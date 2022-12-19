@@ -19,9 +19,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
+<StackPane style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
     <children>
-        <HBox prefHeight="1080.0" prefWidth="1920.0">
+        <HBox minHeight="1000.0" minWidth="1200.0" prefHeight="1080.0" prefWidth="1920.0">
             <children>
                 <VBox prefHeight="1080.0" prefWidth="354.0">
                     <children>
@@ -31,7 +31,7 @@
                                     <children>
                                         <HBox alignment="CENTER_LEFT" prefHeight="132.0" prefWidth="281.0">
                                             <children>
-                                                <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                                <Button fx:id="leftBarButton" mnemonicParsing="false" style="-fx-background-color: transparent;">
                                                     <graphic>
                                                         <ImageView fitHeight="71.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
@@ -47,14 +47,14 @@
                                                 </Label>
                                             </children>
                                         </HBox>
-                                        <HBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="285.0" spacing="50.0">
+                                        <HBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="285.0" spacing="20.0">
                                             <children>
                                                 <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                                                     <image>
                                                         <Image url="@../../../images/search.png" />
                                                     </image>
                                                 </ImageView>
-                                                <TextField prefHeight="68.0" prefWidth="245.0" promptText="Search">
+                                                <TextField fx:id="searchField" prefHeight="68.0" prefWidth="245.0" promptText="Search" style="-fx-background-color: white; -fx-font-weight: 900;">
                                                     <font>
                                                         <Font size="36.0" />
                                                     </font>
@@ -81,7 +81,7 @@
                                                                 <Insets right="40.0" />
                                                             </padding>
                                                         </Label>
-                                                        <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="24.0" style="-fx-background-color: transparent;">
+                                                        <Button fx:id="addResumeButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="24.0" style="-fx-background-color: transparent;">
                                                             <graphic>
                                                                 <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                                                                     <image>
@@ -116,7 +116,7 @@
                                                                 <Insets right="30.0" />
                                                             </padding>
                                                         </Label>
-                                                        <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="50.0" style="-fx-background-color: transparent;">
+                                                        <Button fx:id="addTemplateButton" mnemonicParsing="false" prefHeight="24.0" prefWidth="50.0" style="-fx-background-color: transparent;">
                                                             <graphic>
                                                                 <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                                                                     <image>
@@ -197,14 +197,14 @@
                                     <children>
                                         <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                             <children>
-                                                <Pane prefHeight="1031.0" prefWidth="861.0" VBox.vgrow="ALWAYS">
+                                                <Pane prefHeight="880.0" prefWidth="699.0" VBox.vgrow="ALWAYS">
                                                     <VBox.margin>
                                                         <Insets top="200.0" />
                                                     </VBox.margin>
                                                     <children>
                                                         <HBox prefHeight="870.0" prefWidth="750.0">
                                                             <children>
-                                                                <ImageView fitHeight="875.0" fitWidth="750.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+                                                                <ImageView fitHeight="875.0" fitWidth="752.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
                                                             </children>
                                                         </HBox>
                                                     </children>
@@ -213,7 +213,7 @@
                                         </VBox>
                                         <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                             <children>
-                                                <HBox fx:id="carousel" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #3F4E4F; -fx-background-radius: 0 20 0 20;" />
+                                                <HBox fx:id="carousel" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #3F4E4F; -fx-background-radius: 0 0 0 20;" />
                                                 <HBox alignment="TOP_RIGHT" prefHeight="39.0" prefWidth="785.0" spacing="10.0">
                                                     <children>
                                                         <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-background-radius: 20;">
@@ -224,6 +224,9 @@
                                                                     </image>
                                                                 </ImageView>
                                                             </graphic>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
                                                         </Button>
                                                         <Button mnemonicParsing="false" style="-fx-background-color: white; -fx-background-radius: 20;">
                                                             <graphic>
@@ -238,6 +241,9 @@
                                                     <padding>
                                                         <Insets right="10.0" />
                                                     </padding>
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
                                                 </HBox>
                                                 <Pane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                                             </children>
@@ -248,23 +254,35 @@
                                     <children>
                                         <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                             <children>
-                                                <HBox alignment="CENTER" prefHeight="162.0" prefWidth="1636.0" spacing="100.0">
-                                                    <children>
-                                                        <TextField prefHeight="63.0" prefWidth="798.0" promptText="Type To Search" style="-fx-background-radius: 20;" />
-                                                        <ComboBox prefHeight="53.0" prefWidth="163.0" promptText="Tags" style="-fx-border-radius: 5; -fx-background-color: white; -fx-border-color: black;" />
-                                                        <ComboBox prefHeight="53.0" prefWidth="164.0" promptText="Templates" style="-fx-border-radius: 5; -fx-background-color: white; -fx-border-color: black;" />
-                                                        <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
-                                                            <graphic>
-                                                                <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@../../../images/filter.png" />
-                                                                    </image>
-                                                                </ImageView>
-                                                            </graphic>
-                                                        </Button>
-                                                    </children>
-                                                </HBox>
-                                                <TableView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                    <HBox>
+                                       <children>
+                                                      <HBox alignment="CENTER_LEFT" prefHeight="162.0" prefWidth="1636.0" spacing="20.0">
+                                                          <children>
+                                                              <TextField fx:id="filterSearchField" prefHeight="53.0" prefWidth="794.0" promptText="Type To Search" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: black; -fx-background-color: white; -fx-border-width: 2;">
+                                                   <font>
+                                                      <Font size="20.0" />
+                                                   </font>
+                                                </TextField>
+                                                              <ComboBox fx:id="tags" prefHeight="53.0" prefWidth="163.0" promptText="Tags" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: black; -fx-border-width: 2;" />
+                                                              <ComboBox fx:id="templates" prefHeight="53.0" prefWidth="164.0" promptText="Templates" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: black; -fx-border-width: 2;" />
+                                                          </children>
+                                                      </HBox>
+                                          <HBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Button fx:id="filterOptionButton" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                                   <graphic>
+                                                      <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../images/filter.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Button>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </HBox>
+                                                <TableView fx:id="searchTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                     <columns>
                                                         <TableColumn prefWidth="75.0" text="Name" />
                                                         <TableColumn prefWidth="75.0" text="Date" />
@@ -300,7 +318,7 @@
                                                                         <Insets bottom="10.0" />
                                                                     </GridPane.margin>
                                                                 </Label>
-                                                                <TextField prefHeight="70.0" prefWidth="504.0" GridPane.rowIndex="1">
+                                                                <TextField fx:id="templateName" prefHeight="70.0" prefWidth="504.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: black;" GridPane.rowIndex="1">
                                                                     <GridPane.margin>
                                                                         <Insets top="10.0" />
                                                                     </GridPane.margin>
@@ -309,9 +327,12 @@
                                                         </GridPane>
                                                     </children>
                                                 </HBox>
-                                                <HBox alignment="TOP_CENTER" prefHeight="734.0" prefWidth="1567.0" VBox.vgrow="ALWAYS">
-                                                    <children>
-                                                        <Button mnemonicParsing="false" prefHeight="64.0" prefWidth="387.0" style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS">
+                                    <VBox fx:id="templateAttributeView" alignment="TOP_CENTER" prefHeight="727.0" prefWidth="1103.0" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets bottom="50.0" />
+                                       </VBox.margin>
+                                       <children>
+                                                        <Button fx:id="newTemplateButton" mnemonicParsing="false" prefHeight="64.0" prefWidth="387.0" style="-fx-background-color: transparent;">
                                                             <graphic>
                                                                 <ImageView fitHeight="64.0" fitWidth="385.0" pickOnBounds="true" preserveRatio="true">
                                                                     <image>
@@ -320,11 +341,8 @@
                                                                 </ImageView>
                                                             </graphic>
                                                         </Button>
-                                                    </children>
-                                                    <VBox.margin>
-                                                        <Insets bottom="50.0" />
-                                                    </VBox.margin>
-                                                </HBox>
+                                       </children>
+                                    </VBox>
                                             </children>
                                             <HBox.margin>
                                                 <Insets left="200.0" right="200.0" />
