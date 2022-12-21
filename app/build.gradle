@@ -46,8 +46,8 @@ dependencies {
     implementation "edu.stanford.nlp:stanford-corenlp:4.5.1:models-english"
     implementation "edu.stanford.nlp:stanford-corenlp:4.5.1:models-english-kbp"
 
-    // Aspose PDF 
-    implementation "com.aspose:aspose-pdf:18.11"
+    // Text-Search
+    implementation group: 'org.apache.lucene', name: 'lucene-core', version: '7.3.0'
 }
 
 application {
