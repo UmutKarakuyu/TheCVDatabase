@@ -1,7 +1,15 @@
 package ResumeNLP;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import javax.xml.bind.Unmarshaller.Listener;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -20,6 +28,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.ByteBuffersDirectory;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StoredField;
 
 public class Index {
     private int hitsPerPage;
@@ -40,14 +49,28 @@ public class Index {
         this.indexWriter = indexWriter;
     }
 
+    private byte[] serialize(Object obj) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(200000);
+        ObjectOutputStream os = new ObjectOutputStream(bos);
+        os.writeObject(obj);
+        os.close();
+        return bos.toByteArray();
+    }
+
+    private Object unserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+        ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
+        Object result = is.readObject();
+        is.close();
+        return result;
+    }
+
     public void addDoc(String name, String text, ArrayList<String> tags) throws IOException {
         Document doc = new Document();
-
         doc.add(new TextField("name", name, Field.Store.YES));
         doc.add(new TextField("text", text, Field.Store.YES));
-        for(String tag: tags){
-            doc.add(new TextField("tag", tag, Field.Store.YES));
-        }
+
+        ArrayList<Object> tagsObj = new ArrayList<Object>(tags.stream().map(tag -> (Object) tag).toList());
+        doc.add(new StoredField("tags", this.serialize(tagsObj)));
 
         this.indexWriter.addDocument(doc);
         this.indexWriter.commit();
@@ -57,28 +80,35 @@ public class Index {
         this.indexWriter.deleteDocuments(new Term("name", name));
     }
 
-    public void query(String query_text, String field) throws IOException, ParseException{
-        switch(field){
-            case "name": break;
-            case "text": break;
-            case "tag": break;
-            default:
-                throw new IllegalArgumentException("Field value only can be 'name', 'text' or 'tag'.");
-        }
-
-        Query q = new QueryParser(field, analyzer).parse(query_text);
+    public void query(String query_text, ArrayList<String> tagFilters) throws IOException, ParseException, ClassNotFoundException{
+        Query q = new QueryParser("text", analyzer).parse(query_text);
 
         IndexReader reader = DirectoryReader.open(this.index);
         IndexSearcher searcher = new IndexSearcher(reader);
         TopDocs docs = searcher.search(q, this.hitsPerPage);
         ScoreDoc[] hits = docs.scoreDocs;
 
-        System.out.println("Found " + hits.length + " hits.");
+        System.out.printf("Query: %s\n", query_text);
         for(int i=0;i<hits.length;++i) {
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
-            System.out.println((i + 1) + ". " + d.get("name"));
+            ArrayList<Object> docTagsObj = (ArrayList<Object>) this.unserialize(d.getBinaryValue("tags").bytes);
+            List<String> docTags = docTagsObj.stream().map(object -> Objects.toString(object, null)).toList();
+
+            if(tagFilters.size() != 0){
+                for(String docTag: docTags){
+                    for(String tagFilter: tagFilters){
+                        if(docTag.equals(tagFilter)){
+                            System.out.println((i + 1) + ". " + d.get("name") + ". " + docTags);
+                            break;
+                        }
+                    }
+                }
+            } else{
+                System.out.println((i + 1) + ". " + d.get("name") + ". " + docTags);
+            }
         }
+        System.out.println();
         
         reader.close();
     }
