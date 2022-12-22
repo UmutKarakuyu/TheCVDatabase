@@ -1,29 +1,23 @@
 package com.example.se302_project;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Resume {
     private String name;
     private String date;
-    private File file;
+    private String fileName;
     private ArrayList<String> tags;
-    private Template template; // içerisindeki tüm attributelar template'ten geleceği için ekstra variable
-                               // oluşturmadım.
+    private Template template;
+    private HashMap<String, String> attributes;
 
-    public Resume(String name, String date, File file, ArrayList<String> tags) {
+    public Resume(String name, String date, String fileName, Template template) {
         this.name = name;
         this.date = date;
-        this.file = file;
-        this.tags = tags;
-    }
-
-    public Resume(String name, String date, File file, ArrayList<String> tags, Template template) {
-        this.name = name;
-        this.date = date;
-        this.file = file;
-        this.tags = tags;
+        this.fileName = fileName;
+        this.tags = new ArrayList<>();
         this.template = template;
+        this.attributes = new HashMap<String, String>();
     }
 
     public String getName() {
@@ -42,20 +36,21 @@ public class Resume {
         this.date = date;
     }
 
-    public File getFile() {
-        return file;
+    public String getfileName() {
+        return fileName;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setfileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public ArrayList<String> getTags() {
         return tags;
     }
 
-    public void setTags(ArrayList<String> tags) {
-        this.tags = tags;
+    public String getTag(int position) {
+        String output = tags.get(position);
+        return output;
     }
 
     public Template getTemplate() {
@@ -65,4 +60,17 @@ public class Resume {
     public void setTemplate(Template template) {
         this.template = template;
     }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+
+    public HashMap<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(HashMap<String, String> attributes) {
+        this.attributes = attributes;
+    }
+
 }
