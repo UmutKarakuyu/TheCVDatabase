@@ -2,13 +2,18 @@ package com.example.se302_project;
 
 import java.sql.SQLException;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class MainController {
         @FXML
@@ -36,16 +41,31 @@ public class MainController {
         @FXML
         private VBox templateAttributeView;
         @FXML
-        private ListView<String> resumeListView, templateListView;
+        private TableView resumeTableView, templateTableView;
+        @FXML
+        private TableColumn resumeNameColumn, resumeTrashColumn, templateNameColumn, templateTrashColumn;
 
         public void initialize() throws SQLException {
+                String path = "images/trash.png";
+                Image image = new Image(getClass().getResource(path).toExternalForm());
+                ObservableList<CustomImage> resumeList = FXCollections.observableArrayList();
+                resumeNameColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, String>("name"));
+                resumeTrashColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, ImageView>("image"));
 
                 for (int i = 0; i < DBConnection.getInstance().getResumes().size(); i++) {
-                        resumeListView.getItems().add(DBConnection.getInstance().getResumes().get(i));
+                        resumeList.add(new CustomImage(DBConnection.getInstance().getResumes().get(i),
+                                        new ImageView(image)));
+                        resumeTableView.setItems(resumeList);
                 }
 
+                ObservableList<CustomImage> templateList = FXCollections.observableArrayList();
+                templateNameColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, String>("name"));
+                templateTrashColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, ImageView>("image"));
+
                 for (int i = 0; i < DBConnection.getInstance().getTemplates().size(); i++) {
-                        templateListView.getItems().add(DBConnection.getInstance().getTemplates().get(i));
+                        templateList.add(new CustomImage(DBConnection.getInstance().getTemplates().get(i),
+                                        new ImageView(image)));
+                        templateTableView.setItems(templateList);
                 }
         }
 }
