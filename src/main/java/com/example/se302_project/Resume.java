@@ -73,4 +73,8 @@ public class Resume {
         this.attributes = attributes;
     }
 
+    public void addTag(String tag) {
+        tags.add(tag);
+    }
+
 }

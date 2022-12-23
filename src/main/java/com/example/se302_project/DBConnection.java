@@ -2,13 +2,15 @@ package com.example.se302_project;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class DBConnection {
     private static DBConnection instance = null;
     private final String fileName;
     private Connection connection;
 
-    private PreparedStatement insertResume, insertTemplate, insertTag, insertAttribute;
+    private PreparedStatement insertResume, insertTemplate, insertTag, insertAttribute, getTags, getTemplates,
+            getResumes, getTemplateAttributes;
 
     private DBConnection() {
         this.fileName = "info.db";
@@ -53,6 +55,14 @@ public class DBConnection {
 
             insertAttribute = connection
                     .prepareStatement("INSERT INTO ATTRIBUTES (RESUME_NAME, KEY, VALUE) VALUES (?,?,?)");
+
+            getTags = connection.prepareStatement("SELECT DISTINCT NAME FROM TAG");
+
+            getTemplates = connection.prepareStatement("SELECT DISTINCT TITLE FROM TEMPLATE");
+
+            getResumes = connection.prepareStatement("SELECT NAME FROM RESUME");
+
+            getTemplateAttributes = connection.prepareStatement("SELECT ATTRIBUTES FROM TEMPLATE WHERE TITLE = ?");
 
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
@@ -110,8 +120,8 @@ public class DBConnection {
 
     public void addTag(Resume resume, String tag) {
         try {
-            insertTag.setString(1, tag);
-            insertTag.setString(2, resume.getName());
+            insertTag.setString(1, resume.getName());
+            insertTag.setString(2, tag);
             insertTag.execute();
         } catch (SQLException e) {
             System.out.println(e);
@@ -119,12 +129,86 @@ public class DBConnection {
 
     }
 
-    /*
-     * Tüm tagleri ver --> Dropdown için
-     * Tüm template titleları ver --> Carousel && ListView && Dropdown
-     * Tüm resume isimlerini ver --> ListView
-     * BIR templatten ismi ve tüm attributeları al --> Generate Resume
-     * 
-     */
+    public ArrayList<String> getTags() throws SQLException {
+        ResultSet rs = getTags.executeQuery();
+        ArrayList<String> ar = new ArrayList<>();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnCount = rsmd.getColumnCount();
 
+        try {
+
+            while (rs.next()) {
+                int i = 1;
+                while (i <= columnCount) {
+                    ar.add(rs.getString(i++));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return ar;
+    }
+
+    public ArrayList<String> getTemplates() throws SQLException {
+        ResultSet rs = getTemplates.executeQuery();
+        ArrayList<String> ar = new ArrayList<>();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnCount = rsmd.getColumnCount();
+
+        try {
+
+            while (rs.next()) {
+                int i = 1;
+                while (i <= columnCount) {
+                    ar.add(rs.getString(i++));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return ar;
+    }
+
+    public ArrayList<String> getResumes() throws SQLException {
+        ResultSet rs = getResumes.executeQuery();
+        ArrayList<String> ar = new ArrayList<>();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnCount = rsmd.getColumnCount();
+
+        try {
+
+            while (rs.next()) {
+                int i = 1;
+                while (i <= columnCount) {
+                    ar.add(rs.getString(i++));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return ar;
+    }
+
+    public ArrayList<String> getTemplateAttributes(Template template) throws SQLException {
+
+        ArrayList<String> ar = new ArrayList<>();
+
+        try {
+            getTemplateAttributes.setString(1, template.getTitle());
+            getTemplateAttributes.execute();
+            ResultSet rs = getTemplateAttributes.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+
+            while (rs.next()) {
+                int i = 1;
+                while (i <= columnCount) {
+                    ar.add(rs.getString(i++));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return ar;
+    }
 }
