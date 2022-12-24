@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="Maven: org.openjfx:javafx-fxml:mac:18-ea+2">
+  <library name="Maven: org.openjfx:javafx-fxml:win:18-ea+2">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/18-ea+2/javafx-fxml-18-ea+2-mac.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/18-ea+2/javafx-fxml-18-ea+2-win.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/18-ea+2/javafx-fxml-18-ea+2-javadoc.jar!/" />

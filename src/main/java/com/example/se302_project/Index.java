@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -67,7 +68,7 @@ public class Index {
         doc.add(new TextField("name", name, Field.Store.YES));
         doc.add(new TextField("text", text, Field.Store.YES));
 
-        ArrayList<Object> tagsObj = new ArrayList<Object>(tags.stream().map(tag -> (Object) tag).toList());
+        ArrayList<Object> tagsObj = new ArrayList<Object>(tags.stream().map(tag -> (Object) tag).collect(Collectors.toList()));
         doc.add(new StoredField("tags", this.serialize(tagsObj)));
 
         this.indexWriter.addDocument(doc);
@@ -91,7 +92,7 @@ public class Index {
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
             ArrayList<Object> docTagsObj = (ArrayList<Object>) this.unserialize(d.getBinaryValue("tags").bytes);
-            List<String> docTags = docTagsObj.stream().map(object -> Objects.toString(object, null)).toList();
+            List<String> docTags = docTagsObj.stream().map(object -> Objects.toString(object, null)).collect(Collectors.toList());
 
             if(tagFilters.size() != 0){
                 for(String docTag: docTags){
