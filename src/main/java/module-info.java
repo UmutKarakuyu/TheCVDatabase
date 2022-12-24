@@ -5,6 +5,10 @@ module com.example.se302_project {
 
     requires org.controlsfx.controls;
 
+    requires stanford.corenlp;
+    requires org.apache.lucene.queryparser;
+    requires org.apache.lucene.core;
+
     opens com.example.se302_project to javafx.fxml;
 
     exports com.example.se302_project;
