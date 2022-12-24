@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,6 +45,8 @@ public class MainController {
         private TableView resumeTableView, templateTableView;
         @FXML
         private TableColumn resumeNameColumn, resumeTrashColumn, templateNameColumn, templateTrashColumn;
+        @FXML
+        private HBox resumeHBox, searchHBox, templateHBox;
 
         public void initialize() throws SQLException {
                 String path = "images/trash.png";
@@ -67,5 +70,26 @@ public class MainController {
                                         new ImageView(image)));
                         templateTableView.setItems(templateList);
                 }
+        }
+
+        @FXML
+        public void openResumeScreen() {
+                resumeHBox.setVisible(true);
+                searchHBox.setVisible(false);
+                templateHBox.setVisible(false);
+        }
+
+        @FXML
+        public void openSearchScreen() {
+                resumeHBox.setVisible(false);
+                searchHBox.setVisible(true);
+                templateHBox.setVisible(false);
+        }
+
+        @FXML
+        public void openTemplateScreen() {
+                resumeHBox.setVisible(false);
+                searchHBox.setVisible(false);
+                templateHBox.setVisible(true);
         }
 }

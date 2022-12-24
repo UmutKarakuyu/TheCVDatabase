@@ -46,7 +46,7 @@
                                                 </Label>
                                             </children>
                                         </HBox>
-                                        <HBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="285.0" spacing="20.0">
+                                        <HBox alignment="CENTER_LEFT" onMouseClicked="#openSearchScreen" prefHeight="82.0" prefWidth="285.0" spacing="20.0">
                                             <children>
                                                 <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                                                     <image>
@@ -80,7 +80,7 @@
                                                                 <Insets right="40.0" />
                                                             </padding>
                                                         </Label>
-                                                        <Button fx:id="addResumeButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="24.0" style="-fx-background-color: transparent;">
+                                                        <Button fx:id="addResumeButton" mnemonicParsing="false" onAction="#openResumeScreen" prefHeight="31.0" prefWidth="24.0" style="-fx-background-color: transparent;">
                                                             <graphic>
                                                                 <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                                                                     <image>
@@ -117,7 +117,7 @@
                                                                 <Insets right="30.0" />
                                                             </padding>
                                                         </Label>
-                                                        <Button fx:id="addTemplateButton" mnemonicParsing="false" prefHeight="24.0" prefWidth="50.0" style="-fx-background-color: transparent;">
+                                                        <Button fx:id="addTemplateButton" mnemonicParsing="false" onAction="#openTemplateScreen" prefHeight="24.0" prefWidth="50.0" style="-fx-background-color: transparent;">
                                                             <graphic>
                                                                 <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                                                                     <image>
@@ -196,7 +196,7 @@
                     <children>
                         <StackPane prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <HBox prefHeight="1081.0" prefWidth="1921.0">
+                                <HBox fx:id="resumeHBox" prefHeight="1081.0" prefWidth="1921.0" visible="false">
                                     <children>
                                         <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                             <children>
@@ -253,7 +253,7 @@
                                         </VBox>
                                     </children>
                                 </HBox>
-                                <HBox prefHeight="1081.0" prefWidth="1921.0" visible="false">
+                                <HBox fx:id="searchHBox" prefHeight="1081.0" prefWidth="1921.0" visible="false">
                                     <children>
                                         <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                             <children>
@@ -298,7 +298,7 @@
                                         </VBox>
                                     </children>
                                 </HBox>
-                                <HBox prefHeight="1081.0" prefWidth="1921.0" visible="false">
+                                <HBox fx:id="templateHBox" prefHeight="1081.0" prefWidth="1921.0" visible="false">
                                     <children>
                                         <VBox fx:id="templatePane" alignment="CENTER" prefHeight="1080.0" prefWidth="1567.0" HBox.hgrow="ALWAYS">
                                             <children>
