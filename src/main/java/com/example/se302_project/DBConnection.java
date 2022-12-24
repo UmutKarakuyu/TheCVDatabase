@@ -1,13 +1,19 @@
 package com.example.se302_project;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
 public class DBConnection {
     private static DBConnection instance = null;
+
     private final String fileName;
     private Connection connection;
+
+    private final String indexDir;
+    private final int hitsPerPage;
+    private Index index;
 
     private PreparedStatement insertResume, insertTemplate, insertTag, insertAttribute, getTags, getTemplates,
             getResumes, getTemplateAttributes;
@@ -67,6 +73,15 @@ public class DBConnection {
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
         }
+
+        this.indexDir = "index";
+        this.hitsPerPage = 10;
+        try {
+            Index index = new Index(this.indexDir, this.hitsPerPage);
+            this.index = index;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     };
 
     public static DBConnection getInstance() {
@@ -78,30 +93,43 @@ public class DBConnection {
         return instance;
     }
 
+    public Index getIndex() {
+        return this.index;
+    }
+
     public void addResume(Resume resume) {
         try {
-            insertResume.setString(1, resume.getName());
-            insertResume.setString(2, resume.getDate());
+            String resume_name = resume.getName();
+            String resume_date = resume.getDate();
+            ArrayList<String> resume_tags = resume.getTags();
+
+            insertResume.setString(1, resume_name);
+            insertResume.setString(2, resume_date);
             insertResume.setString(3, resume.getfileName());
             insertResume.setString(4, resume.getTemplate().getTitle());
             insertResume.execute();
 
-            for (int i = 0; i < resume.getTags().size(); i++) {
+            for (int i = 0; i < resume_tags.size(); i++) {
                 insertTag.setString(1, resume.getName());
-                insertTag.setString(2, resume.getTags().get(i));
+                insertTag.setString(2, resume_tags.get(i));
                 insertTag.execute();
             }
 
             Object[] attributeKeys = resume.getAttributes().keySet().toArray();
-
+            String resume_text = "";
             for (int i = 0; i < attributeKeys.length; i++) {
                 insertAttribute.setString(1, resume.getName());
                 insertAttribute.setString(2, attributeKeys[i].toString());
-                insertAttribute.setString(3, resume.getAttributes().get(attributeKeys[i].toString()));
+                String attrVal = resume.getAttributes().get(attributeKeys[i].toString());
+                insertAttribute.setString(3, attrVal);
                 insertAttribute.execute();
+
+                resume_text += attrVal + " ";
             }
 
-        } catch (SQLException e) {
+            this.index.addDoc(resume_name, resume_date, resume_text, resume_tags);
+
+        } catch (SQLException | IOException e) {
             System.err.println(e);
         }
     }

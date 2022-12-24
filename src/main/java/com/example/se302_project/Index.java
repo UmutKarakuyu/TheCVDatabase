@@ -5,7 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,22 +28,25 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.ByteBuffersDirectory;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StoredField;
 
 public class Index {
+    private String indexDir;
     private int hitsPerPage;
     
     private StandardAnalyzer analyzer;
     private Directory index;
     private IndexWriter indexWriter;
     
-    public Index(int hitsPerPage) throws IOException{
+    public Index(String indexDir, int hitsPerPage) throws IOException{
         StandardAnalyzer analyzer = new StandardAnalyzer();
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
-        Directory index = new ByteBuffersDirectory();
+        Directory index = FSDirectory.open(Paths.get(indexDir));
         IndexWriter indexWriter = new IndexWriter(index, config);
-        
+
+        this.indexDir = indexDir;
         this.hitsPerPage = hitsPerPage;
         this.index = index;
         this.analyzer = analyzer;
@@ -63,9 +68,10 @@ public class Index {
         return result;
     }
 
-    public void addDoc(String name, String text, ArrayList<String> tags) throws IOException {
+    public void addDoc(String name, String date, String text, ArrayList<String> tags) throws IOException {
         Document doc = new Document();
         doc.add(new TextField("name", name, Field.Store.YES));
+        doc.add(new TextField("date", date, Field.Store.YES));
         doc.add(new TextField("text", text, Field.Store.YES));
 
         ArrayList<Object> tagsObj = new ArrayList<Object>(tags.stream().map(tag -> (Object) tag).collect(Collectors.toList()));
@@ -79,7 +85,7 @@ public class Index {
         this.indexWriter.deleteDocuments(new Term("name", name));
     }
 
-    public void query(String query_text, ArrayList<String> tagFilters) throws IOException, ParseException, ClassNotFoundException{
+    public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters) throws IOException, ParseException, ClassNotFoundException{
         Query q = new QueryParser("text", analyzer).parse(query_text);
 
         IndexReader reader = DirectoryReader.open(this.index);
@@ -87,6 +93,7 @@ public class Index {
         TopDocs docs = searcher.search(q, this.hitsPerPage);
         ScoreDoc[] hits = docs.scoreDocs;
 
+        HashMap<String, String> query_results = new HashMap<>();
         System.out.printf("Query: %s\n", query_text);
         for(int i=0;i<hits.length;++i) {
             int docId = hits[i].doc;
@@ -98,18 +105,21 @@ public class Index {
                 for(String docTag: docTags){
                     for(String tagFilter: tagFilters){
                         if(docTag.equals(tagFilter)){
-                            System.out.println((i + 1) + ". " + d.get("name") + ". " + docTags);
+                            System.out.println((i + 1) + ". " + d.get("name") + ". " + d.get("date") + ". " + docTags);
+                            query_results.put(d.get("name"), d.get("date"));
                             break;
                         }
                     }
                 }
             } else{
-                System.out.println((i + 1) + ". " + d.get("name") + ". " + docTags);
+                query_results.put(d.get("name"), d.get("date"));
+                System.out.println((i + 1) + ". " + d.get("name") + ". " + d.get("date") + ". " + docTags);
             }
         }
         System.out.println();
-        
         reader.close();
+
+        return query_results;
     }
 
     public void close() throws IOException{

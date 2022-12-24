@@ -1,6 +1,9 @@
 package com.example.se302_project;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.apache.lucene.queryparser.classic.ParseException;
 
 public class MainController {
         @FXML
@@ -40,6 +44,8 @@ public class MainController {
         @FXML
         private TableView searchTableView;
         @FXML
+        private TableColumn searchTResumeNameColumn, searchTResumeDateColumn;
+        @FXML
         private VBox templateAttributeView;
         @FXML
         private TableView resumeTableView, templateTableView;
@@ -58,8 +64,8 @@ public class MainController {
                 for (int i = 0; i < DBConnection.getInstance().getResumes().size(); i++) {
                         resumeList.add(new CustomImage(DBConnection.getInstance().getResumes().get(i),
                                         new ImageView(image)));
-                        resumeTableView.setItems(resumeList);
                 }
+                resumeTableView.setItems(resumeList);
 
                 ObservableList<CustomImage> templateList = FXCollections.observableArrayList();
                 templateNameColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, String>("name"));
@@ -68,8 +74,55 @@ public class MainController {
                 for (int i = 0; i < DBConnection.getInstance().getTemplates().size(); i++) {
                         templateList.add(new CustomImage(DBConnection.getInstance().getTemplates().get(i),
                                         new ImageView(image)));
-                        templateTableView.setItems(templateList);
                 }
+                templateTableView.setItems(templateList);
+
+                /*
+                Template template = new Template("Student");
+                DBConnection.getInstance().addTemplate(template);
+
+                Resume resume1 = new Resume("Emre Dülek", "01.01.2023",
+                        "C://EmreDulek/Desktop/EmreDulek.pdf", template);
+                HashMap<String, String> resume1_attributes = new HashMap<>();
+                resume1_attributes.put("introduction", "I am a software developer who has experience with application and web development.\n" +
+                        "I have experience working for startups, thus I have developed adequate teamwork,\n" +
+                        "communication, and problem solving abilities. I’m currently studying two undergraduate\n" +
+                        "program to learn new concepts in science. Even though I didn't have enough knowledge\n" +
+                        "of some concepts, I considered myself as a ‘fast learner’.");
+                resume1_attributes.put("education", "2020-Present\n" +
+                        "Izmir University of Economics\n" +
+                        "Bachelor of Science : Computer Engineering (GPA : 3.63)\n" +
+                        "Izmir University of Economics\n" +
+                        "2021-Present\n" +
+                        "Bachelor of Science : Electrical and Electronics Engineering (GPA : 3.80)");
+                resume1.setAttributes(resume1_attributes);
+                ArrayList<String> tags1 = new ArrayList<String>();
+                tags1.add("Java");
+                tags1.add("JavaFX");
+                tags1.add("SQLite");
+                tags1.add("Django");
+                resume1.setTags(tags1);
+
+                Resume resume2 = new Resume("Umut Karakuyu", "03.01.2023",
+                        "C://UmutKarakuyu/Desktop/UmutKarakuyu.pdf",
+                        template);
+                HashMap<String, String> resume2_attributes = new HashMap<>();
+                resume2_attributes.put("introduction", "As a software developer, I have 2+ of expertise planning and implementing\n" +
+                        "reliable software. I consider my communication skills are exceptional and\n" +
+                        "have worked on both academic and startup initiatives. I'm putting in an\n" +
+                        "application as a software developer to broaden my skill set and get\n" +
+                        "valuable experience for my line of work.");
+                resume2_attributes.put("education", "Izmir University of Economics");
+                resume2.setAttributes(resume2_attributes);
+                ArrayList<String> tags2 = new ArrayList<String>();
+                tags2.add("Testing");
+                tags2.add("JavaFX");
+                tags2.add("MySQL");
+                tags2.add("Django");
+                resume2.setTags(tags2);
+
+                DBConnection.getInstance().addResume(resume1);
+                DBConnection.getInstance().addResume(resume2);*/
         }
 
         @FXML
@@ -91,5 +144,33 @@ public class MainController {
                 resumeHBox.setVisible(false);
                 searchHBox.setVisible(false);
                 templateHBox.setVisible(true);
+        }
+
+        @FXML
+        public void search() {
+                String query = filterSearchField.getText();
+                if(query.equals("")){
+                        return;
+                }
+
+                ArrayList<String> tagFilters = new ArrayList<String>();
+                //tagFilters.add("SQLite");
+                Index index = DBConnection.getInstance().getIndex();
+                HashMap<String, String> findings = null;
+                try {
+                       findings = index.query(query, tagFilters);
+                } catch (IOException | ParseException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                }
+
+                ObservableList<SearchResult> query_results = FXCollections.observableArrayList();
+                searchTResumeNameColumn.setCellValueFactory(new PropertyValueFactory<SearchResult, String>("name"));
+                searchTResumeDateColumn.setCellValueFactory(new PropertyValueFactory<SearchResult, String>("date"));
+
+                for (String resumeName : findings.keySet()) {
+                        query_results.add(new SearchResult(resumeName, findings.get(resumeName)));
+                }
+                searchTableView.setItems(query_results);
+
         }
 }

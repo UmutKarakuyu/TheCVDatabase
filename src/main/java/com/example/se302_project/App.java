@@ -32,7 +32,7 @@ public class App extends Application {
         resparser.match(tokens, "TITLE");
         resparser.match(tokens, "SKILL");
 
-        Index index = new Index(10);
+        Index index = new Index("index2", 10);
         String resume1_text = Files.readString(Path.of("src/main/resources/com/example/se302_project/nlp/resume1.txt"));
         ArrayList<String> tag1 = new ArrayList<String>();
         tag1.add("Python");
@@ -63,6 +63,7 @@ public class App extends Application {
         
         index.close();
         */
+        
     }
 
     public static void main(String[] args) {
