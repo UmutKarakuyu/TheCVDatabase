@@ -26,7 +26,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.ByteBuffersDirectory;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.document.Field;
@@ -86,7 +86,9 @@ public class Index {
     }
 
     public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters) throws IOException, ParseException, ClassNotFoundException{
-        Query q = new QueryParser("text", analyzer).parse(query_text);
+        //QueryParser.SetAllowLeadingWildcard(true)
+        //Query q = new QueryParser("text", analyzer).parse(query_text);
+        Query q = new WildcardQuery(new Term("text", "*"+query_text+"*"));
 
         IndexReader reader = DirectoryReader.open(this.index);
         IndexSearcher searcher = new IndexSearcher(reader);
