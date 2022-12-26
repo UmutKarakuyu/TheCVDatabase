@@ -16,7 +16,7 @@ public class DBConnection {
     private Index index;
 
     private PreparedStatement insertResume, insertTemplate, insertTag, insertAttribute, getTags, getTemplates,
-            getResumes, getTemplateAttributes;
+            getResumes, getTemplateAttributes, getTemplateObject, getResumeObject;
 
     private DBConnection() {
         this.fileName = "info.db";
@@ -69,6 +69,8 @@ public class DBConnection {
             getResumes = connection.prepareStatement("SELECT NAME FROM RESUME");
 
             getTemplateAttributes = connection.prepareStatement("SELECT ATTRIBUTES FROM TEMPLATE WHERE TITLE = ?");
+
+            getTemplateObject = connection.prepareStatement("SELECT TITLE, ATTRIBUTE FROM TEMPLATE WHERE TITLE = ?");
 
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
@@ -239,4 +241,24 @@ public class DBConnection {
         }
         return ar;
     }
-}
+
+    public Template getTemplateObject(String templateName) throws SQLException {
+        Template t = new Template(templateName);
+        try {
+            getTemplateObject.setString(1, templateName);
+            getTemplateObject.execute();
+            ResultSet rs = getTemplateObject.executeQuery();
+
+            while (rs.next()) {
+                String attribute = rs.getString(2);
+                t.addAttribute(attribute);
+                }
+            
+            }
+        catch (SQLException e) {
+                System.out.println(e);
+            }
+        return t;
+        }
+    
+    }
