@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DBConnection {
     private static DBConnection instance = null;
@@ -16,7 +17,7 @@ public class DBConnection {
     private Index index;
 
     private PreparedStatement insertResume, insertTemplate, insertTag, insertAttribute, getTags, getTemplates,
-            getResumes, getTemplateAttributes, getTemplateObject, getResumeObject;
+            getResumes, getTemplateAttributes, getResumeAttributes, getResumeTags, getResumeObject;
 
     private DBConnection() {
         this.fileName = "info.db";
@@ -70,7 +71,11 @@ public class DBConnection {
 
             getTemplateAttributes = connection.prepareStatement("SELECT ATTRIBUTES FROM TEMPLATE WHERE TITLE = ?");
 
-            getTemplateObject = connection.prepareStatement("SELECT TITLE, ATTRIBUTE FROM TEMPLATE WHERE TITLE = ?");
+            getResumeAttributes = connection.prepareStatement("SELECT KEY, VALUE FROM ATTRIBUTES WHERE RESUME_NAME = ?");
+
+            getResumeTags = connection.prepareStatement("SELECT NAME FROM TAG WHERE RESUME_NAME = ?");
+
+            getResumeObject = connection.prepareStatement("SELECT * FROM RESUME FROM RESUME WHERE NAME = ?");
 
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
@@ -242,15 +247,54 @@ public class DBConnection {
         return ar;
     }
 
+    public HashMap<String, String> getResumeAttributes(String resumeName) throws SQLException{
+        HashMap<String, String> h = new HashMap<>();
+        try {
+            getResumeAttributes.setString(1, resumeName);
+            getResumeAttributes.execute();
+            ResultSet rs = getResumeAttributes.executeQuery();
+
+            while(rs.next()) {
+                String key = rs.getString(1);
+                String value = rs.getString(2);
+                h.put(key, value);
+            }
+        } 
+        catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+        return h;
+    }
+
+    public ArrayList<String> getResumeTags(String resumeName) throws SQLException{
+        ArrayList<String> arr = new ArrayList<>();
+        try {
+            getResumeTags.setString(1, resumeName);
+            getResumeTags.execute();
+            ResultSet rs = getResumeTags.executeQuery();
+
+            while(rs.next()) {
+                String tag = rs.getString(1);
+                arr.add(tag);
+            }
+        }
+
+        catch (SQLException e) {
+            System.out.println(e);
+        }
+        return arr;
+    }
+
     public Template getTemplateObject(String templateName) throws SQLException {
         Template t = new Template(templateName);
         try {
-            getTemplateObject.setString(1, templateName);
-            getTemplateObject.execute();
-            ResultSet rs = getTemplateObject.executeQuery();
+            getTemplateAttributes.setString(1, templateName);
+            getTemplateAttributes.execute();
+            ResultSet rs = getTemplateAttributes.executeQuery();
 
             while (rs.next()) {
-                String attribute = rs.getString(2);
+                String attribute = rs.getString(1);
                 t.addAttribute(attribute);
                 }
             
@@ -260,5 +304,33 @@ public class DBConnection {
             }
         return t;
         }
+    
+    public Resume getResumeObject(String resumeName) throws SQLException {
+        Resume r = new Resume(resumeName);
+        try {
+            getResumeObject.setString(1, resumeName);
+            getResumeObject.execute();
+            ResultSet rs = getResumeObject.executeQuery();
+            rs.next();
+
+            String date = rs.getString(2);
+            String file = rs.getString(3);
+            String templateName = rs.getString(4);
+            Template template = getTemplateObject(templateName);
+            HashMap<String, String> attributes = getResumeAttributes(resumeName);
+            ArrayList<String> tags = getResumeTags(resumeName);
+
+            r.setDate(date);
+            r.setfileName(file);
+            r.setTemplate(template);
+            r.setAttributes(attributes);
+            r.setTags(tags);
+            
+        }
+        catch (SQLException e) {
+            System.out.println(e);
+        }
+        return r;
+    }
     
     }

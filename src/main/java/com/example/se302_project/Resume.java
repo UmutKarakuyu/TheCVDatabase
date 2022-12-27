@@ -11,6 +11,15 @@ public class Resume {
     private Template template;
     private HashMap<String, String> attributes;
 
+    public Resume(String name) {
+        this.name = name;
+        this.date = null;
+        this.fileName = null;
+        this.tags = null;
+        this.template = null;
+        this.attributes = null;
+    }
+
     public Resume(String name, String date, String fileName, Template template) {
         this.name = name;
         this.date = date;

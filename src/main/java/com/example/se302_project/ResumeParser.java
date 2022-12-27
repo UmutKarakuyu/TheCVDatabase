@@ -1,4 +1,4 @@
-package com.example.se302_project;
+/*package com.example.se302_project;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -138,3 +138,4 @@ public class ResumeParser{
         return matches;
     }
 }
+*/
