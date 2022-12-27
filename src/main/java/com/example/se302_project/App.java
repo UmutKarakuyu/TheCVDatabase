@@ -19,7 +19,10 @@ public class App extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("CvDatabase.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hello!");
+        stage.setMinHeight(700);
+        stage.setMinWidth(1200);
         stage.setScene(scene);
+        stage.setFullScreen(true);
         stage.show();
 
         /*
