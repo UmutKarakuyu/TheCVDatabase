@@ -24,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class MainController {
@@ -67,8 +68,19 @@ public class MainController {
         private TextField modalResumeName;
         @FXML
         private ImageView pdfUploadView;
+        @FXML
+        private VBox drawerShort, drawerLong;
+        @FXML
+        private StackPane drawerStackPane;
 
         public void initialize() throws SQLException, IOException {
+
+                modalHBox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                        if (modalHBox.getWidth() < 1250)
+                                shortDrawer();
+                        else
+                                longDrawer();
+                });
 
                 String path = "images/trash.png";
                 Image image = new Image(getClass().getResource(path).toExternalForm());
@@ -233,5 +245,27 @@ public class MainController {
                 modalResumeName.clear();
                 modalListView.getSelectionModel().clearSelection();
                 modalListView.getItems().clear();
+        }
+
+        @FXML
+        private void longDrawer() {
+                drawerStackPane.setPrefWidth(350);
+                drawerShort.setVisible(false);
+                drawerLong.setVisible(true);
+        }
+
+        @FXML
+        private void shortDrawer() {
+                drawerStackPane.setPrefWidth(70);
+                drawerShort.setVisible(true);
+                drawerLong.setVisible(false);
+        }
+
+        @FXML
+        private void toggleDrawer() {
+                if (drawerStackPane.getWidth() == 70) {
+                        longDrawer();
+                } else
+                        shortDrawer();
         }
 }

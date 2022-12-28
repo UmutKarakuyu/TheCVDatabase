@@ -30,13 +30,13 @@
                         <Insets />
                      </VBox.margin>
                      <children>
-                              <StackPane alignment="TOP_LEFT" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="703.0" prefWidth="343.0">
+                              <StackPane fx:id="drawerStackPane" alignment="TOP_LEFT" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="350.0">
                                   <children>
-                                      <VBox prefHeight="964.0" prefWidth="377.0" spacing="30.0" StackPane.alignment="TOP_LEFT">
+                                      <VBox fx:id="drawerLong" prefHeight="964.0" prefWidth="377.0" StackPane.alignment="TOP_LEFT">
                                           <children>
                                               <HBox alignment="CENTER_LEFT" prefHeight="132.0" prefWidth="281.0" VBox.vgrow="ALWAYS">
                                                   <children>
-                                                      <Button fx:id="leftBarButton" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                                      <Button fx:id="leftBarButton" mnemonicParsing="false" onAction="#toggleDrawer" style="-fx-background-color: transparent;">
                                                           <graphic>
                                                               <ImageView fitHeight="71.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                                                                   <image>
@@ -143,13 +143,13 @@
                                     <Insets bottom="50.0" />
                                  </padding>
                                       </VBox>
-                              <VBox prefHeight="820.0" prefWidth="348.0" spacing="30.0" visible="false" StackPane.alignment="TOP_LEFT">
+                              <VBox fx:id="drawerShort" prefHeight="820.0" prefWidth="12.0" spacing="10.0" visible="false" StackPane.alignment="TOP_LEFT">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" prefHeight="131.0" prefWidth="289.0">
                                        <children>
-                                          <Button fx:id="leftBarButton1" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                          <Button fx:id="leftBarButton1" mnemonicParsing="false" onAction="#toggleDrawer" style="-fx-background-color: transparent;">
                                              <graphic>
-                                                <ImageView fitHeight="71.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@images/logo.png" />
                                                    </image>
@@ -157,12 +157,15 @@
                                              </graphic>
                                           </Button>
                                        </children>
+                                       <VBox.margin>
+                                          <Insets left="-6.0" />
+                                       </VBox.margin>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT" onMouseClicked="#openSearchScreen" prefHeight="82.0" prefWidth="285.0">
+                                    <HBox alignment="CENTER_LEFT" onMouseClicked="#openSearchScreen" prefHeight="40.0" prefWidth="350.0">
                                        <children>
                                           <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
                                              <graphic>
-                                                <ImageView fitHeight="39.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@images/search.png" />
                                                    </image>
@@ -174,11 +177,11 @@
                                           <Insets />
                                        </VBox.margin>
                                     </HBox>
-                                    <HBox prefHeight="56.0" prefWidth="278.0" spacing="40.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="278.0" spacing="40.0">
                                        <children>
                                           <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
                                              <graphic>
-                                                <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@images/resume.png" />
                                                    </image>
@@ -187,11 +190,11 @@
                                           </Button>
                                        </children>
                                     </HBox>
-                                    <HBox spacing="40.0">
+                                    <HBox alignment="CENTER_LEFT" spacing="40.0">
                                        <children>
                                           <Button fx:id="leftBarButton11" mnemonicParsing="false" style="-fx-background-color: transparent;">
                                              <graphic>
-                                                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@images/template.png" />
                                                    </image>
