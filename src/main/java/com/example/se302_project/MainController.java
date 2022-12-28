@@ -78,6 +78,8 @@ public class MainController {
         private VBox drawerShort, drawerLong;
         @FXML
         private StackPane drawerStackPane;
+        @FXML
+        private ListView templateCarouselList;
 
         public void initialize() throws SQLException, IOException {
                 tagSearchField.setOnKeyPressed(event -> {
@@ -328,6 +330,8 @@ public class MainController {
                                         new ImageView(image)));
                 }
 
+                
                 templateTableView.setItems(templateList);
+                templateCarouselList.setItems(FXCollections.observableArrayList(DBConnection.getInstance().getTemplates()));
         }
 }
