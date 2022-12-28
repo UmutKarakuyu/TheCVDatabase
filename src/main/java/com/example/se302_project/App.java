@@ -31,10 +31,15 @@ public class App extends Application {
         ResumeParser resparser = new ResumeParser("src/main/resources/com/example/se302_project/nlp/linkedin_skills.txt",
                                                   "src/main/resources/com/example/se302_project/nlp/titles/titles_combined.txt",
                                                   "src/main/resources/com/example/se302_project/nlp/stopwords.txt");
-        List<String> tokens = resparser.extractTokens(resume_text);
+        List<String> tokens = resparser.extractTokensFromResume(resume_text);
+        System.out.println("TITLES");
         resparser.match(tokens, "TITLE");
+        System.out.println("===");
+        System.out.println("SKILLS");
+        System.out.println("===");
         resparser.match(tokens, "SKILL");
-
+        
+        
         Index index = new Index("index2", 10);
         String resume1_text = Files.readString(Path.of("src/main/resources/com/example/se302_project/nlp/resume1.txt"));
         ArrayList<String> tag1 = new ArrayList<String>();

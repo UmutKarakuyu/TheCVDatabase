@@ -30,7 +30,6 @@
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-queries:9.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-sandbox:9.4.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:9.4.2" level="project" />
-    <orderEntry type="library" name="Maven: edu.stanford.nlp:stanford-corenlp:4.5.1" level="project" />
     <orderEntry type="library" name="Maven: com.apple:AppleJavaExtensions:1.4" level="project" />
     <orderEntry type="library" name="Maven: de.jollyday:jollyday:0.4.9" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.3.1" level="project" />
@@ -61,8 +60,5 @@
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
-    <orderEntry type="library" name="Maven: edu.stanford.nlp:stanford-corenlp:models:4.5.1" level="project" />
-    <orderEntry type="library" name="Maven: edu.stanford.nlp:stanford-corenlp:models-english:4.5.1" level="project" />
-    <orderEntry type="library" name="Maven: edu.stanford.nlp:stanford-corenlp:models-english-kbp:4.5.1" level="project" />
   </component>
 </module>

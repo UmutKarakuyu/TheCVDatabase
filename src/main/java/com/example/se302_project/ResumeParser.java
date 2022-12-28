@@ -1,32 +1,24 @@
-/*package com.example.se302_project;
+package com.example.se302_project;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.regex.Pattern;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.pipeline.CoreDocument;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public class ResumeParser{
     private final int MAX_GROUP_LENGTH = 4;
 
-    private StanfordCoreNLP pipeline;
     private List<String> stopwords;
     private HashMap<String, String> skillMatches;
     private HashMap<String, String> titleMatches;
     
     public ResumeParser(String skills_path, String titles_path, String stopwords_path) throws IOException{
-        Properties props = new Properties();
-        props.setProperty("annotators", "tokenize,pos,depparse,lemma,ner,kbp"); // tokenize,lemma,ner,parse,depparse,coref,kbp
-        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-        this.pipeline = pipeline;
-
         List<String> stopwords = Files.readAllLines(Paths.get(stopwords_path));
         this.stopwords = stopwords;
 
@@ -39,10 +31,7 @@ public class ResumeParser{
         HashMap<String, String> matchList = new HashMap<>();
         for(String original_text: list){
             String text = this.lowercaseText(original_text);
-
-            CoreDocument text_doc = new CoreDocument(text);
-            this.pipeline.annotate(text_doc);
-            List<CoreLabel> text_tokens = text_doc.tokens();
+            List<String> text_tokens = this.splitTokens(text);
             List<String> refined_text_tokens = this.removePunctuationMark(text_tokens);
             String refined_text = "";
             for(String refined_skill_token: refined_text_tokens){
@@ -61,22 +50,42 @@ public class ResumeParser{
         return text.toLowerCase(Locale.forLanguageTag("en"));
     }
 
-    private List<String> removePunctuationMark(List<CoreLabel> tokens){
+    private List<String> removePunctuationMark(List<String> tokens){
         List<String> refined_tokens = new LinkedList<>();
-        for(CoreLabel token: tokens){
-            if(!Pattern.matches("\\p{Punct}", token.lemma())){
-                refined_tokens.add(token.lemma());
+        for(String token: tokens){
+            token = this.cleanToken(token);
+            if(!Pattern.matches("\\p{Punct}", token)){
+                if(!token.equals("")){
+                    refined_tokens.add(token);
+                }
             }
         }
         return refined_tokens;
     }
 
-    private List<CoreLabel> removeStopWords(List<CoreLabel> tokens){
-        List<CoreLabel> refined_tokens = new LinkedList<>();
-        for(CoreLabel token: tokens){
+    private List<String> splitTokens(String text){
+        StringTokenizer st = new StringTokenizer(text, " .\n?!()'/"+'"');
+        List<String> tokens = new ArrayList<String>();
+        while(st.hasMoreTokens()) {  
+            tokens.add(st.nextToken());  
+        }
+        return tokens;
+    }
+
+    private String cleanToken(String token){
+        token = token.replace(",", "");
+        token = token.replace(".", "");
+        token = token.replace("\n", "").replace("\r", "");
+        token = token.trim();
+        return token;
+    }
+
+    private List<String> removeStopWords(List<String> tokens){
+        List<String> refined_tokens = new LinkedList<>();
+        for(String token: tokens){
             boolean isStopWord = false;
             for(String stopword: this.stopwords){
-                if(token.originalText().equals(stopword)){
+                if(token.equals(stopword)){
                     isStopWord = true;
                     break;
                 }
@@ -89,16 +98,11 @@ public class ResumeParser{
         return refined_tokens;
     }
 
-    public List<String> extractTokens(String text){
+    public List<String> extractTokensFromResume(String text){
         text = this.lowercaseText(text);
-
-        CoreDocument document = new CoreDocument(text);
-        this.pipeline.annotate(document);
-        List<CoreLabel> tokens = document.tokens();
-
+        List<String> tokens = this.splitTokens(text);
         tokens = this.removeStopWords(tokens);
         List<String> refined_tokens = this.removePunctuationMark(tokens);
-
         return refined_tokens;
     }
 
@@ -138,4 +142,3 @@ public class ResumeParser{
         return matches;
     }
 }
-*/
