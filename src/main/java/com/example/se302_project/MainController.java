@@ -81,7 +81,7 @@ public class MainController {
 
         public void initialize() throws SQLException, IOException {
                 tagSearchField.setOnKeyPressed(event -> {
-                        if(event.getCode() == KeyCode.ENTER){
+                        if (event.getCode() == KeyCode.ENTER) {
                                 addTag();
                         }
                 });
@@ -93,29 +93,7 @@ public class MainController {
                                 longDrawer();
                 });
 
-                String path = "images/trash.png";
-                Image image = new Image(getClass().getResource(path).toExternalForm());
-                ObservableList<CustomImage> resumeList = FXCollections
-                                .observableArrayList();
-                resumeNameColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, String>("name"));
-                resumeTrashColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, ImageView>("image"));
-
-                for (int i = 0; i < DBConnection.getInstance().getResumes().size(); i++) {
-                        resumeList.add(new CustomImage(DBConnection.getInstance().getResumes().get(i),
-                                        new ImageView(image)));
-                }
-                resumeTableView.setItems(resumeList);
-
-                ObservableList<CustomImage> templateList = FXCollections
-                                .observableArrayList();
-                templateNameColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, String>("name"));
-                templateTrashColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, ImageView>("image"));
-
-                for (int i = 0; i < DBConnection.getInstance().getTemplates().size(); i++) {
-                        templateList.add(new CustomImage(DBConnection.getInstance().getTemplates().get(i),
-                                        new ImageView(image)));
-                }
-                templateTableView.setItems(templateList);
+                fillTableViews();
 
                 /*
                  * Template template = new Template("Student");
@@ -226,26 +204,26 @@ public class MainController {
                 if (tag_query.equals("")) {
                         return;
                 }
-                
+
                 ArrayList<String> available_tags = new ArrayList<>();
                 try {
                         available_tags = DBConnection.getInstance().getTags();
                 } catch (SQLException e) {
                         e.printStackTrace();
                 }
-                
+
                 boolean match_found = false;
                 ObservableList<String> combobox_tags = tags.getItems();
-                for(String available_tag: available_tags){
-                        if(tag_query.toLowerCase(Locale.forLanguageTag("en")).equals(
-                                available_tag.toLowerCase(Locale.forLanguageTag("en")))){
-                                        combobox_tags.add(available_tag);
-                                        match_found = true;
-                                        break;
-                                }
+                for (String available_tag : available_tags) {
+                        if (tag_query.toLowerCase(Locale.forLanguageTag("en")).equals(
+                                        available_tag.toLowerCase(Locale.forLanguageTag("en")))) {
+                                combobox_tags.add(available_tag);
+                                match_found = true;
+                                break;
+                        }
                 }
-            
-                if(match_found){
+
+                if (match_found) {
                         tags.setItems(combobox_tags);
                         tagSearchField.clear();
                 }
@@ -283,11 +261,15 @@ public class MainController {
                 Template template = DBConnection.getInstance()
                                 .getTemplateObject(modalListView.getSelectionModel().getSelectedItem().toString());
 
-                Resume resume = new Resume(name, formattedDate, file.getName(), template);
+                Resume resume = new Resume(name, formattedDate,
+                                "...../src/main/resources/com/example/se302_project/pdf/Arda Kestane.pdf"
+                                                + file.getName(),
+                                template);
                 DBConnection.getInstance().addResume(resume);
 
+                fillTableViews();
                 closeModal();
-                initialize();
+
         }
 
         @FXML
@@ -318,5 +300,34 @@ public class MainController {
                         longDrawer();
                 } else
                         shortDrawer();
+        }
+
+        @FXML
+        public void fillTableViews() throws SQLException {
+                String path = "images/trash.png";
+                Image image = new Image(getClass().getResource(path).toExternalForm());
+
+                ObservableList<CustomImage> resumeList = FXCollections
+                                .observableArrayList();
+                resumeNameColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, String>("name"));
+                resumeTrashColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, ImageView>("image"));
+
+                for (int i = 0; i < DBConnection.getInstance().getResumes().size(); i++) {
+                        resumeList.add(new CustomImage(DBConnection.getInstance().getResumes().get(i),
+                                        new ImageView(image)));
+                }
+                resumeTableView.setItems(resumeList);
+
+                ObservableList<CustomImage> templateList = FXCollections
+                                .observableArrayList();
+                templateNameColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, String>("name"));
+                templateTrashColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, ImageView>("image"));
+
+                for (int i = 0; i < DBConnection.getInstance().getTemplates().size(); i++) {
+                        templateList.add(new CustomImage(DBConnection.getInstance().getTemplates().get(i),
+                                        new ImageView(image)));
+                }
+
+                templateTableView.setItems(templateList);
         }
 }
