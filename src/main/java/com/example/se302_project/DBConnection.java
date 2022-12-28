@@ -71,11 +71,12 @@ public class DBConnection {
 
             getTemplateAttributes = connection.prepareStatement("SELECT ATTRIBUTES FROM TEMPLATE WHERE TITLE = ?");
 
-            getResumeAttributes = connection.prepareStatement("SELECT KEY, VALUE FROM ATTRIBUTES WHERE RESUME_NAME = ?");
+            getResumeAttributes = connection
+                    .prepareStatement("SELECT KEY, VALUE FROM ATTRIBUTES WHERE RESUME_NAME = ?");
 
             getResumeTags = connection.prepareStatement("SELECT NAME FROM TAG WHERE RESUME_NAME = ?");
 
-            getResumeObject = connection.prepareStatement("SELECT * FROM RESUME FROM RESUME WHERE NAME = ?");
+            getResumeObject = connection.prepareStatement("SELECT * FROM RESUME WHERE NAME = ?");
 
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
@@ -247,34 +248,33 @@ public class DBConnection {
         return ar;
     }
 
-    public HashMap<String, String> getResumeAttributes(String resumeName) throws SQLException{
+    public HashMap<String, String> getResumeAttributes(String resumeName) throws SQLException {
         HashMap<String, String> h = new HashMap<>();
         try {
             getResumeAttributes.setString(1, resumeName);
             getResumeAttributes.execute();
             ResultSet rs = getResumeAttributes.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 String key = rs.getString(1);
                 String value = rs.getString(2);
                 h.put(key, value);
             }
-        } 
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e);
         }
-        
+
         return h;
     }
 
-    public ArrayList<String> getResumeTags(String resumeName) throws SQLException{
+    public ArrayList<String> getResumeTags(String resumeName) throws SQLException {
         ArrayList<String> arr = new ArrayList<>();
         try {
             getResumeTags.setString(1, resumeName);
             getResumeTags.execute();
             ResultSet rs = getResumeTags.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 String tag = rs.getString(1);
                 arr.add(tag);
             }
@@ -296,15 +296,14 @@ public class DBConnection {
             while (rs.next()) {
                 String attribute = rs.getString(1);
                 t.addAttribute(attribute);
-                }
-            
             }
-        catch (SQLException e) {
-                System.out.println(e);
-            }
-        return t;
+
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-    
+        return t;
+    }
+
     public Resume getResumeObject(String resumeName) throws SQLException {
         Resume r = new Resume(resumeName);
         try {
@@ -325,12 +324,11 @@ public class DBConnection {
             r.setTemplate(template);
             r.setAttributes(attributes);
             r.setTags(tags);
-            
-        }
-        catch (SQLException e) {
+
+        } catch (SQLException e) {
             System.out.println(e);
         }
         return r;
     }
-    
-    }
+
+}

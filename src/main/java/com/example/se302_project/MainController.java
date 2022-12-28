@@ -2,8 +2,12 @@ package com.example.se302_project;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.apache.lucene.queryparser.classic.ParseException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,15 +15,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.apache.lucene.queryparser.classic.ParseException;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 public class MainController {
         @FXML
@@ -53,12 +58,22 @@ public class MainController {
         @FXML
         private TableColumn resumeNameColumn, resumeTrashColumn, templateNameColumn, templateTrashColumn;
         @FXML
-        private HBox resumeHBox, searchHBox, templateHBox;
+        private HBox resumeHBox, searchHBox, templateHBox, modalHBox;
+        @FXML
+        private Pane modalPane;
+        @FXML
+        private ListView modalListView;
+        @FXML
+        private TextField modalResumeName;
+        @FXML
+        private ImageView pdfUploadView;
 
-        public void initialize() throws SQLException {
+        public void initialize() throws SQLException, IOException {
+
                 String path = "images/trash.png";
                 Image image = new Image(getClass().getResource(path).toExternalForm());
-                ObservableList<CustomImage> resumeList = FXCollections.observableArrayList();
+                ObservableList<CustomImage> resumeList = FXCollections
+                                .observableArrayList();
                 resumeNameColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, String>("name"));
                 resumeTrashColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, ImageView>("image"));
 
@@ -68,7 +83,8 @@ public class MainController {
                 }
                 resumeTableView.setItems(resumeList);
 
-                ObservableList<CustomImage> templateList = FXCollections.observableArrayList();
+                ObservableList<CustomImage> templateList = FXCollections
+                                .observableArrayList();
                 templateNameColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, String>("name"));
                 templateTrashColumn.setCellValueFactory(new PropertyValueFactory<CustomImage, ImageView>("image"));
 
@@ -79,58 +95,68 @@ public class MainController {
                 templateTableView.setItems(templateList);
 
                 /*
-                Template template = new Template("Student");
-                DBConnection.getInstance().addTemplate(template);
-
-                Resume resume1 = new Resume("Emre Dülek", "01.01.2023",
-                        "C://EmreDulek/Desktop/EmreDulek.pdf", template);
-                HashMap<String, String> resume1_attributes = new HashMap<>();
-                resume1_attributes.put("introduction", "I am a software developer who has experience with application and web development.\n" +
-                        "I have experience working for startups, thus I have developed adequate teamwork,\n" +
-                        "communication, and problem solving abilities. I’m currently studying two undergraduate\n" +
-                        "program to learn new concepts in science. Even though I didn't have enough knowledge\n" +
-                        "of some concepts, I considered myself as a ‘fast learner’.");
-                resume1_attributes.put("education", "2020-Present\n" +
-                        "Izmir University of Economics\n" +
-                        "Bachelor of Science : Computer Engineering (GPA : 3.63)\n" +
-                        "Izmir University of Economics\n" +
-                        "2021-Present\n" +
-                        "Bachelor of Science : Electrical and Electronics Engineering (GPA : 3.80)");
-                resume1.setAttributes(resume1_attributes);
-                ArrayList<String> tags1 = new ArrayList<String>();
-                tags1.add("Java");
-                tags1.add("JavaFX");
-                tags1.add("SQLite");
-                tags1.add("Django");
-                resume1.setTags(tags1);
-
-                Resume resume2 = new Resume("Umut Karakuyu", "03.01.2023",
-                        "C://UmutKarakuyu/Desktop/UmutKarakuyu.pdf",
-                        template);
-                HashMap<String, String> resume2_attributes = new HashMap<>();
-                resume2_attributes.put("introduction", "As a software developer, I have 2+ of expertise planning and implementing\n" +
-                        "reliable software. I consider my communication skills are exceptional and\n" +
-                        "have worked on both academic and startup initiatives. I'm putting in an\n" +
-                        "application as a software developer to broaden my skill set and get\n" +
-                        "valuable experience for my line of work.");
-                resume2_attributes.put("education", "Izmir University of Economics");
-                resume2.setAttributes(resume2_attributes);
-                ArrayList<String> tags2 = new ArrayList<String>();
-                tags2.add("Testing");
-                tags2.add("JavaFX");
-                tags2.add("MySQL");
-                tags2.add("Django");
-                resume2.setTags(tags2);
-
-                DBConnection.getInstance().addResume(resume1);
-                DBConnection.getInstance().addResume(resume2);*/
+                 * Template template = new Template("Student");
+                 * DBConnection.getInstance().addTemplate(template);
+                 * 
+                 * Resume resume1 = new Resume("Emre Dülek", "01.01.2023",
+                 * "C://EmreDulek/Desktop/EmreDulek.pdf", template);
+                 * HashMap<String, String> resume1_attributes = new HashMap<>();
+                 * resume1_attributes.put("introduction",
+                 * "I am a software developer who has experience with application and web development.\n"
+                 * +
+                 * "I have experience working for startups, thus I have developed adequate teamwork,\n"
+                 * +
+                 * "communication, and problem solving abilities. I’m currently studying two undergraduate\n"
+                 * +
+                 * "program to learn new concepts in science. Even though I didn't have enough knowledge\n"
+                 * +
+                 * "of some concepts, I considered myself as a ‘fast learner’.");
+                 * resume1_attributes.put("education", "2020-Present\n" +
+                 * "Izmir University of Economics\n" +
+                 * "Bachelor of Science : Computer Engineering (GPA : 3.63)\n" +
+                 * "Izmir University of Economics\n" +
+                 * "2021-Present\n" +
+                 * "Bachelor of Science : Electrical and Electronics Engineering (GPA : 3.80)");
+                 * resume1.setAttributes(resume1_attributes);
+                 * ArrayList<String> tags1 = new ArrayList<String>();
+                 * tags1.add("Java");
+                 * tags1.add("JavaFX");
+                 * tags1.add("SQLite");
+                 * tags1.add("Django");
+                 * resume1.setTags(tags1);
+                 * 
+                 * Resume resume2 = new Resume("Umut Karakuyu", "03.01.2023",
+                 * "C://UmutKarakuyu/Desktop/UmutKarakuyu.pdf",
+                 * template);
+                 * HashMap<String, String> resume2_attributes = new HashMap<>();
+                 * resume2_attributes.put("introduction",
+                 * "As a software developer, I have 2+ of expertise planning and implementing\n"
+                 * +
+                 * "reliable software. I consider my communication skills are exceptional and\n"
+                 * +
+                 * "have worked on both academic and startup initiatives. I'm putting in an\n" +
+                 * "application as a software developer to broaden my skill set and get\n" +
+                 * "valuable experience for my line of work.");
+                 * resume2_attributes.put("education", "Izmir University of Economics");
+                 * resume2.setAttributes(resume2_attributes);
+                 * ArrayList<String> tags2 = new ArrayList<String>();
+                 * tags2.add("Testing");
+                 * tags2.add("JavaFX");
+                 * tags2.add("MySQL");
+                 * tags2.add("Django");
+                 * resume2.setTags(tags2);
+                 * 
+                 * DBConnection.getInstance().addResume(resume1);
+                 * DBConnection.getInstance().addResume(resume2);
+                 */
         }
 
         @FXML
-        public void openResumeScreen() {
+        public void openResumeScreen() throws SQLException {
                 resumeHBox.setVisible(true);
                 searchHBox.setVisible(false);
                 templateHBox.setVisible(false);
+                showModal();
         }
 
         @FXML
@@ -150,16 +176,16 @@ public class MainController {
         @FXML
         public void search() {
                 String query = filterSearchField.getText();
-                if(query.equals("")){
+                if (query.equals("")) {
                         return;
                 }
 
                 ArrayList<String> tagFilters = new ArrayList<String>();
-                //tagFilters.add("SQLite");
+                // tagFilters.add("SQLite");
                 Index index = DBConnection.getInstance().getIndex();
                 HashMap<String, String> findings = null;
                 try {
-                       findings = index.query(query, tagFilters);
+                        findings = index.query(query, tagFilters);
                 } catch (IOException | ParseException | ClassNotFoundException e) {
                         e.printStackTrace();
                 }
@@ -172,6 +198,40 @@ public class MainController {
                         query_results.add(new SearchResult(resumeName, findings.get(resumeName)));
                 }
                 searchTableView.setItems(query_results);
+        }
 
+        @FXML
+        public void showModal() throws SQLException {
+                modalHBox.setVisible(true);
+                for (int i = 0; i < DBConnection.getInstance().getTemplates().size(); i++) {
+                        modalListView.getItems().add(DBConnection.getInstance().getTemplates().get(i));
+                }
+        }
+
+        @FXML
+        public void addResume() throws SQLException {
+                String name = modalResumeName.getText();
+
+                LocalDateTime date = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String formattedDate = date.format(formatter);
+
+                String fileName = "MeliCE";
+
+                Template template = DBConnection.getInstance()
+                                .getTemplateObject(modalListView.getSelectionModel().getSelectedItem().toString());
+
+                Resume resume = new Resume(name, formattedDate, fileName, template);
+                DBConnection.getInstance().addResume(resume);
+
+                closeModal();
+        }
+
+        @FXML
+        private void closeModal() {
+                modalHBox.setVisible(false);
+                modalResumeName.clear();
+                modalListView.getSelectionModel().clearSelection();
+                modalListView.getItems().clear();
         }
 }
