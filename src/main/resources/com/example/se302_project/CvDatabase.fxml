@@ -95,7 +95,7 @@
                                                         </Button>
                                                     </children>
                                                 </HBox>
-                                    <TableView fx:id="resumeTableView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
+                                    <TableView fx:id="resumeTableView" onMouseClicked="#selectFromResumeTable" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
                                       <columns>
                                           <TableColumn prefWidth="107.0" text="Column X" />
                                         <TableColumn fx:id="resumeNameColumn" prefWidth="220.0" />
@@ -163,7 +163,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" onMouseClicked="#openSearchScreen" prefHeight="40.0" prefWidth="350.0">
                                        <children>
-                                          <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                          <Button mnemonicParsing="false" onAction="#openSearchScreen" style="-fx-background-color: transparent;">
                                              <graphic>
                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -179,7 +179,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="278.0" spacing="40.0">
                                        <children>
-                                          <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                          <Button mnemonicParsing="false" onAction="#openResumeScreen" style="-fx-background-color: transparent;">
                                              <graphic>
                                                 <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -192,7 +192,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="40.0">
                                        <children>
-                                          <Button fx:id="leftBarButton11" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                          <Button fx:id="leftBarButton11" mnemonicParsing="false" onAction="#openTemplateScreen" style="-fx-background-color: transparent;">
                                              <graphic>
                                                 <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -411,7 +411,7 @@
                               <ListView fx:id="modalListView" prefHeight="265.0" prefWidth="349.0" stylesheets="@css/TableView.css" />
                               <HBox alignment="BOTTOM_RIGHT" prefHeight="43.0" prefWidth="349.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#addResume" prefHeight="22.0" prefWidth="69.0" style="-fx-background-radius: 10; -fx-background-color: FFF9F8; -fx-border-color: grey; -fx-border-radius: 20;" text="Save">
+                                    <Button mnemonicParsing="false" onAction="#saveResume" prefHeight="22.0" prefWidth="69.0" style="-fx-background-radius: 10; -fx-background-color: FFF9F8; -fx-border-color: grey; -fx-border-radius: 20;" text="Save">
                                        <HBox.margin>
                                           <Insets bottom="5.0" right="10.0" />
                                        </HBox.margin>

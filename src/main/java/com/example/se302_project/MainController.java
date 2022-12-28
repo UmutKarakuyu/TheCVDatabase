@@ -1,5 +1,6 @@
 package com.example.se302_project;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 public class MainController {
         @FXML
@@ -164,11 +166,8 @@ public class MainController {
         }
 
         @FXML
-        public void openResumeScreen() throws SQLException {
-                resumeHBox.setVisible(true);
-                searchHBox.setVisible(false);
-                templateHBox.setVisible(false);
-                showModal();
+        public void selectFromResumeTable() {
+
         }
 
         @FXML
@@ -221,22 +220,34 @@ public class MainController {
         }
 
         @FXML
-        public void addResume() throws SQLException {
-                String name = modalResumeName.getText();
+        public void openResumeScreen() throws SQLException {
+                resumeHBox.setVisible(true);
+                searchHBox.setVisible(false);
+                templateHBox.setVisible(false);
+                showModal();
+        }
 
+        @FXML
+        public void saveResume() throws SQLException, IOException {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Select a file");
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
+                fileChooser.getExtensionFilters().add(extFilter);
+                File file = fileChooser.showOpenDialog(null);
+
+                String name = modalResumeName.getText();
                 LocalDateTime date = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                 String formattedDate = date.format(formatter);
 
-                String fileName = "MeliCE";
-
                 Template template = DBConnection.getInstance()
                                 .getTemplateObject(modalListView.getSelectionModel().getSelectedItem().toString());
 
-                Resume resume = new Resume(name, formattedDate, fileName, template);
+                Resume resume = new Resume(name, formattedDate, file.getName(), template);
                 DBConnection.getInstance().addResume(resume);
 
                 closeModal();
+                initialize();
         }
 
         @FXML
@@ -263,7 +274,7 @@ public class MainController {
 
         @FXML
         private void toggleDrawer() {
-                if (drawerStackPane.getWidth() == 70) {
+                if (drawerShort.isVisible()) {
                         longDrawer();
                 } else
                         shortDrawer();
