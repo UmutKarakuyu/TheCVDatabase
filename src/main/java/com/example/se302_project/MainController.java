@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 
@@ -23,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -46,6 +48,8 @@ public class MainController {
         private Button filterOptionButton;
         @FXML
         private Button newTemplateButton;
+        @FXML
+        private TextField tagSearchField;
         @FXML
         private ComboBox<String> tags;
         @FXML
@@ -76,6 +80,11 @@ public class MainController {
         private StackPane drawerStackPane;
 
         public void initialize() throws SQLException, IOException {
+                tagSearchField.setOnKeyPressed(event -> {
+                        if(event.getCode() == KeyCode.ENTER){
+                                addTag();
+                        }
+                });
 
                 modalHBox.widthProperty().addListener((obs, oldVal, newVal) -> {
                         if (modalHBox.getWidth() < 1250)
@@ -209,6 +218,37 @@ public class MainController {
                         query_results.add(new SearchResult(resumeName, findings.get(resumeName)));
                 }
                 searchTableView.setItems(query_results);
+        }
+
+        private void addTag() {
+                // Search for tag query if it's found, added to combobox
+                String tag_query = tagSearchField.getText();
+                if (tag_query.equals("")) {
+                        return;
+                }
+                
+                ArrayList<String> available_tags = new ArrayList<>();
+                try {
+                        available_tags = DBConnection.getInstance().getTags();
+                } catch (SQLException e) {
+                        e.printStackTrace();
+                }
+                
+                boolean match_found = false;
+                ObservableList<String> combobox_tags = tags.getItems();
+                for(String available_tag: available_tags){
+                        if(tag_query.toLowerCase(Locale.forLanguageTag("en")).equals(
+                                available_tag.toLowerCase(Locale.forLanguageTag("en")))){
+                                        combobox_tags.add(available_tag);
+                                        match_found = true;
+                                        break;
+                                }
+                }
+            
+                if(match_found){
+                        tags.setItems(combobox_tags);
+                        tagSearchField.clear();
+                }
         }
 
         @FXML
