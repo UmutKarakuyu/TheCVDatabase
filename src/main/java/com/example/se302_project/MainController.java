@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import org.apache.lucene.queryparser.classic.ParseException;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.skin.TableHeaderRow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -343,5 +347,36 @@ public class MainController {
                 templateTableView.setItems(templateList);
                 templateCarouselList
                                 .setItems(FXCollections.observableArrayList(DBConnection.getInstance().getTemplates()));
+
+                                                resumeTableView.widthProperty().addListener(new ChangeListener<Number>()
+                                {
+                                    @Override
+                                    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth)
+                                    {
+                                        TableHeaderRow header = (TableHeaderRow) resumeTableView.lookup("TableHeaderRow");
+                                        header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
+                                            @Override
+                                            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                                                header.setReordering(false);
+                                            }
+                                        });
+                                    }
+                                });
+
+                                templateTableView.widthProperty().addListener(new ChangeListener<Number>()
+                                {
+                                    @Override
+                                    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth)
+                                    {
+                                        TableHeaderRow header = (TableHeaderRow) templateTableView.lookup("TableHeaderRow");
+                                        header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
+                                            @Override
+                                            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                                                header.setReordering(false);
+                                            }
+                                        });
+                                    }
+                                });
+
         }
 }
