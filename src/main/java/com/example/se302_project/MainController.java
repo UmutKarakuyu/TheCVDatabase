@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import javafx.event.ActionEvent;
 import org.apache.lucene.queryparser.classic.ParseException;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,7 +23,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.skin.TableHeaderRow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -35,6 +33,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 public class MainController {
+        Template template;
+        public ListView templateList;
         @FXML
         private Label searchField;
         @FXML
@@ -83,21 +83,19 @@ public class MainController {
         private StackPane drawerStackPane;
         @FXML
         private ListView templateCarouselList;
-        @FXML
-        private ImageView originalResume;
-        @FXML 
-        private VBox generatedResumeBox;
-        @FXML
-        private ImageView ellipse1, ellipse2;
-        @FXML
-        private HBox firstEllipses;
-        @FXML
-        private HBox secondEllipses;
-        @FXML
-        private HBox thirdEllipses;
+
+        public void buttonAdd(){
+                template= new Template(templateName.getText());
+                templateList.getItems().add(template.getTitle());
+        }
+
+        public void saveTemplate(){
+        DBConnection dbConnection= new DBConnection();
+        DBConnection.getInstance().addTemplate(template);
+        
+        }
 
         public void initialize() throws SQLException, IOException {
-
                 tagSearchField.setOnKeyPressed(event -> {
                         if (event.getCode() == KeyCode.ENTER) {
                                 addTag();
@@ -109,15 +107,6 @@ public class MainController {
                                 shortDrawer();
                         else
                                 longDrawer();
-                });
-                generatedResumeBox.heightProperty().addListener((obs, oldVal, newVal) -> {
-                        ellipse2.setFitHeight(generatedResumeBox.getHeight());
-                        ellipse2.setFitWidth(generatedResumeBox.getWidth() / 2);
-                });
-
-                generatedResumeBox.widthProperty().addListener((obs, oldVal, newVal) -> {
-                        ellipse2.setFitHeight(generatedResumeBox.getHeight());
-                        ellipse2.setFitWidth(generatedResumeBox.getWidth() / 2);
                 });
 
                 fillTableViews();
@@ -183,26 +172,12 @@ public class MainController {
         public void selectFromResumeTable() {
 
         }
-        @FXML
-        public void openResumeScreen() {
-                resumeHBox.setVisible(true);
-                searchHBox.setVisible(false);
-                templateHBox.setVisible(false);
 
-                firstEllipses.setVisible(true);
-                secondEllipses.setVisible(false);
-                thirdEllipses.setVisible(false);
-        }
-        
         @FXML
         public void openSearchScreen() {
                 resumeHBox.setVisible(false);
                 searchHBox.setVisible(true);
                 templateHBox.setVisible(false);
-
-                firstEllipses.setVisible(false);
-                secondEllipses.setVisible(true);
-                thirdEllipses.setVisible(false);
         }
 
         @FXML
@@ -210,10 +185,6 @@ public class MainController {
                 resumeHBox.setVisible(false);
                 searchHBox.setVisible(false);
                 templateHBox.setVisible(true);
-
-                firstEllipses.setVisible(false);
-                secondEllipses.setVisible(false);
-                thirdEllipses.setVisible(true);
         }
 
         @FXML
@@ -280,6 +251,14 @@ public class MainController {
                 for (int i = 0; i < DBConnection.getInstance().getTemplates().size(); i++) {
                         modalListView.getItems().add(DBConnection.getInstance().getTemplates().get(i));
                 }
+        }
+
+        @FXML
+        public void openResumeScreen() {
+                resumeHBox.setVisible(true);
+                searchHBox.setVisible(false);
+                templateHBox.setVisible(false);
+
         }
 
         @FXML
@@ -376,36 +355,5 @@ public class MainController {
                 templateTableView.setItems(templateList);
                 templateCarouselList
                                 .setItems(FXCollections.observableArrayList(DBConnection.getInstance().getTemplates()));
-
-                                                resumeTableView.widthProperty().addListener(new ChangeListener<Number>()
-                                {
-                                    @Override
-                                    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth)
-                                    {
-                                        TableHeaderRow header = (TableHeaderRow) resumeTableView.lookup("TableHeaderRow");
-                                        header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
-                                            @Override
-                                            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                                                header.setReordering(false);
-                                            }
-                                        });
-                                    }
-                                });
-
-                                templateTableView.widthProperty().addListener(new ChangeListener<Number>()
-                                {
-                                    @Override
-                                    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth)
-                                    {
-                                        TableHeaderRow header = (TableHeaderRow) templateTableView.lookup("TableHeaderRow");
-                                        header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
-                                            @Override
-                                            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                                                header.setReordering(false);
-                                            }
-                                        });
-                                    }
-                                });
-
         }
 }
