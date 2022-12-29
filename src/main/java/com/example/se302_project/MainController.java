@@ -240,7 +240,15 @@ public class MainController {
         }
 
         @FXML
-        public void openResumeScreen() throws SQLException {
+        public void openResumeScreen() {
+                resumeHBox.setVisible(true);
+                searchHBox.setVisible(false);
+                templateHBox.setVisible(false);
+
+        }
+
+        @FXML
+        public void addResumeScreen() throws SQLException {
                 resumeHBox.setVisible(true);
                 searchHBox.setVisible(false);
                 templateHBox.setVisible(false);
@@ -330,8 +338,8 @@ public class MainController {
                                         new ImageView(image)));
                 }
 
-                
                 templateTableView.setItems(templateList);
-                templateCarouselList.setItems(FXCollections.observableArrayList(DBConnection.getInstance().getTemplates()));
+                templateCarouselList
+                                .setItems(FXCollections.observableArrayList(DBConnection.getInstance().getTemplates()));
         }
 }

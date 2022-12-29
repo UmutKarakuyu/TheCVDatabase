@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane alignment="TOP_LEFT" prefHeight="723.0" prefWidth="1176.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
+<StackPane alignment="TOP_LEFT" prefHeight="723.0" prefWidth="1176.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
     <children>
         <HBox prefHeight="953.0" prefWidth="1144.0">
             <children>
@@ -77,12 +77,12 @@
                                                 </HBox>
                                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="350.0" spacing="40.0" VBox.vgrow="NEVER">
                                                     <children>
-                                                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#openResumeScreen" pickOnBounds="true" preserveRatio="true">
                                                             <image>
                                                                 <Image url="@images/resume.png" />
                                                             </image>
                                                         </ImageView>
-                                                        <Label prefHeight="59.0" prefWidth="190.0" style="-fx-font-family: Nunito;" text="Resumes" wrapText="true">
+                                                        <Label onMouseClicked="#openResumeScreen" prefHeight="59.0" prefWidth="190.0" style="-fx-font-family: Nunito;" text="Resumes" wrapText="true">
                                                             <font>
                                                                 <Font size="30.0" />
                                                             </font>
@@ -110,12 +110,12 @@
                                                 </TableView>
                                                 <HBox alignment="CENTER" prefHeight="80.0" prefWidth="285.0" spacing="40.0" VBox.vgrow="NEVER">
                                                     <children>
-                                                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                                        <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#openTemplateScreen" pickOnBounds="true" preserveRatio="true">
                                                             <image>
                                                                 <Image url="@images/template.png" />
                                                             </image>
                                                         </ImageView>
-                                                        <Label style="-fx-font-family: Nunito;" text="Templates" wrapText="true">
+                                                        <Label onMouseClicked="#openTemplateScreen" style="-fx-font-family: Nunito;" text="Templates" wrapText="true">
                                                             <font>
                                                                 <Font size="30.0" />
                                                             </font>
@@ -229,7 +229,7 @@
                             <children>
                                 <StackPane alignment="TOP_LEFT" prefHeight="510.0" prefWidth="802.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <HBox fx:id="resumeHBox" prefHeight="1081.0" prefWidth="1921.0" StackPane.alignment="CENTER">
+                                        <HBox fx:id="resumeHBox" prefHeight="1081.0" prefWidth="1921.0" visible="false" StackPane.alignment="CENTER">
                                             <children>
                                                 <VBox alignment="BOTTOM_CENTER" prefHeight="723.0" prefWidth="309.0" HBox.hgrow="ALWAYS">
                                                     <children>
@@ -288,29 +288,32 @@
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <HBox fx:id="searchHBox" prefHeight="1081.0" prefWidth="1921.0" visible="false" StackPane.alignment="TOP_LEFT">
+                                        <HBox fx:id="searchHBox" prefHeight="1081.0" prefWidth="1921.0" StackPane.alignment="TOP_LEFT">
                                             <children>
                                                 <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <HBox>
                                                             <children>
-                                                                <HBox alignment="CENTER_LEFT" prefHeight="139.0" prefWidth="755.0" spacing="20.0">
+                                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="755.0" spacing="20.0">
                                                                     <children>
-                                                                        <TextField fx:id="filterSearchField" onKeyPressed="#search" prefHeight="53.0" prefWidth="217.0" promptText="Type To Search Anything" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: black; -fx-background-color: white; -fx-border-width: 2;">
+                                                                        <TextField fx:id="filterSearchField" onKeyPressed="#search" prefHeight="30.0" prefWidth="230.0" promptText="Type To Search Anything" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: grey; -fx-background-color: white; -fx-border-width: 2;">
                                                                             <font>
                                                                                 <Font size="16.0" />
                                                                             </font>
                                                                         </TextField>
-                                                                        <TextField fx:id="tagSearchField" prefHeight="53.0" prefWidth="182.0" promptText="Type To Search Tag" style="-fx-border-radius: 20; -fx-background-radius: 20; -fx-background-color: white; -fx-border-color: black; -fx-border-width: 2;">
+                                                                        <TextField fx:id="tagSearchField" prefHeight="30.0" prefWidth="230.0" promptText="Type To Search Tag" style="-fx-border-radius: 20; -fx-background-radius: 20; -fx-background-color: white; -fx-border-color: grey; -fx-border-width: 2;">
                                                                             <font>
                                                                                 <Font size="16.0" />
                                                                             </font>
                                                                         </TextField>
-                                                                        <ComboBox fx:id="tags" prefHeight="53.0" prefWidth="163.0" promptText="Tags" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: black; -fx-border-width: 2;" />
-                                                                        <ComboBox fx:id="templates" prefHeight="53.0" prefWidth="163.0" promptText="Templates" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: black; -fx-border-width: 2;" />
+                                                                        <ComboBox fx:id="tags" prefHeight="30.0" prefWidth="180.0" promptText="Tags" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: grey; -fx-border-width: 2;" />
+                                                                        <ComboBox fx:id="templates" prefHeight="30.0" prefWidth="180.0" promptText="Templates" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: grey; -fx-border-width: 2;" />
                                                                     </children>
+                                                   <HBox.margin>
+                                                      <Insets right="5.0" />
+                                                   </HBox.margin>
                                                                 </HBox>
-                                                                <HBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
+                                                                <HBox alignment="BOTTOM_RIGHT" prefWidth="32.0" HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <Button fx:id="filterOptionButton" accessibleRole="COMBO_BOX" mnemonicParsing="false" style="-fx-background-color: transparent;">
                                                                             <graphic>
@@ -325,7 +328,7 @@
                                                                 </HBox>
                                                             </children>
                                                         </HBox>
-                                                        <TableView fx:id="searchTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                                        <TableView fx:id="searchTableView" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
                                                             <columns>
                                                                 <TableColumn fx:id="searchTResumeNameColumn" prefWidth="75.0" text="Name" />
                                                                 <TableColumn fx:id="searchTResumeDateColumn" prefWidth="75.0" text="Date" />
