@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import org.apache.lucene.queryparser.classic.ParseException;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -80,8 +79,11 @@ public class MainController {
         private StackPane drawerStackPane;
         @FXML
         private ListView templateCarouselList;
+        @FXML
+        private ImageView originalResume;
 
         public void initialize() throws SQLException, IOException {
+
                 tagSearchField.setOnKeyPressed(event -> {
                         if (event.getCode() == KeyCode.ENTER) {
                                 addTag();
