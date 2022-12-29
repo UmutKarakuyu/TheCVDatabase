@@ -89,6 +89,12 @@ public class MainController {
         private VBox generatedResumeBox;
         @FXML
         private ImageView ellipse1, ellipse2;
+        @FXML
+        private HBox firstEllipses;
+        @FXML
+        private HBox secondEllipses;
+        @FXML
+        private HBox thirdEllipses;
 
         public void initialize() throws SQLException, IOException {
 
@@ -177,12 +183,26 @@ public class MainController {
         public void selectFromResumeTable() {
 
         }
+        @FXML
+        public void openResumeScreen() {
+                resumeHBox.setVisible(true);
+                searchHBox.setVisible(false);
+                templateHBox.setVisible(false);
 
+                firstEllipses.setVisible(true);
+                secondEllipses.setVisible(false);
+                thirdEllipses.setVisible(false);
+        }
+        
         @FXML
         public void openSearchScreen() {
                 resumeHBox.setVisible(false);
                 searchHBox.setVisible(true);
                 templateHBox.setVisible(false);
+
+                firstEllipses.setVisible(false);
+                secondEllipses.setVisible(true);
+                thirdEllipses.setVisible(false);
         }
 
         @FXML
@@ -190,6 +210,10 @@ public class MainController {
                 resumeHBox.setVisible(false);
                 searchHBox.setVisible(false);
                 templateHBox.setVisible(true);
+
+                firstEllipses.setVisible(false);
+                secondEllipses.setVisible(false);
+                thirdEllipses.setVisible(true);
         }
 
         @FXML
@@ -256,14 +280,6 @@ public class MainController {
                 for (int i = 0; i < DBConnection.getInstance().getTemplates().size(); i++) {
                         modalListView.getItems().add(DBConnection.getInstance().getTemplates().get(i));
                 }
-        }
-
-        @FXML
-        public void openResumeScreen() {
-                resumeHBox.setVisible(true);
-                searchHBox.setVisible(false);
-                templateHBox.setVisible(false);
-
         }
 
         @FXML
