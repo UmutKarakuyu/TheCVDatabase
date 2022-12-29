@@ -19,7 +19,7 @@ public class DBConnection {
     private PreparedStatement insertResume, insertTemplate, insertTag, insertAttribute, getTags, getTemplates,
             getResumes, getTemplateAttributes, getResumeAttributes, getResumeTags, getResumeObject, deleteResume;
 
-    private DBConnection() {
+    DBConnection() {
         this.fileName = "info.db";
         File file = new File(fileName);
         boolean firstRun = !file.exists();
