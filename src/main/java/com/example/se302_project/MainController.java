@@ -85,6 +85,10 @@ public class MainController {
         private ListView templateCarouselList;
         @FXML
         private ImageView originalResume;
+        @FXML 
+        private VBox generatedResumeBox;
+        @FXML
+        private ImageView ellipse1, ellipse2;
 
         public void initialize() throws SQLException, IOException {
 
@@ -99,6 +103,15 @@ public class MainController {
                                 shortDrawer();
                         else
                                 longDrawer();
+                });
+                generatedResumeBox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                        ellipse2.setFitHeight(generatedResumeBox.getHeight());
+                        ellipse2.setFitWidth(generatedResumeBox.getWidth() / 2);
+                });
+
+                generatedResumeBox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                        ellipse2.setFitHeight(generatedResumeBox.getHeight());
+                        ellipse2.setFitWidth(generatedResumeBox.getWidth() / 2);
                 });
 
                 fillTableViews();
