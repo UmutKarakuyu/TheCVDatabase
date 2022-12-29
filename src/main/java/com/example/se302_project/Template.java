@@ -6,6 +6,7 @@ public class Template {
     private String title;
     private ArrayList<String> attributes;
 
+
     public Template(String title) {
         this.title = title;
         this.attributes = new ArrayList<String>();
