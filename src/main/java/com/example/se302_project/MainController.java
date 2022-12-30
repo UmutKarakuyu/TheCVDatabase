@@ -7,34 +7,26 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
-import javafx.event.ActionEvent;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 public class MainController {
         Template template;
-        public ListView templateList;
+        public GridPane templateList;
         @FXML
         private Label searchField;
         @FXML
@@ -85,14 +77,57 @@ public class MainController {
         private ListView templateCarouselList;
 
         public void buttonAdd(){
-                template= new Template(templateName.getText());
-                templateList.getItems().add(template.getTitle());
-        }
+              //templateList.addColumn(1, new TextField());
+                //TextField textField1= new TextField();
+                //textField1.setPromptText("Add attribute");
+                //templateList.addColumn(1, textField1);
 
-        public void saveTemplate(){
-        DBConnection dbConnection= new DBConnection();
-        DBConnection.getInstance().addTemplate(template);
-        
+
+                templateList.addColumn(1, new TextField());
+                TextField textField1= new TextField();
+
+        }
+        public class Triple{
+                Node n;
+                int row;
+                int col;
+                public Triple(Node n,int row, int col){
+                        this.row = row;
+                        this.col = col;
+                        this.n = n;
+                }
+        }
+        public static Node getItem(List<Triple> l, int findRow, int findCol){
+
+                for(int i=0; i < l.size(); i++){
+                        if(l.get(i).row == findRow && l.get(i).col == findCol){
+                                return l.get(i).n;
+                        }
+                }
+                return null;
+        }
+        public void saveTemplate() throws SQLException, IOException {
+                List<Triple> list = new ArrayList<>();
+                for (int i = 0; i < templateList.getChildren().size(); i++) {
+                        list.add(new Triple(templateList.getChildren().get(i),
+                                GridPane.getRowIndex(templateList.getChildren().get(i)), GridPane.getColumnIndex(templateList.getChildren().get(i))));
+
+
+                        TextField tempText = (TextField) getItem(list, 1, 1);
+                        assert tempText != null;
+                        System.out.println(tempText.getText());
+
+
+//for(int i= 1; i< templateList.getColumnCount(); i++){
+                        //templateList.get
+//}
+
+                        template = new Template(templateName.getText());
+                        DBConnection dbConnection = new DBConnection();
+                        DBConnection.getInstance().addTemplate(template);
+                        initialize();
+
+                }
         }
 
         public void initialize() throws SQLException, IOException {
