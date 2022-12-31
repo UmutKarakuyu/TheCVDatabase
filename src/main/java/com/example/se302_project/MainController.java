@@ -18,6 +18,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -372,26 +373,39 @@ public class MainController {
         }
 
         public void buttonAdd() {
-                ObservableList<Node> children = templateList.getChildren();
+                if (templateList.getRowCount() <= 20) {
+                        ObservableList<Node> children = templateList.getChildren();
+                        Node button = null;
+                        for (Node child : children) {
+                                if (child instanceof Button) {
+                                        button = child;
+                                        break;
+                                }
+                        }
+                        if (button != null) {
+                                children.remove(button);
+                        }
 
-                Node button = null;
-                for (Node child : children) {
-                        if (child instanceof Button) {
-                                button = child;
-                                break;
+                        TextField textField = new TextField();
+                        textField.setMaxWidth(250);
+                        Label label = new Label(":");
+
+                        GridPane.setRowIndex(textField, GridPane.getRowIndex(button));
+                        GridPane.setColumnIndex(textField, 0);
+                        GridPane.setRowIndex(label, GridPane.getRowIndex(button));
+                        GridPane.setColumnIndex(label, 1);
+                        GridPane.setHalignment(label, HPos.LEFT);
+
+                        children.addAll(textField, label);
+
+                        templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
+
+                        ObservableList<ColumnConstraints> columnConstraints = templateList.getColumnConstraints();
+                        for (ColumnConstraints constraint : columnConstraints) {
+                                constraint.setHalignment(HPos.LEFT);
+                                constraint.setHgrow(Priority.ALWAYS);
                         }
                 }
-                if (button != null) {
-                        children.remove(button);
-                }
-
-                TextField textField = new TextField();
-                textField.setMaxWidth(250);
-                GridPane.setRowIndex(textField, GridPane.getRowIndex(button));
-                children.add(textField);
-
-                templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
-
         }
 
         public class Triple {
