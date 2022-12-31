@@ -17,7 +17,8 @@ public class DBConnection {
     private Index index;
 
     private PreparedStatement insertResume, insertTemplate, insertTag, insertAttribute, getTags, getTemplates,
-            getResumes, getTemplateAttributes, getResumeAttributes, getResumeTags, getResumeObject, deleteResume;
+            getResumes, getTemplateAttributes, getResumeAttributes, getResumeTags, getResumeObject,
+            deleteResumeFromResume, deleteResumeFromTag, deleteResumeFromAttributes;
 
     DBConnection() {
         this.fileName = "info.db";
@@ -76,11 +77,13 @@ public class DBConnection {
 
             getResumeTags = connection.prepareStatement("SELECT NAME FROM TAG WHERE RESUME_NAME = ?");
 
-            deleteResume = connection.prepareStatement("SELECT * FROM RESUME WHERE NAME = ?");
+            deleteResumeFromResume = connection.prepareStatement("DELETE FROM RESUME WHERE NAME = ?");
 
-            deleteResume = connection.prepareStatement("DELETE FROM RESUME WHERE NAME = ?;" +
-                    "DELETE FROM TAG WHERE RESUME_NAME = ?;" +
-                    "DELETE FROM ATTRIBUTES WHERE RESUME_NAME = ?");
+            deleteResumeFromTag = connection.prepareStatement(" DELETE FROM TAG WHERE RESUME_NAME = ?");
+
+            deleteResumeFromAttributes = connection.prepareStatement("DELETE FROM ATTRIBUTES WHERE RESUME_NAME = ?");
+
+            getResumeObject = connection.prepareStatement("SELECT * FROM RESUME WHERE NAME = ?");
 
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
@@ -335,13 +338,15 @@ public class DBConnection {
         return r;
     }
 
-    public void deleteResume(String resumeName) {
+    public void deleteResume(String resumeName) { // Find a way to merge 3 prepStmt's into one.
 
         try {
-            deleteResume.setString(1, resumeName);
-            deleteResume.setString(2, resumeName);
-            deleteResume.setString(3, resumeName);
-
+            deleteResumeFromResume.setString(1, resumeName);
+            deleteResumeFromTag.setString(1, resumeName);
+            deleteResumeFromAttributes.setString(1, resumeName);
+            deleteResumeFromResume.execute();
+            deleteResumeFromTag.execute();
+            deleteResumeFromAttributes.execute();
         } catch (SQLException e) {
             System.out.println(e);
         }
