@@ -178,6 +178,7 @@ public class MainController {
 
         @FXML
         public void selectFromResumeTable() throws SQLException, IOException {
+                openResumeScreen();
                 int index = resumeTableView.getSelectionModel().getSelectedIndex();
                 String resumeName = (String) resumeNameColumn.getCellData(index);
                 Resume resume = DBConnection.getInstance().getResumeObject(resumeName);
