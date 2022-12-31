@@ -186,14 +186,9 @@ public class MainController {
                 ObservableList<TablePosition> selectedCells = resumeTableView.getSelectionModel().getSelectedCells();
 
                 if (selectedCells.get(0).getTableColumn().equals(resumeTrashColumn)) {
-                        String filepath = "src/main/resources/com/example/se302_project/images/pdfs/"
-                                        + resume.getfileName()
-                                        + ".png";
-                        File file = new File(filepath);
-
+                        File file = new File(resume.getfileName());
                         originalResume.setImage(null);
                         file.delete();
-
                         DBConnection.getInstance().deleteResume(resumeName);
                         initialize();
 
@@ -202,6 +197,24 @@ public class MainController {
                         String path1 = "images/pdfs/" + fileName + ".png";
                         Image image = new Image(getClass().getResource(path1).toExternalForm());
                         originalResume.setImage(image);
+
+                }
+
+        }
+
+        @FXML
+        public void selectFromTemplateTable() throws SQLException, IOException {
+                openResumeScreen();
+                int index = templateTableView.getSelectionModel().getSelectedIndex();
+                String templateName = (String) templateNameColumn.getCellData(index);
+                Template template = DBConnection.getInstance().getTemplateObject(templateName);
+
+                ObservableList<TablePosition> selectedCells = templateTableView.getSelectionModel().getSelectedCells();
+
+                if (selectedCells.get(0).getTableColumn().equals(resumeTrashColumn)) {
+                        // DBConnection.getInstance().deleteTemplate(template);
+
+                } else {
 
                 }
 
@@ -372,6 +385,7 @@ public class MainController {
                                 document.close();
                                 System.out.println("Converted Images are saved at -> "
                                                 + destinationFile.getAbsolutePath());
+                                resume.setfileName(destinationDir);
                         } else {
                                 System.err.println(file.getName() + " File not exists");
                         }
