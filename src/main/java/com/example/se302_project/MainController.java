@@ -16,9 +16,9 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.rendering.ImageType;
-import org.apache.pdfbox.rendering.PDFRenderer;
+//import org.apache.pdfbox.pdmodel.PDDocument;
+//import org.apache.pdfbox.rendering.ImageType;
+//import org.apache.pdfbox.rendering.PDFRenderer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -397,7 +397,7 @@ public class MainController {
                 fillTableViews();
                 closeModal();
 
-        }
+       }
 
         @FXML
         private void closeModal() {
@@ -483,44 +483,32 @@ public class MainController {
                 templateList.addRow(templateList.getRowCount(), textField, label);
 
                 templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
+
+
+
+
+
         }
 
-        public class Triple {
-                Node n;
-                int row;
-                int col;
 
-                public Triple(Node n, int row, int col) {
-                        this.row = row;
-                        this.col = col;
-                        this.n = n;
-                }
-        }
-
-        public static Node getItem(List<Triple> l, int findRow, int findCol) {
-
-                for (int i = 0; i < l.size(); i++) {
-                        if (l.get(i).row == findRow && l.get(i).col == findCol) {
-                                return l.get(i).n;
-                        }
-                }
-                return null;
-        }
 
         public void saveTemplate() throws SQLException, IOException {
-                List<Triple> list = new ArrayList<>();
-                for (int i = 0; i < templateList.getChildren().size(); i++) {
-                        list.add(new Triple(templateList.getChildren().get(i),
-                                        GridPane.getRowIndex(templateList.getChildren().get(i)),
-                                        GridPane.getColumnIndex(templateList.getChildren().get(i))));
 
-                        TextField tempText = (TextField) getItem(list, 1, 1);
-                        assert tempText != null;
+                List<String> textFieldData = new ArrayList<>();
 
-                        // for(int i= 1; i< templateList.getColumnCount(); i++){
-                        // templateList.get
-                        // }
 
+                for (Node node : templateList.getChildren()) {
+                        if (node instanceof TextField) {
+                                textFieldData.add(((TextField) node).getText());
+                        }
+                }
+
+                Template template1 = new Template(textFieldData.get(0));
+
+                for (int i = 1; i < textFieldData.size(); i++) {
+                        template1.addAttribute(textFieldData.get(i));
+                }
+                        DBConnection.getInstance().getTemplateAttributes(template1);
                         Template template = new Template(templateName.getText());
                         DBConnection.getInstance().addTemplate(template);
                         initialize();
@@ -528,4 +516,4 @@ public class MainController {
                 }
         }
 
-}
+
