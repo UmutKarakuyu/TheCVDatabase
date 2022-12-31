@@ -23,6 +23,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -475,11 +476,13 @@ public class MainController {
 
                 TextField textField = new TextField();
                 textField.setMaxWidth(250);
-                GridPane.setRowIndex(textField, GridPane.getRowIndex(button));
-                children.add(textField);
+
+                Label label = new Label(":");
+                label.setAlignment(Pos.CENTER_LEFT);
+
+                templateList.addRow(templateList.getRowCount(), textField, label);
 
                 templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
-
         }
 
         public class Triple {
