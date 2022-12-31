@@ -25,14 +25,10 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 
 public class MainController {
-        Template template;
-        public GridPane templateList;
         @FXML
         private Label searchField;
         @FXML
         private TextField filterSearchField;
-        @FXML
-        private TextField templateName;
         @FXML
         private Button addResumeButton;
         @FXML
@@ -41,8 +37,6 @@ public class MainController {
         private Button leftBarButton;
         @FXML
         private Button filterOptionButton;
-        @FXML
-        private Button newTemplateButton;
         @FXML
         private TextField tagSearchField;
         @FXML
@@ -53,8 +47,6 @@ public class MainController {
         private TableView searchTableView;
         @FXML
         private TableColumn searchTResumeNameColumn, searchTResumeDateColumn;
-        @FXML
-        private VBox templateAttributeView;
         @FXML
         private TableView resumeTableView, templateTableView;
         @FXML
@@ -75,69 +67,26 @@ public class MainController {
         private StackPane drawerStackPane;
         @FXML
         private ListView templateCarouselList;
-        @FXML 
-         private VBox generatedResumeBox;
+        @FXML
+        private VBox generatedResumeBox;
         @FXML
         private ImageView ellipse1, ellipse2;
         @FXML
-         private HBox firstEllipses;
-         @FXML
-         private HBox secondEllipses;
-         @FXML
-         private HBox thirdEllipses;
-
-        public void buttonAdd(){
-              //templateList.addColumn(1, new TextField());
-                //TextField textField1= new TextField();
-                //textField1.setPromptText("Add attribute");
-                //templateList.addColumn(1, textField1);
-
-
-                templateList.addColumn(1, new TextField());
-                TextField textField1= new TextField();
-
-        }
-        public class Triple{
-                Node n;
-                int row;
-                int col;
-                public Triple(Node n,int row, int col){
-                        this.row = row;
-                        this.col = col;
-                        this.n = n;
-                }
-        }
-        public static Node getItem(List<Triple> l, int findRow, int findCol){
-
-                for(int i=0; i < l.size(); i++){
-                        if(l.get(i).row == findRow && l.get(i).col == findCol){
-                                return l.get(i).n;
-                        }
-                }
-                return null;
-        }
-        public void saveTemplate() throws SQLException, IOException {
-                List<Triple> list = new ArrayList<>();
-                for (int i = 0; i < templateList.getChildren().size(); i++) {
-                        list.add(new Triple(templateList.getChildren().get(i),
-                                GridPane.getRowIndex(templateList.getChildren().get(i)), GridPane.getColumnIndex(templateList.getChildren().get(i))));
-
-
-                        TextField tempText = (TextField) getItem(list, 1, 1);
-                        assert tempText != null;
-
-
-//for(int i= 1; i< templateList.getColumnCount(); i++){
-                        //templateList.get
-//}
-
-                        template = new Template(templateName.getText());
-                        DBConnection dbConnection = new DBConnection();
-                        DBConnection.getInstance().addTemplate(template);
-                        initialize();
-
-                }
-        }
+        private HBox firstEllipses;
+        @FXML
+        private HBox secondEllipses;
+        @FXML
+        private HBox thirdEllipses;
+        @FXML
+        private VBox templateAttributeView;
+        @FXML
+        private TextField templateName;
+        @FXML
+        private Button newTemplateButton;
+        @FXML
+        private GridPane templateList;
+        @FXML
+        private VBox templateNameVBox;
 
         public void initialize() throws SQLException, IOException {
                 tagSearchField.setOnKeyPressed(event -> {
@@ -421,4 +370,71 @@ public class MainController {
                 templateCarouselList
                                 .setItems(FXCollections.observableArrayList(DBConnection.getInstance().getTemplates()));
         }
+
+        public void buttonAdd() {
+                ObservableList<Node> children = templateList.getChildren();
+
+                Node button = null;
+                for (Node child : children) {
+                        if (child instanceof Button) {
+                                button = child;
+                                break;
+                        }
+                }
+                if (button != null) {
+                        children.remove(button);
+                }
+
+                TextField textField = new TextField();
+                textField.setMaxWidth(250);
+                GridPane.setRowIndex(textField, GridPane.getRowIndex(button));
+                children.add(textField);
+
+                templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
+
+        }
+
+        public class Triple {
+                Node n;
+                int row;
+                int col;
+
+                public Triple(Node n, int row, int col) {
+                        this.row = row;
+                        this.col = col;
+                        this.n = n;
+                }
+        }
+
+        public static Node getItem(List<Triple> l, int findRow, int findCol) {
+
+                for (int i = 0; i < l.size(); i++) {
+                        if (l.get(i).row == findRow && l.get(i).col == findCol) {
+                                return l.get(i).n;
+                        }
+                }
+                return null;
+        }
+
+        public void saveTemplate() throws SQLException, IOException {
+                List<Triple> list = new ArrayList<>();
+                for (int i = 0; i < templateList.getChildren().size(); i++) {
+                        list.add(new Triple(templateList.getChildren().get(i),
+                                        GridPane.getRowIndex(templateList.getChildren().get(i)),
+                                        GridPane.getColumnIndex(templateList.getChildren().get(i))));
+
+                        TextField tempText = (TextField) getItem(list, 1, 1);
+                        assert tempText != null;
+
+                        // for(int i= 1; i< templateList.getColumnCount(); i++){
+                        // templateList.get
+                        // }
+
+                        Template template = new Template(templateName.getText());
+                        DBConnection.getInstance().addTemplate(template);
+                        initialize();
+
+                }
+        }
+
 }
