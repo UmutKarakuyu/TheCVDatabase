@@ -1,5 +1,6 @@
 package com.example.se302_project;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -9,16 +10,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import javax.imageio.ImageIO;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -61,7 +65,7 @@ public class MainController {
         @FXML
         private TextField modalResumeName;
         @FXML
-        private ImageView pdfUploadView;
+        private ImageView pdfUploadView, originalResume;
         @FXML
         private VBox drawerShort, drawerLong;
         @FXML
@@ -173,7 +177,32 @@ public class MainController {
         }
 
         @FXML
-        public void selectFromResumeTable() {
+        public void selectFromResumeTable() throws SQLException, IOException {
+                int index = resumeTableView.getSelectionModel().getSelectedIndex();
+                String resumeName = (String) resumeNameColumn.getCellData(index);
+                Resume resume = DBConnection.getInstance().getResumeObject(resumeName);
+
+                ObservableList<TablePosition> selectedCells = resumeTableView.getSelectionModel().getSelectedCells();
+
+                if (selectedCells.get(0).getTableColumn().equals(resumeTrashColumn)) {
+                        String filepath = "src/main/resources/com/example/se302_project/images/pdfs/"
+                                        + resume.getfileName()
+                                        + ".png";
+                        File file = new File(filepath);
+
+                        originalResume.setImage(null);
+                        file.delete();
+
+                        DBConnection.getInstance().deleteResume(resumeName);
+                        initialize();
+
+                } else {
+                        String fileName = resume.getfileName().replace(".pdf", "_1");
+                        String path1 = "images/pdfs/" + fileName + ".png";
+                        Image image = new Image(getClass().getResource(path1).toExternalForm());
+                        originalResume.setImage(image);
+
+                }
 
         }
 
@@ -301,10 +330,53 @@ public class MainController {
                                 .getTemplateObject(modalListView.getSelectionModel().getSelectedItem().toString());
 
                 Resume resume = new Resume(name, formattedDate,
-                                "...../src/main/resources/com/example/se302_project/pdf/Arda Kestane.pdf"
-                                                + file.getName(),
+                                file.getName(),
                                 template);
                 DBConnection.getInstance().addResume(resume);
+                try {
+                        String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/";
+                        File destinationFile = new File(destinationDir);
+                        if (!destinationFile.exists()) {
+                                destinationFile.mkdir();
+                                System.out.println("Folder Created -> " + destinationFile.getAbsolutePath());
+                        }
+                        if (file.exists()) {
+                                System.out.println("Images copied to Folder Location: "
+                                                + destinationFile.getAbsolutePath());
+                                PDDocument document = PDDocument.load(file);
+                                PDFRenderer pdfRenderer = new PDFRenderer(document);
+
+                                int numberOfPages = document.getNumberOfPages();
+                                System.out.println("Total files to be converting -> " + numberOfPages);
+
+                                String fileName = file.getName().replace(".pdf", "");
+                                String fileExtension = "png";
+                                /*
+                                 * 600 dpi give good image clarity but size of each image is 2x times of 300
+                                 * dpi.
+                                 * Ex: 1. For 300dpi 04-Request-Headers_2.png expected size is 797 KB
+                                 * 2. For 600dpi 04-Request-Headers_2.png expected size is 2.42 MB
+                                 */
+                                int dpi = 300;// use less dpi for to save more space in harddisk.
+                                // For professional usage
+                                // you can use more than 300dpi
+
+                                for (int i = 0; i < numberOfPages; ++i) {
+                                        File outPutFile = new File(destinationDir + fileName + "_" + (i + 1) + "."
+                                                        + fileExtension);
+                                        BufferedImage bImage = pdfRenderer.renderImageWithDPI(i, dpi, ImageType.RGB);
+                                        ImageIO.write(bImage, fileExtension, outPutFile);
+                                }
+
+                                document.close();
+                                System.out.println("Converted Images are saved at -> "
+                                                + destinationFile.getAbsolutePath());
+                        } else {
+                                System.err.println(file.getName() + " File not exists");
+                        }
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
 
                 fillTableViews();
                 closeModal();
@@ -373,39 +445,26 @@ public class MainController {
         }
 
         public void buttonAdd() {
-                if (templateList.getRowCount() <= 20) {
-                        ObservableList<Node> children = templateList.getChildren();
-                        Node button = null;
-                        for (Node child : children) {
-                                if (child instanceof Button) {
-                                        button = child;
-                                        break;
-                                }
-                        }
-                        if (button != null) {
-                                children.remove(button);
-                        }
+                ObservableList<Node> children = templateList.getChildren();
 
-                        TextField textField = new TextField();
-                        textField.setMaxWidth(250);
-                        Label label = new Label(":");
-
-                        GridPane.setRowIndex(textField, GridPane.getRowIndex(button));
-                        GridPane.setColumnIndex(textField, 0);
-                        GridPane.setRowIndex(label, GridPane.getRowIndex(button));
-                        GridPane.setColumnIndex(label, 1);
-                        GridPane.setHalignment(label, HPos.LEFT);
-
-                        children.addAll(textField, label);
-
-                        templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
-
-                        ObservableList<ColumnConstraints> columnConstraints = templateList.getColumnConstraints();
-                        for (ColumnConstraints constraint : columnConstraints) {
-                                constraint.setHalignment(HPos.LEFT);
-                                constraint.setHgrow(Priority.ALWAYS);
+                Node button = null;
+                for (Node child : children) {
+                        if (child instanceof Button) {
+                                button = child;
+                                break;
                         }
                 }
+                if (button != null) {
+                        children.remove(button);
+                }
+
+                TextField textField = new TextField();
+                textField.setMaxWidth(250);
+                GridPane.setRowIndex(textField, GridPane.getRowIndex(button));
+                children.add(textField);
+
+                templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
+
         }
 
         public class Triple {
