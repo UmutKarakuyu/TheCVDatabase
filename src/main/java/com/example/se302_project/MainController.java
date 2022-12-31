@@ -75,6 +75,16 @@ public class MainController {
         private StackPane drawerStackPane;
         @FXML
         private ListView templateCarouselList;
+        @FXML 
+         private VBox generatedResumeBox;
+        @FXML
+        private ImageView ellipse1, ellipse2;
+        @FXML
+         private HBox firstEllipses;
+         @FXML
+         private HBox secondEllipses;
+         @FXML
+         private HBox thirdEllipses;
 
         public void buttonAdd(){
               //templateList.addColumn(1, new TextField());
@@ -115,7 +125,6 @@ public class MainController {
 
                         TextField tempText = (TextField) getItem(list, 1, 1);
                         assert tempText != null;
-                        System.out.println(tempText.getText());
 
 
 //for(int i= 1; i< templateList.getColumnCount(); i++){
@@ -142,6 +151,16 @@ public class MainController {
                                 shortDrawer();
                         else
                                 longDrawer();
+                });
+
+                generatedResumeBox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                        ellipse2.setFitHeight(generatedResumeBox.getHeight());
+                        ellipse2.setFitWidth(generatedResumeBox.getWidth() / 2);
+                });
+
+                generatedResumeBox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                        ellipse2.setFitHeight(generatedResumeBox.getHeight());
+                        ellipse2.setFitWidth(generatedResumeBox.getWidth() / 2);
                 });
 
                 fillTableViews();
@@ -213,6 +232,21 @@ public class MainController {
                 resumeHBox.setVisible(false);
                 searchHBox.setVisible(true);
                 templateHBox.setVisible(false);
+
+                firstEllipses.setVisible(false);
+                secondEllipses.setVisible(true);
+                thirdEllipses.setVisible(false);
+        }
+
+        @FXML
+        public void openResumeScreen() {
+                resumeHBox.setVisible(true);
+                searchHBox.setVisible(false);
+                templateHBox.setVisible(false);
+
+                firstEllipses.setVisible(true);
+                secondEllipses.setVisible(false);
+                thirdEllipses.setVisible(false);
         }
 
         @FXML
@@ -220,6 +254,10 @@ public class MainController {
                 resumeHBox.setVisible(false);
                 searchHBox.setVisible(false);
                 templateHBox.setVisible(true);
+
+                firstEllipses.setVisible(false);
+                secondEllipses.setVisible(false);
+                thirdEllipses.setVisible(true);
         }
 
         @FXML
@@ -286,14 +324,6 @@ public class MainController {
                 for (int i = 0; i < DBConnection.getInstance().getTemplates().size(); i++) {
                         modalListView.getItems().add(DBConnection.getInstance().getTemplates().get(i));
                 }
-        }
-
-        @FXML
-        public void openResumeScreen() {
-                resumeHBox.setVisible(true);
-                searchHBox.setVisible(false);
-                templateHBox.setVisible(false);
-
         }
 
         @FXML

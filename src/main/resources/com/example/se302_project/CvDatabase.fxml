@@ -22,72 +22,72 @@
 
 <StackPane alignment="TOP_LEFT" prefHeight="723.0" prefWidth="1176.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
     <children>
-      <HBox fx:id="firstEllipses" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <VBox alignment="TOP_RIGHT" prefHeight="723.0" prefWidth="225.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <ImageView fx:id="ellipse1" fitHeight="91.0" fitWidth="371.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@images/ellipse1.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </VBox>
-            <VBox fx:id="generatedResumeBox" alignment="BOTTOM_RIGHT" prefHeight="723.0" prefWidth="271.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <ImageView fx:id="ellipse2" fitHeight="722.0" fitWidth="371.0" pickOnBounds="true" smooth="false">
-                     <image>
-                        <Image url="@images/ellipse2.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <HBox fx:id="secondEllipses" prefHeight="100.0" prefWidth="200.0" visible="false">
-         <children>
-            <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <ImageView fitHeight="140.0" fitWidth="555.0" pickOnBounds="true" smooth="false">
-                     <image>
-                        <Image url="@images/ellipse3.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </VBox>
-            <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <ImageView fitHeight="668.0" fitWidth="386.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@images/ellipse4.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <HBox fx:id="thirdEllipses" prefHeight="100.0" prefWidth="200.0" visible="false">
-         <children>
-            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <ImageView fitHeight="81.0" fitWidth="396.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@images/ellipse5.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </VBox>
-            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <ImageView fitHeight="339.0" fitWidth="479.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@images/ellipse6.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </VBox>
-         </children>
-      </HBox>
+        <HBox fx:id="firstEllipses" prefHeight="100.0" prefWidth="200.0">
+            <children>
+                <VBox alignment="TOP_RIGHT" prefHeight="723.0" prefWidth="225.0" HBox.hgrow="ALWAYS">
+                    <children>
+                    <ImageView fx:id="ellipse1" fitHeight="91.0" fitWidth="371.0" pickOnBounds="true">
+                        <image>
+                            <Image url="@images/ellipse1.png" />
+                        </image>
+                    </ImageView>
+                </children>
+                </VBox>
+                <VBox fx:id="generatedResumeBox" alignment="BOTTOM_RIGHT" prefHeight="723.0" prefWidth="271.0" HBox.hgrow="ALWAYS">
+                <children>
+                    <ImageView fx:id="ellipse2" fitHeight="722.0" fitWidth="371.0" pickOnBounds="true" smooth="false">
+                        <image>
+                            <Image url="@images/ellipse2.png" />
+                        </image>
+                    </ImageView>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <HBox fx:id="secondEllipses" prefHeight="100.0" prefWidth="200.0" visible="false">
+            <children>
+                <VBox alignment="BOTTOM_LEFT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                    <children>
+                    <ImageView fitHeight="140.0" fitWidth="555.0" pickOnBounds="true" smooth="false">
+                        <image>
+                            <Image url="@images/ellipse3.png" />
+                        </image>
+                    </ImageView>
+                    </children>
+                </VBox>
+                <VBox alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                    <children>
+                    <ImageView fitHeight="668.0" fitWidth="386.0" pickOnBounds="true">
+                        <image>
+                            <Image url="@images/ellipse4.png" />
+                        </image>
+                    </ImageView>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <HBox fx:id="thirdEllipses" prefHeight="100.0" prefWidth="200.0" visible="false">
+            <children>
+                <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                    <children>
+                    <ImageView fitHeight="81.0" fitWidth="396.0" pickOnBounds="true">
+                        <image>
+                            <Image url="@images/ellipse5.png" />
+                        </image>
+                    </ImageView>
+                    </children>
+                </VBox>
+                <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                    <children>
+                    <ImageView fitHeight="339.0" fitWidth="479.0" pickOnBounds="true">
+                        <image>
+                            <Image url="@images/ellipse6.png" />
+                        </image>
+                    </ImageView>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
         <HBox prefHeight="953.0" prefWidth="1144.0">
             <children>
                 <VBox prefHeight="938.0" prefWidth="322.0">
@@ -439,7 +439,7 @@
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <HBox fx:id="templateHBox" prefHeight="766.0" prefWidth="944.0" StackPane.alignment="TOP_LEFT">
+                                        <HBox fx:id="templateHBox" prefHeight="766.0" prefWidth="944.0" visible="false" StackPane.alignment="TOP_LEFT">
                                             <children>
                                                 <VBox fx:id="templatePane" alignment="CENTER" prefHeight="1080.0" prefWidth="1567.0" HBox.hgrow="ALWAYS">
                                                     <children>
