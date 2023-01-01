@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane alignment="TOP_LEFT" prefHeight="723.0" prefWidth="1176.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
+<StackPane alignment="TOP_LEFT" prefHeight="723.0" prefWidth="1176.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
     <children>
         <HBox fx:id="firstEllipses" prefHeight="100.0" prefWidth="200.0">
             <children>
@@ -194,7 +194,7 @@
                                             </Button>
                                         </children>
                                     </HBox>
-                                    <TableView fx:id="templateTableView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
+                                    <TableView fx:id="templateTableView" onMouseClicked="#selectFromTemplateTable" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
                                         <columns>
                                             <TableColumn editable="false" prefWidth="103.0" sortable="false" text="Column X" />
                                             <TableColumn fx:id="templateNameColumn" editable="false" prefWidth="224.0" sortable="false" />

@@ -227,17 +227,17 @@ public class MainController {
 
         @FXML
         public void selectFromTemplateTable() throws SQLException, IOException {
-                openResumeScreen();
                 int index = templateTableView.getSelectionModel().getSelectedIndex();
                 String templateName = (String) templateNameColumn.getCellData(index);
-                Template template = DBConnection.getInstance().getTemplateObject(templateName);
-
                 ObservableList<TablePosition> selectedCells = templateTableView.getSelectionModel().getSelectedCells();
 
-                if (selectedCells.get(0).getTableColumn().equals(resumeTrashColumn)) {
-                        // DBConnection.getInstance().deleteTemplate(template);
+                if (selectedCells.get(0).getTableColumn().equals(templateTrashColumn)) {
+                        DBConnection.getInstance().deleteTemplate(templateName);
+                        System.out.println(templateName);
+                        initialize();
 
                 } else {
+                        openTemplateScreen();
 
                 }
 

@@ -18,7 +18,7 @@ public class DBConnection {
 
     private PreparedStatement insertResume, insertTemplate, insertTag, insertAttribute, getTags, getTemplates,
             getResumes, getTemplateAttributes, getResumeAttributes, getResumeTags, getResumeObject,
-            deleteResumeFromResume, deleteResumeFromTag, deleteResumeFromAttributes;
+            deleteResumeFromResume, deleteResumeFromTag, deleteResumeFromAttributes, deleteTemplate;
 
     DBConnection() {
         this.fileName = "info.db";
@@ -84,6 +84,8 @@ public class DBConnection {
             deleteResumeFromAttributes = connection.prepareStatement("DELETE FROM ATTRIBUTES WHERE RESUME_NAME = ?");
 
             getResumeObject = connection.prepareStatement("SELECT * FROM RESUME WHERE NAME = ?");
+
+            deleteTemplate = connection.prepareStatement("DELETE FROM TEMPLATE WHERE TITLE = ?");
 
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
@@ -152,7 +154,7 @@ public class DBConnection {
     public void addTemplate(Template template) {
         ArrayList<String> attributes = template.getAttributes();
         try {
-            for(int i = 0 ; i < attributes.size() ; i++) {
+            for (int i = 0; i < attributes.size(); i++) {
                 insertTemplate.setString(1, template.getTitle());
                 insertTemplate.setString(2, attributes.get(i));
                 insertTemplate.execute();
@@ -356,4 +358,12 @@ public class DBConnection {
 
     }
 
+    public void deleteTemplate(String templateName) {
+        try {
+            deleteTemplate.setString(1, templateName);
+            deleteTemplate.execute();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
 }
