@@ -23,7 +23,6 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -93,6 +92,8 @@ public class MainController {
         private GridPane templateList;
         @FXML
         private VBox templateNameVBox;
+        @FXML
+        private GridPane generateResume;
 
         public void initialize() throws SQLException, IOException {
                 tagSearchField.setOnKeyPressed(event -> {
@@ -198,10 +199,26 @@ public class MainController {
                         String path1 = "images/pdfs/" + fileName + ".png";
                         Image image = new Image(getClass().getResource(path1).toExternalForm());
                         originalResume.setImage(image);
-
+                        generateResume(resume);
                 }
-
         }
+
+              
+        public void generateResume(Resume resume) {
+                generateResume.getChildren().clear();
+                Label l1 = new Label("Attributes");
+                Label l2 = new Label("Values");
+
+                generateResume.addRow(0, l1, l2);
+
+             Template resumeTemplate = resume.getTemplate();
+             ArrayList<String> templateAttributes = resumeTemplate.getAttributes();
+                for(int i = 0 ; i < templateAttributes.size(); i++) {
+                        Label label = new Label(templateAttributes.get(i));
+                        TextField textField = new TextField();
+                        generateResume.addRow(generateResume.getRowCount() + 1, label, textField);
+                }
+        }     
 
         @FXML
         public void selectFromTemplateTable() throws SQLException, IOException {
@@ -460,6 +477,8 @@ public class MainController {
                                 .setItems(FXCollections.observableArrayList(DBConnection.getInstance().getTemplates()));
         }
 
+        
+
         public void buttonAdd() {
                 ObservableList<Node> children = templateList.getChildren();
 
@@ -476,21 +495,12 @@ public class MainController {
 
                 TextField textField = new TextField();
                 textField.setMaxWidth(250);
-
-                Label label = new Label(":");
-                label.setAlignment(Pos.CENTER_LEFT);
-
-                templateList.addRow(templateList.getRowCount(), textField, label);
+                textField.setPromptText("Enter an attribute");
+                templateList.addRow(templateList.getRowCount(), textField);
 
                 templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
 
-
-
-
-
         }
-
-
 
         public void saveTemplate() throws SQLException, IOException {
 
