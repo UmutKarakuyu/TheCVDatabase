@@ -98,8 +98,11 @@ public class MainController {
         private VBox templateNameVBox;
         @FXML
         private GridPane generateResume;
+        @FXML
+        private VBox originalResumeVBox;
 
         public void initialize() throws SQLException, IOException {
+
                 tagSearchField.setOnKeyPressed(event -> {
                         if (event.getCode() == KeyCode.ENTER) {
                                 addTag();
@@ -121,6 +124,16 @@ public class MainController {
                 generatedResumeBox.widthProperty().addListener((obs, oldVal, newVal) -> {
                         ellipse2.setFitHeight(generatedResumeBox.getHeight());
                         ellipse2.setFitWidth(generatedResumeBox.getWidth() / 2);
+                });
+
+                originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                        originalResume.setFitHeight(originalResumeVBox.getHeight() / 1.2);
+                        originalResume.setFitWidth(originalResumeVBox.getHeight() / 1.2);
+                });
+
+                originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                        originalResume.setFitHeight(originalResumeVBox.getHeight() / 1.2);
+                        originalResume.setFitWidth(originalResumeVBox.getHeight() / 1.2);
                 });
 
                 fillTableViews();
@@ -203,6 +216,7 @@ public class MainController {
                         String path1 = "images/pdfs/" + fileName + ".png";
                         Image image = new Image(getClass().getResource(path1).toExternalForm());
                         originalResume.setImage(image);
+
                         generateResume(resume);
                 }
         }
@@ -227,20 +241,19 @@ public class MainController {
 
         @FXML
         public void selectFromTemplateTable() throws SQLException, IOException {
-                openResumeScreen();
                 int index = templateTableView.getSelectionModel().getSelectedIndex();
                 String templateName = (String) templateNameColumn.getCellData(index);
-                Template template = DBConnection.getInstance().getTemplateObject(templateName);
-
                 ObservableList<TablePosition> selectedCells = templateTableView.getSelectionModel().getSelectedCells();
 
-                if (selectedCells.get(0).getTableColumn().equals(resumeTrashColumn)) {
-                        // DBConnection.getInstance().deleteTemplate(template);
+                if (selectedCells.get(0).getTableColumn().equals(templateTrashColumn)) {
+                        DBConnection.getInstance().deleteTemplate(templateName);
+                        System.out.println(templateName);
+                        initialize();
 
                 } else {
+                        openTemplateScreen();
 
                 }
-
         }
 
         @FXML
