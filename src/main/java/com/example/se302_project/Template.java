@@ -28,4 +28,8 @@ public class Template {
         this.attributes = attributes;
     }
 
+    public ArrayList<String> getAttributes() {
+        return this.attributes;
+    }
+
 }

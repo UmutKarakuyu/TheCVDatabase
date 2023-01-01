@@ -150,14 +150,16 @@ public class DBConnection {
     }
 
     public void addTemplate(Template template) {
+        ArrayList<String> attributes = template.getAttributes();
         try {
-            insertTemplate.setString(1, template.getTitle());
-            insertTemplate.setString(2, "Attribute");
-            insertTemplate.execute();
+            for(int i = 0 ; i < attributes.size() ; i++) {
+                insertTemplate.setString(1, template.getTitle());
+                insertTemplate.setString(2, attributes.get(i));
+                insertTemplate.execute();
+            }
 
         } catch (SQLException e) {
             System.err.println(e);
-
         }
     }
 
