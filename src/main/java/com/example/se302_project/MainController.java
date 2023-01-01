@@ -496,27 +496,51 @@ public class MainController {
         }
 
         public void buttonAdd() {
-                ObservableList<Node> children = templateList.getChildren();
 
-                Node button = null;
-                for (Node child : children) {
-                        if (child instanceof Button) {
-                                button = child;
-                                break;
+                        ObservableList<Node> children = templateList.getChildren();
+
+
+                        Node button = null;
+                        for (Node child : children) {
+                                if (child == newTemplateButton) {
+                                        button = child;
+                                        break;
+                                }
                         }
+
+
+                        if (button != null) {
+                                children.remove(button);
+                        }
+
+                        TextField textField = new TextField();
+                        textField.setMaxWidth(250);
+                        textField.setPromptText("Enter an attribute");
+
+                        String path = "images/trash.png";
+                        Image image = new Image(getClass().getResource(path).toExternalForm());
+
+                        Button deleteButton = new Button();
+                        deleteButton.setGraphic(new ImageView(image));
+                        deleteButton.setStyle("-fx-background-color: transparent;");
+
+
+
+                        deleteButton.setOnAction(event -> {
+                                deleteButton.setMaxHeight(50);
+
+                                children.removeAll(textField, deleteButton);
+                        });
+
+
+                        templateList.addRow(templateList.getRowCount(), textField, deleteButton);
+
+                        templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
+
                 }
-                if (button != null) {
-                        children.remove(button);
-                }
 
-                TextField textField = new TextField();
-                textField.setMaxWidth(250);
-                textField.setPromptText("Enter an attribute");
-                templateList.addRow(templateList.getRowCount(), textField);
 
-                templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
-
-        }
+        
 
         public void saveTemplate() throws SQLException, IOException {
 
