@@ -13,6 +13,8 @@ import java.util.Locale;
 import javax.imageio.ImageIO;
 
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -23,11 +25,13 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class MainController {
         @FXML
@@ -203,7 +207,6 @@ public class MainController {
                 }
         }
 
-              
         public void generateResume(Resume resume) {
                 generateResume.getChildren().clear();
                 Label l1 = new Label("Attributes");
@@ -213,14 +216,14 @@ public class MainController {
 
                 generateResume.addRow(0, l1, l2);
 
-             Template resumeTemplate = resume.getTemplate();
-             ArrayList<String> templateAttributes = resumeTemplate.getAttributes();
-                for(int i = 0 ; i < templateAttributes.size(); i++) {
+                Template resumeTemplate = resume.getTemplate();
+                ArrayList<String> templateAttributes = resumeTemplate.getAttributes();
+                for (int i = 0; i < templateAttributes.size(); i++) {
                         Label label = new Label(templateAttributes.get(i));
                         TextField textField = new TextField();
                         generateResume.addRow(generateResume.getRowCount() + 1, label, textField);
                 }
-        }     
+        }
 
         @FXML
         public void selectFromTemplateTable() throws SQLException, IOException {
@@ -416,7 +419,7 @@ public class MainController {
                 fillTableViews();
                 closeModal();
 
-       }
+        }
 
         @FXML
         private void closeModal() {
@@ -479,8 +482,6 @@ public class MainController {
                                 .setItems(FXCollections.observableArrayList(DBConnection.getInstance().getTemplates()));
         }
 
-        
-
         public void buttonAdd() {
                 ObservableList<Node> children = templateList.getChildren();
 
@@ -508,7 +509,6 @@ public class MainController {
 
                 List<String> textFieldData = new ArrayList<>();
 
-
                 for (Node node : templateList.getChildren()) {
                         if (node instanceof TextField) {
                                 textFieldData.add(((TextField) node).getText());
@@ -520,10 +520,20 @@ public class MainController {
                 for (int i = 0; i < textFieldData.size(); i++) {
                         template.addAttribute(textFieldData.get(i));
                 }
-                        DBConnection.getInstance().addTemplate(template);
-                        fillTableViews();
+                DBConnection.getInstance().addTemplate(template);
+                fillTableViews();
 
-                }
         }
 
-
+        @FXML
+        private void helpMenu() throws IOException {
+                Stage stage = new Stage();
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("HelpScreen.fxml"));
+                Parent root = fxmlLoader.load();
+                Scene scene = new Scene(root, 800, 600);
+                stage.setTitle("Help");
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.showAndWait();
+        }
+}

@@ -92,7 +92,7 @@
             <children>
                     <StackPane fx:id="drawerStackPane" alignment="TOP_LEFT" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="350.0">
                         <children>
-                            <VBox fx:id="drawerLong" alignment="TOP_CENTER" prefHeight="964.0" prefWidth="377.0" StackPane.alignment="TOP_LEFT">
+                            <VBox fx:id="drawerLong" alignment="TOP_CENTER" prefHeight="964.0" prefWidth="377.0" visible="false" StackPane.alignment="TOP_LEFT">
                                 <children>
                                     <HBox alignment="CENTER_LEFT" prefHeight="132.0" prefWidth="362.0" VBox.vgrow="NEVER">
                                         <children>
@@ -201,6 +201,19 @@
                                             <TableColumn fx:id="templateTrashColumn" editable="false" minWidth="0.0" prefWidth="49.0" sortable="false" />
                                         </columns>
                                     </TableView>
+                        <HBox>
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#helpMenu" prefWidth="48.0" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/help.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
                                 </children>
                                 <StackPane.margin>
                                     <Insets />
@@ -209,7 +222,7 @@
                                     <Insets bottom="50.0" />
                                 </padding>
                             </VBox>
-                            <VBox fx:id="drawerShort" prefHeight="820.0" prefWidth="12.0" spacing="10.0" visible="false" StackPane.alignment="TOP_LEFT">
+                            <VBox fx:id="drawerShort" prefHeight="820.0" prefWidth="12.0" spacing="10.0" StackPane.alignment="TOP_LEFT">
                                 <children>
                                     <HBox alignment="CENTER_LEFT" prefHeight="131.0" prefWidth="289.0">
                                         <children>
@@ -272,7 +285,23 @@
                                             </Button>
                                         </children>
                                     </HBox>
+                        <HBox alignment="BOTTOM_LEFT" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#helpMenu" prefWidth="48.0" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/help.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
                                 </children>
+                     <StackPane.margin>
+                        <Insets bottom="20.0" />
+                     </StackPane.margin>
                             </VBox>
                         </children>
                <HBox.margin>
