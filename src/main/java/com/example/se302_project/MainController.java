@@ -207,7 +207,9 @@ public class MainController {
         public void generateResume(Resume resume) {
                 generateResume.getChildren().clear();
                 Label l1 = new Label("Attributes");
+                l1.setStyle("-fx-font-size: 20;");
                 Label l2 = new Label("Values");
+                l2.setStyle("-fx-font-size: 20;");
 
                 generateResume.addRow(0, l1, l2);
 

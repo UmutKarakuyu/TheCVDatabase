@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane alignment="TOP_LEFT" prefHeight="723.0" prefWidth="1176.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
+<StackPane alignment="TOP_LEFT" prefHeight="723.0" prefWidth="1176.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
     <children>
         <HBox fx:id="firstEllipses" prefHeight="100.0" prefWidth="200.0">
             <children>
@@ -90,211 +90,200 @@
         </HBox>
         <HBox prefHeight="953.0" prefWidth="1144.0">
             <children>
-                <VBox prefHeight="938.0" prefWidth="322.0">
-                    <children>
-                        <HBox prefHeight="827.0" prefWidth="301.0" VBox.vgrow="ALWAYS">
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
-                            <children>
-                                <StackPane fx:id="drawerStackPane" alignment="TOP_LEFT" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="350.0">
-                                    <children>
-                                        <VBox fx:id="drawerLong" alignment="TOP_CENTER" prefHeight="964.0" prefWidth="377.0" StackPane.alignment="TOP_LEFT">
-                                            <children>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="132.0" prefWidth="362.0" VBox.vgrow="NEVER">
-                                                    <children>
-                                                        <Button fx:id="leftBarButton" mnemonicParsing="false" onAction="#toggleDrawer" prefWidth="48.0" style="-fx-background-color: transparent;">
-                                                            <graphic>
-                                                                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@images/logo.png" />
-                                                                    </image>
-                                                                </ImageView>
-                                                            </graphic>
-                                                        </Button>
-                                                        <Label prefHeight="60.0" prefWidth="283.0" text="CV Database" wrapText="true" HBox.hgrow="ALWAYS">
-                                                            <font>
-                                                                <Font size="45.0" />
-                                                            </font>
-                                                        </Label>
-                                                    </children>
-                                                    <VBox.margin>
-                                                        <Insets left="-12.0" />
-                                                    </VBox.margin>
-                                                </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="285.0" spacing="40.0" VBox.vgrow="NEVER">
-                                                    <children>
-                                                        <ImageView fitHeight="40.0" fitWidth="30.0" onMouseClicked="#openSearchScreen" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                                                            <image>
-                                                                <Image url="@images/search.png" />
-                                                            </image>
-                                                            <HBox.margin>
-                                                                <Insets left="5.0" />
-                                                            </HBox.margin>
-                                                        </ImageView>
-                                                        <Label onMouseClicked="#openSearchScreen" prefHeight="81.0" prefWidth="175.0" style="-fx-background-color: white;" text="Search">
-                                                            <font>
-                                                                <Font size="30.0" />
-                                                            </font>
-                                                        </Label>
-                                                    </children>
-                                                    <VBox.margin>
-                                                        <Insets />
-                                                    </VBox.margin>
-                                                </HBox>
-                                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="350.0" spacing="40.0" VBox.vgrow="NEVER">
-                                                    <children>
-                                                        <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#openResumeScreen" pickOnBounds="true" preserveRatio="true">
-                                                            <image>
-                                                                <Image url="@images/resume.png" />
-                                                            </image>
-                                                        </ImageView>
-                                                        <Label onMouseClicked="#openResumeScreen" prefHeight="59.0" prefWidth="190.0" style="-fx-font-family: Nunito;" text="Resumes" wrapText="true">
-                                                            <font>
-                                                                <Font size="30.0" />
-                                                            </font>
-                                                            <padding>
-                                                                <Insets right="40.0" />
-                                                            </padding>
-                                                        </Label>
-                                                        <Button fx:id="addResumeButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#addResumeScreen" prefHeight="31.0" prefWidth="24.0" style="-fx-background-color: transparent;">
-                                                            <graphic>
-                                                                <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@images/plus.png" />
-                                                                    </image>
-                                                                </ImageView>
-                                                            </graphic>
-                                                        </Button>
-                                                    </children>
-                                                </HBox>
-                                                <TableView fx:id="resumeTableView" onMouseClicked="#selectFromResumeTable" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
-                                                    <columns>
-                                                        <TableColumn editable="false" prefWidth="107.0" resizable="false" sortable="false" text="Column X" />
-                                                        <TableColumn fx:id="resumeNameColumn" editable="false" prefWidth="220.0" sortable="false" />
-                                                        <TableColumn fx:id="resumeTrashColumn" editable="false" minWidth="0.0" prefWidth="49.0" sortable="false" />
-                                                    </columns>
-                                                </TableView>
-                                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="285.0" spacing="40.0" VBox.vgrow="NEVER">
-                                                    <children>
-                                                        <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#openTemplateScreen" pickOnBounds="true" preserveRatio="true">
-                                                            <image>
-                                                                <Image url="@images/template.png" />
-                                                            </image>
-                                                        </ImageView>
-                                                        <Label onMouseClicked="#openTemplateScreen" style="-fx-font-family: Nunito;" text="Templates" wrapText="true">
-                                                            <font>
-                                                                <Font size="30.0" />
-                                                            </font>
-                                                            <padding>
-                                                                <Insets right="40.0" />
-                                                            </padding>
-                                                        </Label>
-                                                        <Button fx:id="addTemplateButton" mnemonicParsing="false" onAction="#openTemplateScreen" prefHeight="24.0" prefWidth="50.0" style="-fx-background-color: transparent;">
-                                                            <graphic>
-                                                                <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@images/plus.png" />
-                                                                    </image>
-                                                                </ImageView>
-                                                            </graphic>
-                                                        </Button>
-                                                    </children>
-                                                </HBox>
-                                                <TableView fx:id="templateTableView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
-                                                    <columns>
-                                                        <TableColumn editable="false" prefWidth="103.0" sortable="false" text="Column X" />
-                                                        <TableColumn fx:id="templateNameColumn" editable="false" prefWidth="224.0" sortable="false" />
-                                                        <TableColumn fx:id="templateTrashColumn" editable="false" minWidth="0.0" prefWidth="49.0" sortable="false" />
-                                                    </columns>
-                                                </TableView>
-                                            </children>
-                                            <StackPane.margin>
-                                                <Insets />
-                                            </StackPane.margin>
-                                            <padding>
-                                                <Insets bottom="50.0" />
-                                            </padding>
-                                        </VBox>
-                                        <VBox fx:id="drawerShort" prefHeight="820.0" prefWidth="12.0" spacing="10.0" visible="false" StackPane.alignment="TOP_LEFT">
-                                            <children>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="131.0" prefWidth="289.0">
-                                                    <children>
-                                                        <Button fx:id="leftBarButton1" mnemonicParsing="false" onAction="#toggleDrawer" style="-fx-background-color: transparent;">
-                                                            <graphic>
-                                                                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@images/logo.png" />
-                                                                    </image>
-                                                                </ImageView>
-                                                            </graphic>
-                                                            <HBox.margin>
-                                                                <Insets left="-3.0" />
-                                                            </HBox.margin>
-                                                        </Button>
-                                                    </children>
-                                                    <VBox.margin>
-                                                        <Insets left="-6.0" />
-                                                    </VBox.margin>
-                                                </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="350.0">
-                                                    <children>
-                                                        <Button mnemonicParsing="false" onAction="#openSearchScreen" style="-fx-background-color: transparent;">
-                                                            <graphic>
-                                                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@images/search.png" />
-                                                                    </image>
-                                                                </ImageView>
-                                                            </graphic>
-                                                        </Button>
-                                                    </children>
-                                                    <VBox.margin>
-                                                        <Insets />
-                                                    </VBox.margin>
-                                                </HBox>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="278.0" spacing="40.0">
-                                                    <children>
-                                                        <Button mnemonicParsing="false" onAction="#openResumeScreen" style="-fx-background-color: transparent;">
-                                                            <graphic>
-                                                                <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@images/resume.png" />
-                                                                    </image>
-                                                                </ImageView>
-                                                            </graphic>
-                                                        </Button>
-                                                    </children>
-                                                </HBox>
-                                                <HBox alignment="CENTER_LEFT" spacing="40.0">
-                                                    <children>
-                                                        <Button mnemonicParsing="false" onAction="#openTemplateScreen" style="-fx-background-color: transparent;">
-                                                            <graphic>
-                                                                <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@images/template.png" />
-                                                                    </image>
-                                                                </ImageView>
-                                                            </graphic>
-                                                        </Button>
-                                                    </children>
-                                                </HBox>
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                </StackPane>
-                            </children>
-                        </HBox>
-                    </children>
-                    <HBox.margin>
-                        <Insets left="20.0" right="40.0" />
-                    </HBox.margin>
-                </VBox>
+                    <StackPane fx:id="drawerStackPane" alignment="TOP_LEFT" maxWidth="350.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="350.0">
+                        <children>
+                            <VBox fx:id="drawerLong" alignment="TOP_CENTER" prefHeight="964.0" prefWidth="377.0" StackPane.alignment="TOP_LEFT">
+                                <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="132.0" prefWidth="362.0" VBox.vgrow="NEVER">
+                                        <children>
+                                            <Button fx:id="leftBarButton" mnemonicParsing="false" onAction="#toggleDrawer" prefWidth="48.0" style="-fx-background-color: transparent;">
+                                                <graphic>
+                                                    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/logo.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic>
+                                            </Button>
+                                            <Label prefHeight="60.0" prefWidth="283.0" text="CV Database" wrapText="true" HBox.hgrow="ALWAYS">
+                                                <font>
+                                                    <Font size="45.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
+                                        <VBox.margin>
+                                            <Insets left="-12.0" />
+                                        </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="285.0" spacing="40.0" VBox.vgrow="NEVER">
+                                        <children>
+                                            <ImageView fitHeight="40.0" fitWidth="30.0" onMouseClicked="#openSearchScreen" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                                                <image>
+                                                    <Image url="@images/search.png" />
+                                                </image>
+                                                <HBox.margin>
+                                                    <Insets left="5.0" />
+                                                </HBox.margin>
+                                            </ImageView>
+                                            <Label onMouseClicked="#openSearchScreen" prefHeight="81.0" prefWidth="175.0" style="-fx-background-color: white;" text="Search">
+                                                <font>
+                                                    <Font size="30.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
+                                        <VBox.margin>
+                                            <Insets />
+                                        </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="350.0" spacing="40.0" VBox.vgrow="NEVER">
+                                        <children>
+                                            <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#openResumeScreen" pickOnBounds="true" preserveRatio="true">
+                                                <image>
+                                                    <Image url="@images/resume.png" />
+                                                </image>
+                                            </ImageView>
+                                            <Label onMouseClicked="#openResumeScreen" prefHeight="59.0" prefWidth="190.0" style="-fx-font-family: Nunito;" text="Resumes" wrapText="true">
+                                                <font>
+                                                    <Font size="30.0" />
+                                                </font>
+                                                <padding>
+                                                    <Insets right="40.0" />
+                                                </padding>
+                                            </Label>
+                                            <Button fx:id="addResumeButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#addResumeScreen" prefHeight="31.0" prefWidth="24.0" style="-fx-background-color: transparent;">
+                                                <graphic>
+                                                    <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/plus.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic>
+                                            </Button>
+                                        </children>
+                                    </HBox>
+                                    <TableView fx:id="resumeTableView" onMouseClicked="#selectFromResumeTable" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
+                                        <columns>
+                                            <TableColumn editable="false" prefWidth="107.0" resizable="false" sortable="false" text="Column X" />
+                                            <TableColumn fx:id="resumeNameColumn" editable="false" prefWidth="220.0" sortable="false" />
+                                            <TableColumn fx:id="resumeTrashColumn" editable="false" minWidth="0.0" prefWidth="49.0" sortable="false" />
+                                        </columns>
+                                    </TableView>
+                                    <HBox alignment="CENTER" prefHeight="80.0" prefWidth="285.0" spacing="40.0" VBox.vgrow="NEVER">
+                                        <children>
+                                            <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#openTemplateScreen" pickOnBounds="true" preserveRatio="true">
+                                                <image>
+                                                    <Image url="@images/template.png" />
+                                                </image>
+                                            </ImageView>
+                                            <Label onMouseClicked="#openTemplateScreen" style="-fx-font-family: Nunito;" text="Templates" wrapText="true">
+                                                <font>
+                                                    <Font size="30.0" />
+                                                </font>
+                                                <padding>
+                                                    <Insets right="40.0" />
+                                                </padding>
+                                            </Label>
+                                            <Button fx:id="addTemplateButton" mnemonicParsing="false" onAction="#openTemplateScreen" prefHeight="24.0" prefWidth="50.0" style="-fx-background-color: transparent;">
+                                                <graphic>
+                                                    <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/plus.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic>
+                                            </Button>
+                                        </children>
+                                    </HBox>
+                                    <TableView fx:id="templateTableView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
+                                        <columns>
+                                            <TableColumn editable="false" prefWidth="103.0" sortable="false" text="Column X" />
+                                            <TableColumn fx:id="templateNameColumn" editable="false" prefWidth="224.0" sortable="false" />
+                                            <TableColumn fx:id="templateTrashColumn" editable="false" minWidth="0.0" prefWidth="49.0" sortable="false" />
+                                        </columns>
+                                    </TableView>
+                                </children>
+                                <StackPane.margin>
+                                    <Insets />
+                                </StackPane.margin>
+                                <padding>
+                                    <Insets bottom="50.0" />
+                                </padding>
+                            </VBox>
+                            <VBox fx:id="drawerShort" prefHeight="820.0" prefWidth="12.0" spacing="10.0" visible="false" StackPane.alignment="TOP_LEFT">
+                                <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="131.0" prefWidth="289.0">
+                                        <children>
+                                            <Button fx:id="leftBarButton1" mnemonicParsing="false" onAction="#toggleDrawer" style="-fx-background-color: transparent;">
+                                                <graphic>
+                                                    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/logo.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic>
+                                                <HBox.margin>
+                                                    <Insets left="-3.0" />
+                                                </HBox.margin>
+                                            </Button>
+                                        </children>
+                                        <VBox.margin>
+                                            <Insets left="-6.0" />
+                                        </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="350.0">
+                                        <children>
+                                            <Button mnemonicParsing="false" onAction="#openSearchScreen" style="-fx-background-color: transparent;">
+                                                <graphic>
+                                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/search.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic>
+                                            </Button>
+                                        </children>
+                                        <VBox.margin>
+                                            <Insets />
+                                        </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="278.0" spacing="40.0">
+                                        <children>
+                                            <Button mnemonicParsing="false" onAction="#openResumeScreen" style="-fx-background-color: transparent;">
+                                                <graphic>
+                                                    <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/resume.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic>
+                                            </Button>
+                                        </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="40.0">
+                                        <children>
+                                            <Button mnemonicParsing="false" onAction="#openTemplateScreen" style="-fx-background-color: transparent;">
+                                                <graphic>
+                                                    <ImageView fitHeight="40.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@images/template.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic>
+                                            </Button>
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </VBox>
+                        </children>
+               <HBox.margin>
+                  <Insets left="10.0" right="30.0" />
+               </HBox.margin>
+                    </StackPane>
                 <VBox prefHeight="1000.0" prefWidth="631.0" HBox.hgrow="ALWAYS">
                     <children>
                         <HBox VBox.vgrow="ALWAYS">
                             <children>
-                                <StackPane alignment="TOP_LEFT" prefHeight="510.0" prefWidth="802.0" HBox.hgrow="ALWAYS">
+                                <StackPane prefHeight="510.0" prefWidth="802.0" HBox.hgrow="ALWAYS">
                                     <children>
                                         <HBox fx:id="resumeHBox" prefHeight="1081.0" prefWidth="1921.0" StackPane.alignment="CENTER">
                                             <children>
@@ -367,22 +356,32 @@
                                                         </HBox>
                                           <VBox alignment="TOP_CENTER" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-width: 2; -fx-border-color: gray; -fx-border-radius: 20;" VBox.vgrow="ALWAYS">
                                              <children>
-                                                <GridPane fx:id="generateResume" alignment="CENTER" prefHeight="61.0" prefWidth="347.0" vgap="10.0">
-                                                  <columnConstraints>
-                                                    <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="185.0" minWidth="10.0" prefWidth="175.0" />
-                                                    <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="178.0" minWidth="10.0" prefWidth="172.0" />
-                                                  </columnConstraints>
-                                                  <rowConstraints>
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                  </rowConstraints>
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <GridPane fx:id="generateResume" alignment="CENTER" prefHeight="66.0" prefWidth="347.0" vgap="10.0">
+                                                        <columnConstraints>
+                                                          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="185.0" minWidth="10.0" prefWidth="175.0" />
+                                                          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="178.0" minWidth="10.0" prefWidth="172.0" />
+                                                        </columnConstraints>
+                                                        <rowConstraints>
+                                                          <RowConstraints prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                                        </rowConstraints>
+                                                      </GridPane>
+                                                   </children>
                                                    <VBox.margin>
                                                       <Insets top="10.0" />
                                                    </VBox.margin>
-                                                </GridPane>
-                                                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="411.0" VBox.vgrow="NEVER">
+                                                </HBox>
+                                                <HBox alignment="BOTTOM_CENTER" prefHeight="60.0" prefWidth="411.0" VBox.vgrow="ALWAYS">
                                                    <children>
                                                       <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save" />
                                                    </children>
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                   <padding>
+                                                      <Insets bottom="10.0" />
+                                                   </padding>
                                                 </HBox>
                                              </children>
                                              <opaqueInsets>
@@ -396,13 +395,13 @@
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <HBox fx:id="searchHBox" prefHeight="1081.0" prefWidth="1921.0" visible="false" StackPane.alignment="TOP_LEFT">
+                                        <HBox fx:id="searchHBox" alignment="CENTER" prefHeight="1081.0" prefWidth="1921.0" visible="false" StackPane.alignment="CENTER">
                                             <children>
-                                                <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                <VBox alignment="TOP_CENTER" prefHeight="736.0" prefWidth="841.0">
                                                     <children>
-                                                        <HBox>
+                                                        <HBox alignment="CENTER">
                                                             <children>
-                                                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="755.0" spacing="20.0">
+                                                                <HBox alignment="CENTER" prefHeight="80.0" prefWidth="755.0" spacing="20.0" HBox.hgrow="ALWAYS">
                                                                     <children>
                                                                         <TextField fx:id="filterSearchField" onKeyPressed="#search" prefHeight="30.0" prefWidth="230.0" promptText="Type To Search Anything" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: grey; -fx-background-color: white; -fx-border-width: 2;">
                                                                             <font>
@@ -421,7 +420,7 @@
                                                       <Insets right="5.0" />
                                                    </HBox.margin>
                                                                 </HBox>
-                                                                <HBox alignment="BOTTOM_RIGHT" prefWidth="32.0" HBox.hgrow="ALWAYS">
+                                                                <HBox alignment="BOTTOM_RIGHT" prefWidth="32.0">
                                                                     <children>
                                                                         <Button fx:id="filterOptionButton" accessibleRole="COMBO_BOX" mnemonicParsing="false" style="-fx-background-color: transparent;">
                                                                             <graphic>
@@ -436,9 +435,9 @@
                                                                 </HBox>
                                                             </children>
                                                         </HBox>
-                                          <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                                          <HBox alignment="CENTER" maxHeight="900.0" prefHeight="639.0" prefWidth="786.0" style="-fx-background-color: gray; -fx-background-radius: 20; -fx-padding: 10;" VBox.vgrow="ALWAYS">
                                              <children>
-                                                              <TableView fx:id="searchTableView" focusTraversable="false" prefHeight="590.0" prefWidth="738.0" stylesheets="@css/TableView.css">
+                                                              <TableView fx:id="searchTableView" focusTraversable="false" prefHeight="590.0" prefWidth="738.0" style="-fx-background-radius: 20;" stylesheets="@css/TableView.css" HBox.hgrow="ALWAYS">
                                                                   <columns>
                                                                       <TableColumn fx:id="searchTResumeNameColumn" prefWidth="75.0" text="Name" />
                                                                       <TableColumn fx:id="searchTResumeDateColumn" prefWidth="75.0" text="Date" />
@@ -449,7 +448,7 @@
                                                               </TableView>
                                              </children>
                                              <VBox.margin>
-                                                <Insets bottom="20.0" />
+                                                <Insets bottom="20.0" right="20.0" />
                                              </VBox.margin>
                                           </HBox>
                                                     </children>
