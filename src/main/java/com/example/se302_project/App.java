@@ -3,13 +3,10 @@ package com.example.se302_project;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 
@@ -18,7 +15,10 @@ public class App extends Application {
     public void start(Stage stage) throws IOException, ParseException, ClassNotFoundException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("CvDatabase.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+        String path = "images/logo.png";
+        Image image = new Image(getClass().getResource(path).toExternalForm());
+        stage.getIcons().add(image);
+        stage.setTitle("CV Database");
         stage.setMinHeight(900);
         stage.setMinWidth(1200);
         stage.setScene(scene);
