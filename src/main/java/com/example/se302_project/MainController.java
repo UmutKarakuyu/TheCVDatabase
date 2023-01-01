@@ -127,13 +127,11 @@ public class MainController {
                 });
 
                 originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
-                        originalResume.setFitHeight(originalResumeVBox.getHeight() / 1.2);
-                        originalResume.setFitWidth(originalResumeVBox.getHeight() / 1.2);
+                        originalResume.setFitWidth(originalResumeVBox.getWidth());
                 });
 
                 originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
-                        originalResume.setFitHeight(originalResumeVBox.getHeight() / 1.2);
-                        originalResume.setFitWidth(originalResumeVBox.getHeight() / 1.2);
+                        originalResume.setFitWidth(originalResumeVBox.getWidth());
                 });
 
                 fillTableViews();
@@ -216,6 +214,13 @@ public class MainController {
                         String path1 = "images/pdfs/" + fileName + ".png";
                         Image image = new Image(getClass().getResource(path1).toExternalForm());
                         originalResume.setImage(image);
+                        double ratio;
+                        if (image.getWidth() > originalResumeVBox.getWidth())
+                                ratio = image.getWidth() / originalResumeVBox.getWidth();
+                        else
+                                ratio = originalResumeVBox.getWidth() / image.getWidth() ;        
+                        originalResume.setFitWidth(originalResumeVBox.getWidth());
+                        originalResume.setFitHeight( originalResumeVBox.getHeight() * ratio);
 
                         generateResume(resume);
                 }
@@ -444,7 +449,7 @@ public class MainController {
 
         @FXML
         private void longDrawer() {
-                drawerStackPane.setPrefWidth(350);
+                drawerStackPane.setPrefWidth(275);
                 drawerShort.setVisible(false);
                 drawerLong.setVisible(true);
         }
@@ -497,50 +502,42 @@ public class MainController {
 
         public void buttonAdd() {
 
-                        ObservableList<Node> children = templateList.getChildren();
+                ObservableList<Node> children = templateList.getChildren();
 
-
-                        Node button = null;
-                        for (Node child : children) {
-                                if (child == newTemplateButton) {
-                                        button = child;
-                                        break;
-                                }
+                Node button = null;
+                for (Node child : children) {
+                        if (child == newTemplateButton) {
+                                button = child;
+                                break;
                         }
-
-
-                        if (button != null) {
-                                children.remove(button);
-                        }
-
-                        TextField textField = new TextField();
-                        textField.setMaxWidth(250);
-                        textField.setPromptText("Enter an attribute");
-
-                        String path = "images/trash.png";
-                        Image image = new Image(getClass().getResource(path).toExternalForm());
-
-                        Button deleteButton = new Button();
-                        deleteButton.setGraphic(new ImageView(image));
-                        deleteButton.setStyle("-fx-background-color: transparent;");
-
-
-
-                        deleteButton.setOnAction(event -> {
-                                deleteButton.setMaxHeight(50);
-
-                                children.removeAll(textField, deleteButton);
-                        });
-
-
-                        templateList.addRow(templateList.getRowCount(), textField, deleteButton);
-
-                        templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
-
                 }
 
+                if (button != null) {
+                        children.remove(button);
+                }
 
-        
+                TextField textField = new TextField();
+                textField.setMaxWidth(250);
+                textField.setPromptText("Enter an attribute");
+
+                String path = "images/trash.png";
+                Image image = new Image(getClass().getResource(path).toExternalForm());
+
+                Button deleteButton = new Button();
+                deleteButton.setGraphic(new ImageView(image));
+                deleteButton.setStyle("-fx-background-color: transparent;");
+
+                deleteButton.setOnAction(event -> {
+                        deleteButton.setMaxHeight(50);
+
+                        children.removeAll(textField, deleteButton);
+                });
+
+                templateList.addRow(templateList.getRowCount(), textField, deleteButton);
+
+                templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
+
+        }
 
         public void saveTemplate() throws SQLException, IOException {
 
