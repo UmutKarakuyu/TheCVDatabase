@@ -2,5 +2,5 @@
 /target/
 *resume*.txt
 *pdfs*
-index
+index/*
 info.db
