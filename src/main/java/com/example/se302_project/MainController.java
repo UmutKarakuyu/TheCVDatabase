@@ -503,15 +503,13 @@ public class MainController {
                         }
                 }
 
-                Template template1 = new Template(textFieldData.get(0));
+                Template template = new Template(templateName.getText());
 
-                for (int i = 1; i < textFieldData.size(); i++) {
-                        template1.addAttribute(textFieldData.get(i));
+                for (int i = 0; i < textFieldData.size(); i++) {
+                        template.addAttribute(textFieldData.get(i));
                 }
-                        DBConnection.getInstance().getTemplateAttributes(template1);
-                        Template template = new Template(templateName.getText());
                         DBConnection.getInstance().addTemplate(template);
-                        initialize();
+                        fillTableViews();
 
                 }
         }
