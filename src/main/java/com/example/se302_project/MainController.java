@@ -16,9 +16,9 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import org.apache.lucene.queryparser.classic.ParseException;
-//import org.apache.pdfbox.pdmodel.PDDocument;
-//import org.apache.pdfbox.rendering.ImageType;
-//import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

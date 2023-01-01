@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -15,8 +16,8 @@ public class ResumeParser{
     private final int MAX_GROUP_LENGTH = 4;
 
     private List<String> stopwords;
-    private HashMap<String, String> skillMatches;
-    private HashMap<String, String> titleMatches;
+    private LinkedHashMap<String, String> skillMatches;
+    private LinkedHashMap<String, String> titleMatches;
     
     public ResumeParser(String skills_path, String titles_path, String stopwords_path) throws IOException{
         List<String> stopwords = Files.readAllLines(Paths.get(stopwords_path));
@@ -26,9 +27,9 @@ public class ResumeParser{
         this.titleMatches = this.createMatchList(titles_path);
     }
 
-    private HashMap<String, String> createMatchList(String path) throws IOException{
+    private LinkedHashMap<String, String> createMatchList(String path) throws IOException{
         List<String> list = Files.readAllLines(Paths.get(path));
-        HashMap<String, String> matchList = new HashMap<>();
+        LinkedHashMap<String, String> matchList = new LinkedHashMap<>();
         for(String original_text: list){
             String text = this.lowercaseText(original_text);
             List<String> text_tokens = this.splitTokens(text);
@@ -129,7 +130,6 @@ public class ResumeParser{
                     
                     String orig_text = matchList.get(token_group);
                     if(orig_text != null){
-                        System.out.println(orig_text);
                         matches.add(orig_text);
                     }
                     
@@ -138,7 +138,20 @@ public class ResumeParser{
                 }
             }
         }
+        
+        ArrayList<String> ordered_matches = new ArrayList<>();
+        for(String orig_text: matchList.values()){
+            for(String match: matches){
+                if(orig_text.equals(match)){
+                    if(!ordered_matches.contains(orig_text)){
+                        ordered_matches.add(orig_text);
+                        System.out.println(orig_text);
+                    }
+                    break;
+                }
+            }
+        }
 
-        return matches;
+        return ordered_matches;
     }
 }
