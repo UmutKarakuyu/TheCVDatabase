@@ -83,6 +83,7 @@ public class Index {
 
     public void deleteDoc(String name) throws IOException{
         this.indexWriter.deleteDocuments(new Term("name", name));
+        this.indexWriter.commit();
     }
 
     public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters) throws IOException, ParseException, ClassNotFoundException{

@@ -347,7 +347,8 @@ public class DBConnection {
             deleteResumeFromResume.execute();
             deleteResumeFromTag.execute();
             deleteResumeFromAttributes.execute();
-        } catch (SQLException e) {
+            this.index.deleteDoc(resumeName);
+        } catch (SQLException | IOException e) {
             System.out.println(e);
         }
 
