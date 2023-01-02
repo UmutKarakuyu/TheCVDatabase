@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -116,7 +115,7 @@
                                         <Insets left="-12.0" />
                                     </VBox.margin>
                                 </HBox>
-                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="285.0" spacing="40.0" VBox.vgrow="NEVER">
+                                <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="285.0" spacing="25.0" VBox.vgrow="NEVER">
                                     <children>
                                         <ImageView fitHeight="40.0" fitWidth="30.0" onMouseClicked="#openSearchScreen" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                                             <image>
@@ -126,7 +125,7 @@
                                                 <Insets left="5.0" />
                                             </HBox.margin>
                                         </ImageView>
-                                        <Label onMouseClicked="#openSearchScreen" prefHeight="81.0" prefWidth="175.0" style="-fx-background-color: white;" text="Search">
+                                        <Label onMouseClicked="#openSearchScreen" prefHeight="81.0" prefWidth="225.0" style="-fx-background-color: white;" text="Search">
                                             <font>
                                                 <Font size="26.0" />
                                             </font>
@@ -143,24 +142,24 @@
                                                 <Image url="@images/resume.png" />
                                             </image>
                                         </ImageView>
-                                        <Label onMouseClicked="#openResumeScreen" prefHeight="53.0" prefWidth="126.0" style="-fx-font-family: Nunito;" text="Resumes" wrapText="true">
+                                        <Label onMouseClicked="#openResumeScreen" prefHeight="53.0" prefWidth="150.0" style="-fx-font-family: Nunito;" text="Resumes" wrapText="true">
                                             <font>
                                                 <Font size="26.0" />
                                             </font>
                                         </Label>
-                              <VBox alignment="CENTER_RIGHT" prefHeight="53.0" prefWidth="111.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                              <Button fx:id="addResumeButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#addResumeScreen" prefHeight="31.0" prefWidth="24.0" style="-fx-background-color: transparent;">
-                                                  <graphic>
-                                                      <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
-                                                          <image>
-                                                              <Image url="@images/plus.png" />
-                                                          </image>
-                                                      </ImageView>
-                                                  </graphic>
-                                              </Button>
-                                 </children>
-                              </VBox>
+                                        <VBox alignment="CENTER_RIGHT" prefHeight="53.0" prefWidth="111.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Button fx:id="addResumeButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#addResumeScreen" prefHeight="31.0" prefWidth="24.0" style="-fx-background-color: transparent;">
+                                                    <graphic>
+                                                        <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@images/plus.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                    </graphic>
+                                                </Button>
+                                            </children>
+                                        </VBox>
                                     </children>
                                 </HBox>
                                 <TableView fx:id="resumeTableView" onMouseClicked="#selectFromResumeTable" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
@@ -182,20 +181,23 @@
                                                 <Font size="26.0" />
                                             </font>
                                         </Label>
-                              <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                              <Button fx:id="addTemplateButton" mnemonicParsing="false" onAction="#openTemplateScreen" prefHeight="24.0" prefWidth="50.0" style="-fx-background-color: transparent;">
-                                                  <graphic>
-                                                      <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
-                                                          <image>
-                                                              <Image url="@images/plus.png" />
-                                                          </image>
-                                                      </ImageView>
-                                                  </graphic>
-                                              </Button>
-                                 </children>
-                              </VBox>
+                                        <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <Button fx:id="addTemplateButton" mnemonicParsing="false" onAction="#openTemplateScreen" prefHeight="24.0" prefWidth="50.0" style="-fx-background-color: transparent;">
+                                                    <graphic>
+                                                        <ImageView fitHeight="42.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@images/plus.png" />
+                                                            </image>
+                                                        </ImageView>
+                                                    </graphic>
+                                                </Button>
+                                            </children>
+                                        </VBox>
                                     </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                                 </HBox>
                                 <TableView fx:id="templateTableView" onMouseClicked="#selectFromTemplateTable" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
                                     <columns>
@@ -204,7 +206,7 @@
                                         <TableColumn fx:id="templateTrashColumn" editable="false" minWidth="-Infinity" prefWidth="30.0" sortable="false" />
                                     </columns>
                                 </TableView>
-                                <HBox>
+                                <HBox alignment="CENTER_LEFT" prefWidth="266.0">
                                     <children>
                                         <Button mnemonicParsing="false" onAction="#helpMenu" prefWidth="48.0" style="-fx-background-color: transparent;">
                                             <graphic>
@@ -216,13 +218,19 @@
                                             </graphic>
                                         </Button>
                                     </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="-10.0" />
+                           </padding>
                                 </HBox>
                             </children>
                             <StackPane.margin>
                                 <Insets />
                             </StackPane.margin>
                             <padding>
-                                <Insets bottom="50.0" left="10.0" />
+                                <Insets left="10.0" />
                             </padding>
                         </VBox>
                         <VBox fx:id="drawerShort" prefHeight="820.0" prefWidth="12.0" spacing="10.0" visible="false" StackPane.alignment="TOP_LEFT">
@@ -330,20 +338,23 @@
                                                                 <Insets bottom="20.0" top="10.0" />
                                                             </VBox.margin>
                                                         </HBox>
-                                          <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-                                             <content>
-                                                              <ImageView fx:id="originalResume" fitHeight="535.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true" />
-                                             </content>
-                                          </ScrollPane>
+                                                        <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" stylesheets="@css/ScrollPane.css" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                                            <content>
+                                                                <ImageView fx:id="originalResume" fitHeight="535.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true" />
+                                                            </content>
+                                                            <VBox.margin>
+                                                                <Insets bottom="10.0" />
+                                                            </VBox.margin>
+                                                        </ScrollPane>
                                                     </children>
                                                     <HBox.margin>
                                                         <Insets />
                                                     </HBox.margin>
-                                       <padding>
-                                          <Insets top="100.0" />
-                                       </padding>
+                                                    <padding>
+                                                        <Insets top="100.0" />
+                                                    </padding>
                                                 </VBox>
-                                                <VBox alignment="TOP_CENTER" maxWidth="400.0" spacing="5.0" HBox.hgrow="ALWAYS">
+                                                <VBox alignment="TOP_CENTER" maxWidth="600.0" spacing="5.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <HBox fx:id="carousel" alignment="CENTER" maxHeight="-Infinity" prefHeight="75.0" spacing="5.0" style="-fx-background-color: #3F4E4F; -fx-background-radius: 0 0 0 20;">
                                                             <children>
@@ -428,14 +439,14 @@
                                                                 <Insets />
                                                             </opaqueInsets>
                                                             <VBox.margin>
-                                                                <Insets bottom="20.0" top="5.0" />
+                                                                <Insets bottom="10.0" right="10.0" top="5.0" />
                                                             </VBox.margin>
                                                             <effect>
                                                                 <DropShadow />
                                                             </effect>
-                                             <padding>
-                                                <Insets right="20.0" />
-                                             </padding>
+                                                            <padding>
+                                                                <Insets right="20.0" />
+                                                            </padding>
                                                         </VBox>
                                                     </children>
                                                 </VBox>
@@ -501,134 +512,86 @@
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <HBox fx:id="templateHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="561.0" prefWidth="810.0" StackPane.alignment="CENTER">
+                                        <HBox fx:id="templateHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="561.0" prefWidth="810.0" visible="false" StackPane.alignment="CENTER">
                                             <children>
-                                    <VBox HBox.hgrow="ALWAYS">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                       <children>
-                                                      <StackPane prefHeight="660.0" prefWidth="460.0" style="-fx-background-color: grey; -fx-background-radius: 20;" VBox.vgrow="ALWAYS">
-                                                          <children>
-                                                <HBox alignment="CENTER">
-                                                   <children>
-                                                                    <VBox fx:id="templatePane" alignment="CENTER" prefHeight="700.0" prefWidth="405.0" style="-fx-background-color: white; -fx-background-radius: 20;" HBox.hgrow="ALWAYS">
-                                                                        <children>
-                                                                            <VBox fx:id="templateNameVBox" maxWidth="200.0" prefWidth="205.0" VBox.vgrow="NEVER">
-                                                                                <children>
-                                                                                    <TextField fx:id="templateName1" alignment="TOP_CENTER" prefWidth="266.0" promptText="Template Name" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: grey; -fx-alignment: center; -fx-border-width: 2;" />
-                                                                                </children>
-                                                                                <VBox.margin>
-                                                                                    <Insets bottom="30.0" top="20.0" />
-                                                                                </VBox.margin>
-                                                                            </VBox>
-                                                                            <VBox fx:id="templateAttributeView" alignment="TOP_CENTER" prefHeight="636.0" prefWidth="402.0" VBox.vgrow="ALWAYS">
-                                                                                <VBox.margin>
-                                                                                    <Insets bottom="50.0" />
-                                                                                </VBox.margin>
-                                                                                <children>
-                                                                                    <GridPane fx:id="templateList" alignment="CENTER_LEFT" maxWidth="500.0" prefHeight="60.0" prefWidth="344.0" stylesheets="@css/textFields.css" vgap="10.0">
-                                                                                        <columnConstraints>
-                                                                                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                                                        </columnConstraints>
-                                                                                        <rowConstraints>
-                                                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                                                        </rowConstraints>
-                                                                                        <children>
-                                                                                            <Button fx:id="newTemplateButton" alignment="CENTER" mnemonicParsing="false" onAction="#buttonAdd" prefHeight="64.0" prefWidth="387.0" style="-fx-background-color: transparent;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
-                                                                                                <graphic>
-                                                                                                    <ImageView fitHeight="28.0" fitWidth="315.0" pickOnBounds="true" preserveRatio="true">
-                                                                                                        <image>
-                                                                                                            <Image url="@images/addTuple.png" />
-                                                                                                        </image>
-                                                                                                    </ImageView>
-                                                                                                </graphic>
-                                                                                            </Button>
-                                                                                        </children>
-                                                                                        <VBox.margin>
-                                                                                            <Insets bottom="30.0" top="10.0" />
-                                                                                        </VBox.margin>
-                                                                                    </GridPane>
-                                                                                    <Button mnemonicParsing="false" onAction="#saveTemplate" prefHeight="28.0" prefWidth="78.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save" />
-                                                                                </children>
-                                                                            </VBox>
-                                                                        </children>
-                                                                        <padding>
-                                                                            <Insets left="20.0" right="20.0" />
-                                                                        </padding>
-                                                                        <effect>
-                                                                            <DropShadow />
-                                                                        </effect>
-                                                                    </VBox>
-                                                   </children>
-                                                </HBox>
-                                                          </children>
-                                                          <padding>
-                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                          </padding>
-                                                      </StackPane>
-                                       </children>
-                                    </VBox>
+                                                <VBox HBox.hgrow="ALWAYS">
+                                                    <HBox.margin>
+                                                        <Insets />
+                                                    </HBox.margin>
+                                                    <children>
+                                                        <StackPane prefHeight="660.0" prefWidth="460.0" style="-fx-background-color: grey; -fx-background-radius: 20;" VBox.vgrow="ALWAYS">
+                                                            <children>
+                                                                <HBox alignment="CENTER">
+                                                                    <children>
+                                                                        <VBox fx:id="templatePane" alignment="CENTER" prefHeight="700.0" prefWidth="405.0" style="-fx-background-color: white; -fx-background-radius: 20;" HBox.hgrow="ALWAYS">
+                                                                            <children>
+                                                                                <VBox fx:id="templateNameVBox" maxWidth="200.0" prefWidth="205.0" VBox.vgrow="NEVER">
+                                                                                    <children>
+                                                                                        <TextField fx:id="templateName1" alignment="TOP_CENTER" prefWidth="266.0" promptText="Template Name" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: grey; -fx-alignment: center; -fx-border-width: 2;" />
+                                                                                    </children>
+                                                                                    <VBox.margin>
+                                                                                        <Insets bottom="30.0" top="20.0" />
+                                                                                    </VBox.margin>
+                                                                                </VBox>
+                                                                                <VBox fx:id="templateAttributeView" alignment="TOP_CENTER" prefHeight="636.0" prefWidth="402.0" VBox.vgrow="ALWAYS">
+                                                                                    <VBox.margin>
+                                                                                        <Insets bottom="50.0" />
+                                                                                    </VBox.margin>
+                                                                                    <children>
+                                                                                        <GridPane fx:id="templateList" alignment="CENTER_LEFT" maxWidth="500.0" prefHeight="60.0" prefWidth="344.0" stylesheets="@css/textFields.css" vgap="10.0">
+                                                                                            <columnConstraints>
+                                                                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                                            </columnConstraints>
+                                                                                            <rowConstraints>
+                                                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                                            </rowConstraints>
+                                                                                            <children>
+                                                                                                <Button fx:id="newTemplateButton" alignment="CENTER" mnemonicParsing="false" onAction="#buttonAdd" prefHeight="64.0" prefWidth="387.0" style="-fx-background-color: transparent;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
+                                                                                                    <graphic>
+                                                                                                        <ImageView fitHeight="28.0" fitWidth="315.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                            <image>
+                                                                                                                <Image url="@images/addTuple.png" />
+                                                                                                            </image>
+                                                                                                        </ImageView>
+                                                                                                    </graphic>
+                                                                                                </Button>
+                                                                                            </children>
+                                                                                            <VBox.margin>
+                                                                                                <Insets bottom="30.0" top="10.0" />
+                                                                                            </VBox.margin>
+                                                                                        </GridPane>
+                                                                                        <Button mnemonicParsing="false" onAction="#saveTemplate" prefHeight="28.0" prefWidth="78.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save" />
+                                                                                    </children>
+                                                                                </VBox>
+                                                                            </children>
+                                                                            <padding>
+                                                                                <Insets left="20.0" right="20.0" />
+                                                                            </padding>
+                                                                            <effect>
+                                                                                <DropShadow />
+                                                                            </effect>
+                                                                        </VBox>
+                                                                    </children>
+                                                                </HBox>
+                                                            </children>
+                                                            <padding>
+                                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                            </padding>
+                                                        </StackPane>
+                                                    </children>
+                                                </VBox>
                                             </children>
                                             <StackPane.margin>
                                                 <Insets />
                                             </StackPane.margin>
-                                 <padding>
-                                    <Insets bottom="40.0" left="175.0" right="175.0" top="40.0" />
-                                 </padding>
+                                            <padding>
+                                                <Insets bottom="40.0" left="175.0" right="175.0" top="40.0" />
+                                            </padding>
                                         </HBox>
                                     </children>
                                 </StackPane>
                             </children>
                         </HBox>
-                    </children>
-                </VBox>
-            </children>
-        </HBox>
-        <HBox fx:id="modalHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" visible="false">
-            <children>
-                <VBox alignment="CENTER" maxHeight="723.0" maxWidth="370.0" prefHeight="723.0" prefWidth="370.0" HBox.hgrow="NEVER">
-                    <children>
-                        <Pane disable="true" prefHeight="723.0" prefWidth="738.0" visible="false" VBox.vgrow="NEVER" />
-                        <Pane fx:id="modalPane" minHeight="426.0" minWidth="370.0" prefHeight="1000.0" prefWidth="300.0" style="-fx-border-color: grey; -fx-background-color: FFF9F8; -fx-border-radius: 20;" VBox.vgrow="NEVER">
-                            <children>
-                                <VBox alignment="CENTER" layoutX="10.0" layoutY="-38.0" prefHeight="504.0" prefWidth="350.0">
-                                    <children>
-                                        <HBox alignment="TOP_RIGHT" prefHeight="9.0" prefWidth="349.0">
-                                            <children>
-                                                <Button mnemonicParsing="false" onAction="#closeModal" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 50;" text="X" />
-                                            </children>
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" />
-                                            </VBox.margin>
-                                        </HBox>
-                                        <HBox alignment="TOP_CENTER" prefHeight="34.0" prefWidth="349.0" spacing="20.0">
-                                            <children>
-                                                <Label text="Resume Name:" />
-                                                <TextField fx:id="modalResumeName" prefHeight="26.0" prefWidth="228.0" style="-fx-background-radius: 10;" />
-                                            </children>
-                                            <padding>
-                                                <Insets left="10.0" />
-                                            </padding>
-                                        </HBox>
-                                        <ListView fx:id="modalListView" prefHeight="265.0" prefWidth="349.0" stylesheets="@css/TableView.css" />
-                                        <HBox alignment="BOTTOM_RIGHT" prefHeight="43.0" prefWidth="349.0">
-                                            <children>
-                                                <Button mnemonicParsing="false" onAction="#saveResume" prefHeight="22.0" prefWidth="69.0" style="-fx-background-radius: 10; -fx-background-color: FFF9F8; -fx-border-color: grey; -fx-border-radius: 20;" text="Save">
-                                                    <HBox.margin>
-                                                        <Insets bottom="5.0" right="10.0" />
-                                                    </HBox.margin>
-                                                </Button>
-                                            </children>
-                                            <VBox.margin>
-                                                <Insets top="30.0" />
-                                            </VBox.margin>
-                                        </HBox>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </Pane>
-                        <Pane disable="true" prefHeight="723.0" prefWidth="738.0" />
                     </children>
                 </VBox>
             </children>

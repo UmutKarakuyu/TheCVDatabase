@@ -19,8 +19,8 @@ public class App extends Application {
         Image image = new Image(getClass().getResource(path).toExternalForm());
         stage.getIcons().add(image);
         stage.setTitle("CV Database");
-        stage.setMinHeight(700);
-        stage.setMinWidth(1200);
+        stage.setMinHeight(800);
+        stage.setMinWidth(1300);
         stage.setScene(scene);
         stage.show();
 

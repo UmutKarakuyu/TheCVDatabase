@@ -33,25 +33,25 @@ public class DBConnection {
                 Statement stat = connection.createStatement();
 
                 stat.executeUpdate("CREATE TABLE RESUME(" +
-                        "NAME TEXT PRIMARY KEY," +
+                        "NAME TEXT NOT NULL PRIMARY KEY," +
                         "DATE TEXT NOT NULL," +
                         "FILE TEXT NOT NULL," +
                         "TEMPLATE_NAME TEXT NOT NULL)");
 
                 stat.executeUpdate("CREATE TABLE TEMPLATE(" +
-                        "TITLE TEXT," +
-                        "ATTRIBUTES TEXT," +
+                        "TITLE TEXT NOT NULL," +
+                        "ATTRIBUTES TEXT NOT NULL," +
                         "PRIMARY KEY (TITLE, ATTRIBUTES))");
 
                 stat.executeUpdate("CREATE TABLE TAG(" +
-                        "RESUME_NAME TEXT," +
-                        "NAME TEXT," +
+                        "RESUME_NAME TEXT NOT NULL," +
+                        "NAME TEXT NOT NULL," +
                         "PRIMARY KEY (NAME, RESUME_NAME))");
 
                 stat.executeUpdate("CREATE TABLE ATTRIBUTES(" +
-                        "RESUME_NAME TEXT," +
-                        "KEY TEXT," +
-                        "VALUE TEXT," +
+                        "RESUME_NAME TEXT NOT NULL," +
+                        "KEY TEXT NOT NULL," +
+                        "VALUE TEXT NOT NULL," +
                         "PRIMARY KEY (RESUME_NAME, KEY))");
             }
 
@@ -216,6 +216,7 @@ public class DBConnection {
         }
         return ar;
     }
+
     public boolean templateExists(String templateName) {
         try {
             PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM TEMPLATE WHERE TITLE = ?");
@@ -227,6 +228,7 @@ public class DBConnection {
             return false;
         }
     }
+
     public void updateTemplateAttributes(String templateName, List<String> attributes) throws SQLException {
         deleteTemplate.setString(1, templateName);
         deleteTemplate.executeUpdate();
@@ -237,6 +239,7 @@ public class DBConnection {
             insertTemplate.executeUpdate();
         }
     }
+
     public ArrayList<String> getResumes() throws SQLException {
         ResultSet rs = getResumes.executeQuery();
         ArrayList<String> ar = new ArrayList<>();

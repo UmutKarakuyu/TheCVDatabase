@@ -61,13 +61,7 @@ public class MainController {
         @FXML
         private TableColumn resumeNameColumn, resumeTrashColumn, templateNameColumn, templateTrashColumn;
         @FXML
-        private HBox resumeHBox, searchHBox, templateHBox, modalHBox;
-        @FXML
-        private Pane modalPane;
-        @FXML
-        private ListView modalListView;
-        @FXML
-        private TextField modalResumeName;
+        private HBox resumeHBox, searchHBox, templateHBox;
         @FXML
         private ImageView pdfUploadView, originalResume;
         @FXML
@@ -111,8 +105,8 @@ public class MainController {
                         }
                 });
 
-                modalHBox.widthProperty().addListener((obs, oldVal, newVal) -> {
-                        if (modalHBox.getWidth() < 1250)
+                firstEllipses.widthProperty().addListener((obs, oldVal, newVal) -> {
+                        if (firstEllipses.getWidth() < 1400)
                                 shortDrawer();
                         else
                                 longDrawer();
@@ -209,8 +203,8 @@ public class MainController {
                         originalResume.setImage(null);
                         file.delete();
                         DBConnection.getInstance().deleteResume(resumeName);
-
-                        initialize();
+                        clearResumeContents();
+                        fillTableViews();
 
                 } else {
                         String path1 = resume.getfileName() + "_1.png";
@@ -220,11 +214,11 @@ public class MainController {
                         if (image.getWidth() > originalResumeVBox.getWidth())
                                 ratio = image.getWidth() / originalResumeVBox.getWidth();
                         else
-                                ratio = originalResumeVBox.getWidth() / image.getWidth() ;        
+                                ratio = originalResumeVBox.getWidth() / image.getWidth();
                         originalResume.setFitWidth(originalResumeVBox.getWidth());
                         originalResume.setFitHeight(originalResumeVBox.getHeight() * ratio);
-
-                        generateResume(resume.getTemplate());
+                        resumeTitle.setText(resume.getName());
+                        showGeneratedResume(resume);
                 }
         }
 
@@ -252,7 +246,7 @@ public class MainController {
         @FXML
         public void selectFromTemplateTable() throws SQLException, IOException {
                 if (templateTableView.getSelectionModel().getSelectedCells() == null ||
-                        templateTableView.getSelectionModel().getSelectedIndex() == -1) {
+                                templateTableView.getSelectionModel().getSelectedIndex() == -1) {
                         return;
                 }
 
@@ -264,7 +258,7 @@ public class MainController {
                 if (selectedCells.get(0).getTableColumn().equals(templateTrashColumn)) {
                         DBConnection.getInstance().deleteTemplate(templateName);
                         System.out.println(templateName);
-                        initialize();
+                        fillTableViews();
                 } else {
                         openTemplateScreen();
                         Template template = DBConnection.getInstance().getTemplateObject(templateName);
@@ -288,13 +282,11 @@ public class MainController {
                                         children.removeAll(textField, deleteButton);
                                 });
 
-
                                 templateList.addRow(templateList.getRowCount(), textField, deleteButton);
                         }
                         templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
                 }
         }
-
 
         @FXML
         public void openSearchScreen() {
@@ -389,14 +381,6 @@ public class MainController {
         }
 
         @FXML
-        public void showModal() throws SQLException {
-                modalHBox.setVisible(true);
-                for (int i = 0; i < DBConnection.getInstance().getTemplates().size(); i++) {
-                        modalListView.getItems().add(DBConnection.getInstance().getTemplates().get(i));
-                }
-        }
-
-        @FXML
         public void addResumeScreen() throws SQLException, IOException {
                 resumeHBox.setVisible(true);
                 searchHBox.setVisible(false);
@@ -452,6 +436,13 @@ public class MainController {
                                 String path1 = "images/pdfs/" + fileName + "_1" + ".png";
                                 Image image = new Image(getClass().getResource(path1).toExternalForm());
                                 originalResume.setImage(image);
+                                double ratio;
+                                if (image.getWidth() > originalResumeVBox.getWidth())
+                                        ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                else
+                                        ratio = originalResumeVBox.getWidth() / image.getWidth();
+                                originalResume.setFitWidth(originalResumeVBox.getWidth());
+                                originalResume.setFitHeight(originalResumeVBox.getHeight() * ratio);
 
                                 path = "images/pdfs/" + fileName;
                         } else {
@@ -461,16 +452,15 @@ public class MainController {
                         e.printStackTrace();
                 }
 
+                generateResume.getChildren().clear();
+                Label l1 = new Label("Attributes");
+                l1.setStyle("-fx-font-size: 20;");
+                Label l2 = new Label("Values");
+                l2.setStyle("-fx-font-size: 20;");
+                generateResume.addRow(0, l1, l2);
+                resumeTitle.setText(null);
                 fillTableViews();
 
-        }
-
-        @FXML
-        private void closeModal() {
-                modalHBox.setVisible(false);
-                modalResumeName.clear();
-                modalListView.getSelectionModel().clearSelection();
-                modalListView.getItems().clear();
         }
 
         @FXML
@@ -565,7 +555,6 @@ public class MainController {
 
         }
 
-
         public void saveTemplate() throws SQLException, IOException {
                 // Get the list of attributes from the text fields in the templateList
                 List<String> textFieldData = new ArrayList<>();
@@ -583,22 +572,23 @@ public class MainController {
                         // If the template already exists, update the attributes in the database
                         DBConnection.getInstance().updateTemplateAttributes(templateName, textFieldData);
                 } else {
-                        // If the template does not exist, create a new template with the given attributes and add it to the database
+                        // If the template does not exist, create a new template with the given
+                        // attributes and add it to the database
                         Template template = new Template(templateName);
                         for (int i = 0; i < textFieldData.size(); i++) {
                                 template.addAttribute(textFieldData.get(i));
                         }
                         DBConnection.getInstance().addTemplate(template);
                 }
-                        // Clear the templateName1 text field and templateList, and add the newTemplateButton back to the templateList
-                        templateName1.clear();
-                        templateList.getChildren().clear();
-                        templateList.addRow(0, newTemplateButton);
+                // Clear the templateName1 text field and templateList, and add the
+                // newTemplateButton back to the templateList
+                templateName1.clear();
+                templateList.getChildren().clear();
+                templateList.addRow(0, newTemplateButton);
 
-                        // Refresh the templateTableView and resumeTableView
-                        fillTableViews();
-                }
-
+                // Refresh the templateTableView and resumeTableView
+                fillTableViews();
+        }
 
         @FXML
         private void helpMenu() throws IOException {
@@ -636,6 +626,9 @@ public class MainController {
                         String value = null;
                         int i = 0;
 
+                        childrens.remove(0); // Removing the Attributes and Values strings.
+                        childrens.remove(0);
+
                         for (Node node : childrens) {
                                 if (generateResume.getColumnIndex(node) == 0) {
                                         Label label = (Label) node;
@@ -669,8 +662,39 @@ public class MainController {
                         resume.setAttributes(attributes);
                         DBConnection.getInstance().addResume(resume);
                         fillTableViews();
-                } catch (Exception e) {
+                        clearResumeContents();
 
+                } catch (Exception e) {
                 }
+        }
+
+        @FXML
+        private void showGeneratedResume(Resume resume) {
+
+                generateResume.getChildren().clear();
+                Label l1 = new Label("Attributes");
+                l1.setStyle("-fx-font-size: 20;");
+                Label l2 = new Label("Values");
+                l2.setStyle("-fx-font-size: 20;");
+
+                generateResume.addRow(0, l1, l2);
+
+                ArrayList<String> templateAttributes = resume.getTemplate().getAttributes();
+                for (int i = 0; i < templateAttributes.size(); i++) {
+                        Label key = new Label(templateAttributes.get(i));
+                        Label value = new Label(resume.getAttributes().get(templateAttributes.get(i)));
+                        generateResume.addRow(generateResume.getRowCount() + 1, key, value);
+                }
+        }
+
+        private void clearResumeContents() {
+                generateResume.getChildren().clear();
+                Label l1 = new Label("Attributes");
+                l1.setStyle("-fx-font-size: 20;");
+                Label l2 = new Label("Values");
+                l2.setStyle("-fx-font-size: 20;");
+                generateResume.addRow(0, l1, l2);
+                resumeTitle.setText(null);
+                originalResume.setImage(null);
         }
 }
