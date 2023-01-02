@@ -97,6 +97,14 @@ public class MainController {
         private VBox originalResumeVBox;
         @FXML
         private TextField resumeTitle;
+        @FXML
+        private ChoiceBox<String> tagDropDown;
+        @FXML
+        private TextField tagTextField;
+        @FXML
+        private ChoiceBox<String> myTagsDropDown;
+        @FXML
+        private HBox modalHBox;
 
         public void initialize() throws SQLException, IOException {
 
@@ -220,6 +228,12 @@ public class MainController {
                         originalResume.setFitHeight(originalResumeVBox.getHeight() * ratio);
                         resumeTitle.setText(resume.getName());
                         showGeneratedResume(resume);
+
+                        tagDropDown.getItems().clear();
+                        for (String s : DBConnection.getInstance().getTags()) {
+                                tagDropDown.getItems().add(s);
+                        }
+
                 }
         }
 
@@ -683,6 +697,22 @@ public class MainController {
                         Label value = new Label(resume.getAttributes().get(templateAttributes.get(i)));
                         generateResume.addRow(generateResume.getRowCount() + 1, key, value);
                 }
+                Label l3 = new Label("Tags");
+                l3.setStyle("-fx-font-size: 20;");
+
+                Label l4 = new Label("");
+                generateResume.addRow(generateResume.getRowCount(), l4);
+                generateResume.addRow(generateResume.getRowCount(), l3);
+
+                for (int i = 0; i < resume.getTags().size() - 1; i += 2) {
+                        Label label = new Label(resume.getTag(i));
+                        Label label2 = new Label(resume.getTag(i + 1));
+                        generateResume.addRow(generateResume.getRowCount(), label, label2);
+                }
+                if (resume.getTags().size() % 2 != 0) {
+                        Label label = new Label(resume.getTag(resume.getTags().size() - 1));
+                        generateResume.addRow(generateResume.getRowCount(), label);
+                }
         }
 
         private void clearResumeContents() {
@@ -694,5 +724,41 @@ public class MainController {
                 generateResume.addRow(0, l1, l2);
                 resumeTitle.setText(null);
                 originalResume.setImage(null);
+        }
+
+        @FXML
+        private void addTagDrop() throws SQLException {
+
+                String tag = (String) tagDropDown.getSelectionModel().getSelectedItem();
+                CustomImage image = (CustomImage) resumeTableView.getSelectionModel().getSelectedItem();
+                Resume resume = DBConnection.getInstance().getResumeObject(image.getName());
+                DBConnection.getInstance().addTag(resume, tag);
+
+        }
+
+        @FXML
+        private void addTagText() throws SQLException {
+                String tag = (String) tagTextField.getText();
+                CustomImage image = (CustomImage) resumeTableView.getSelectionModel().getSelectedItem();
+                Resume resume = DBConnection.getInstance().getResumeObject(image.getName());
+                DBConnection.getInstance().addTag(resume, tag);
+                tagDropDown.getItems().add(tag);
+                tagTextField.clear();
+        }
+
+        @FXML
+        private void fillMyTags(Resume resume) throws SQLException {
+
+                for (String s : DBConnection.getInstance().getResumeTags(resume.getName())) {
+                        myTagsDropDown.getItems().add(s);
+                }
+        }
+
+        @FXML
+        private void openTags() throws SQLException {
+                modalHBox.setVisible(true);
+                CustomImage image = (CustomImage) resumeTableView.getSelectionModel().getSelectedItem();
+                Resume resume = DBConnection.getInstance().getResumeObject(image.getName());
+                fillMyTags(resume);
         }
 }

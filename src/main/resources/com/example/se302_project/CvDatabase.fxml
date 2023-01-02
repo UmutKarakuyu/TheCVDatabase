@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -195,9 +196,9 @@
                                             </children>
                                         </VBox>
                                     </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
                                 </HBox>
                                 <TableView fx:id="templateTableView" onMouseClicked="#selectFromTemplateTable" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" stylesheets="@css/TableView.css" VBox.vgrow="ALWAYS">
                                     <columns>
@@ -218,12 +219,12 @@
                                             </graphic>
                                         </Button>
                                     </children>
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="-10.0" />
-                           </padding>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" />
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets left="-10.0" />
+                                    </padding>
                                 </HBox>
                             </children>
                             <StackPane.margin>
@@ -325,7 +326,7 @@
                             <children>
                                 <StackPane prefHeight="510.0" prefWidth="802.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" visible="false" StackPane.alignment="CENTER">
+                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" StackPane.alignment="CENTER">
                                             <children>
                                                 <VBox fx:id="originalResumeVBox" alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                                                     <children>
@@ -413,17 +414,12 @@
                                                                         <Insets top="10.0" />
                                                                     </VBox.margin>
                                                                 </HBox>
-                                                                <HBox alignment="BOTTOM_CENTER" prefHeight="60.0" prefWidth="411.0" VBox.vgrow="ALWAYS">
-                                                                    <children>
-                                                                        <Button mnemonicParsing="false" onAction="#newSubmitButton" prefHeight="28.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save" />
-                                                                    </children>
+                                                                <VBox alignment="BOTTOM_CENTER" prefHeight="121.0" prefWidth="394.0" VBox.vgrow="ALWAYS" />
+                                                                <Button mnemonicParsing="false" onAction="#newSubmitButton" prefHeight="28.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save">
                                                                     <VBox.margin>
-                                                                        <Insets />
+                                                                        <Insets bottom="10.0" top="5.0" />
                                                                     </VBox.margin>
-                                                                    <padding>
-                                                                        <Insets bottom="10.0" />
-                                                                    </padding>
-                                                                </HBox>
+                                                                </Button>
                                                             </children>
                                                             <opaqueInsets>
                                                                 <Insets />
@@ -439,7 +435,7 @@
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <HBox fx:id="searchHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="700.0" prefWidth="1921.0" StackPane.alignment="CENTER">
+                                        <HBox fx:id="searchHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="700.0" prefWidth="1921.0" visible="false" StackPane.alignment="CENTER">
                                             <children>
                                                 <VBox alignment="TOP_CENTER" minHeight="-Infinity" prefHeight="700.0" prefWidth="841.0">
                                                     <children>
@@ -580,6 +576,61 @@
                             </children>
                         </HBox>
                     </children>
+                </VBox>
+            </children>
+        </HBox>
+        <HBox fx:id="modalHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" visible="false">
+            <children>
+                <VBox alignment="CENTER" maxHeight="723.0" maxWidth="370.0" prefHeight="723.0" prefWidth="358.0" HBox.hgrow="NEVER">
+               <children>
+                  <HBox prefHeight="402.0" prefWidth="358.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 20; -fx-border-width: 2;" VBox.vgrow="NEVER">
+                     <children>
+                        <VBox prefHeight="398.0" prefWidth="438.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="35.0" prefWidth="354.0">
+                                 <children>
+                                    <Label text="TAG OPERATIONS" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="354.0">
+                                 <children>
+                                    <Label text="ADD TAGS:" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="38.0" prefWidth="354.0" spacing="100.0">
+                                 <children>
+                                    <ChoiceBox fx:id="tagDropDown" prefWidth="150.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" />
+                                    <Button mnemonicParsing="false" onAction="#addTagDrop" prefHeight="27.0" prefWidth="56.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" text="Add" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="38.0" prefWidth="354.0" spacing="100.0">
+                                 <children>
+                                    <TextField fx:id="tagTextField" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" />
+                                    <Button mnemonicParsing="false" onAction="#addTagText" prefHeight="27.0" prefWidth="56.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" text="Add" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="354.0">
+                                 <children>
+                                    <Label text="DELETE TAGS:" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="38.0" prefWidth="354.0" spacing="100.0">
+                                 <children>
+                                    <ChoiceBox fx:id="myTagsDropDown" prefWidth="150.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" />
+                                    <Button mnemonicParsing="false" onAction="#addTagDrop" prefHeight="27.0" prefWidth="56.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" text="Delete" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
                 </VBox>
             </children>
         </HBox>
