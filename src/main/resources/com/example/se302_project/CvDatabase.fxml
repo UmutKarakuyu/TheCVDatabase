@@ -358,17 +358,7 @@
                                                     <children>
                                                         <HBox fx:id="carousel" alignment="CENTER" maxHeight="-Infinity" prefHeight="75.0" spacing="5.0" style="-fx-background-color: #3F4E4F; -fx-background-radius: 0 0 0 20;">
                                                             <children>
-                                                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@images/leftArrow.png" />
-                                                                    </image>
-                                                                </ImageView>
                                                                 <ListView fx:id="templateCarouselList" onMouseClicked="#courselSelect" orientation="HORIZONTAL" prefHeight="200.0" prefWidth="323.0" style="-fx-background-color: transparent;" stylesheets="@css/ListView.css" HBox.hgrow="ALWAYS" />
-                                                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                                                    <image>
-                                                                        <Image url="@images/rightArrow.png" />
-                                                                    </image>
-                                                                </ImageView>
                                                             </children>
                                                             <effect>
                                                                 <DropShadow radius="4.75" width="0.0" />
