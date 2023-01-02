@@ -434,9 +434,6 @@
                                                             <effect>
                                                                 <DropShadow />
                                                             </effect>
-                                                            <padding>
-                                                                <Insets right="20.0" />
-                                                            </padding>
                                                         </VBox>
                                                     </children>
                                                 </VBox>
