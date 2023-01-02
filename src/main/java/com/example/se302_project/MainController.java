@@ -405,23 +405,26 @@ public class MainController {
 
         @FXML
         public void saveResume() throws SQLException, IOException {
-                clearResumeContents();
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Select a file");
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
                 fileChooser.getExtensionFilters().add(extFilter);
-                File file = fileChooser.showOpenDialog(null);
+                File file = (fileChooser.showOpenDialog(null));
+                String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/"
+                                + file.getName().trim().replace(".pdf", "");
+                File destinationFile = new File(destinationDir);
+                if (!destinationFile.exists()) {
+                        destinationFile.mkdir();
+                }
+
+                File tempfile = new File(destinationDir, file.getName());
+                tempfile.createNewFile();
 
                 // Create a task to perform the file conversion in the background
                 Task<Void> task = new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
                                 try {
-                                        String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/";
-                                        File destinationFile = new File(destinationDir);
-                                        if (!destinationFile.exists()) {
-                                                destinationFile.mkdir();
-                                        }
                                         if (file.exists()) {
                                                 PDDocument document = PDDocument.load(file);
                                                 PDFRenderer pdfRenderer = new PDFRenderer(document);
@@ -433,7 +436,7 @@ public class MainController {
                                                 int dpi = 300;
 
                                                 for (int i = 0; i < numberOfPages; ++i) {
-                                                        File outPutFile = new File(destinationDir + fileName + "_"
+                                                        File outPutFile = new File(destinationDir + "/" + fileName + "_"
                                                                         + (i + 1) + "." + fileExtension);
                                                         BufferedImage bImage = pdfRenderer.renderImageWithDPI(i, dpi,
                                                                         ImageType.RGB);
@@ -442,7 +445,8 @@ public class MainController {
 
                                                 document.close();
 
-                                                path = "images/pdfs/" + fileName;
+                                                path = "images/pdfs/" + file.getName().trim().replace("pdf", "") + "/"
+                                                                + fileName;
                                         } else {
                                                 System.err.println(file.getName() + " File not exists");
                                         }
