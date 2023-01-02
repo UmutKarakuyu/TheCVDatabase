@@ -338,7 +338,7 @@
                                                                 <Insets bottom="20.0" top="10.0" />
                                                             </VBox.margin>
                                                         </HBox>
-                                                        <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" stylesheets="@css/ScrollPane.css" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                                        <ScrollPane focusTraversable="false" hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" stylesheets="@css/ScrollPane.css" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                                                             <content>
                                                                 <ImageView fx:id="originalResume" fitHeight="535.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true" />
                                                             </content>
