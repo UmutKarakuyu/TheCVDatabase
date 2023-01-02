@@ -484,7 +484,26 @@ public class MainController {
                         }
                 };
 
+               /* // Get the resume name from the resumeName1 text field
+                String resumeName = resumeTitle.getText();
+
+                // Check if the resume already exists in the database
+                if (DBConnection.getInstance().resumeExists(resumeName)) {
+                        // If the resume already exists, update the resume in the database
+                        DBConnection.getInstance().updateResume(resumeName, path);
+                } else {
+                        // If the resume does not exist, create a new resume with the given name and path and add it to the database
+                        Resume resume = new Resume(resumeName);
+                        DBConnection.getInstance().addResume(resume);
+                }
+
                 // Set the image in the "originalResume" ImageView when the task is complete
+                task.setOnSucceeded(event -> setOriginalResumeImage());
+
+                // Start the task
+                new Thread(task).start();
+
+              */  // Set the image in the "originalResume" ImageView when the task is complete
                 task.setOnSucceeded(event -> setOriginalResumeImage());
 
                 // Start the task
