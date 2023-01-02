@@ -108,9 +108,9 @@ public class MainController {
         private HBox modalHBox;
         @FXML
         private HBox allHbox;
-        @FXML 
+        @FXML
         private ScrollPane generatedResumeScrollPane;
-        @FXML 
+        @FXML
         private VBox generatedResumeVBox;
 
         public void initialize() throws SQLException, IOException {
@@ -218,11 +218,22 @@ public class MainController {
                 Resume resume = DBConnection.getInstance().getResumeObject(resumeName);
 
                 ObservableList<TablePosition> selectedCells = resumeTableView.getSelectionModel().getSelectedCells();
-
                 if (selectedCells.get(0).getTableColumn().equals(resumeTrashColumn)) {
-                        File file = new File(resume.getfileName() + "_1.png");
+                        String path = resume.getfileName();
+                        String[] parts = path.split("/");
+                        String destinationDir = "src\\main\\resources\\com\\example\\se302_project\\images\\pdfs\\"
+                                        + parts[parts.length - 1];
+                        ;
+                        File dir = new File(
+                                        destinationDir);
+                        File[] files = dir.listFiles();
+                        if (files != null) {
+                                for (File file : files) {
+                                        file.delete();
+                                }
+                        }
+                        dir.delete();
                         originalResume.setImage(null);
-                        file.delete();
                         DBConnection.getInstance().deleteResume(resumeName);
                         clearResumeContents();
                         fillTableViews();
