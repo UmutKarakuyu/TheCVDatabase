@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane alignment="TOP_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
+<StackPane alignment="TOP_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
     <children>
         <HBox fx:id="firstEllipses" prefHeight="100.0" prefWidth="200.0">
             <children>
@@ -501,7 +501,7 @@
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <HBox fx:id="templateHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="561.0" prefWidth="810.0" visible="false" StackPane.alignment="CENTER">
+                                        <HBox fx:id="templateHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="561.0" prefWidth="810.0" StackPane.alignment="CENTER">
                                             <children>
                                     <VBox HBox.hgrow="ALWAYS">
                                        <HBox.margin>
@@ -516,7 +516,7 @@
                                                                         <children>
                                                                             <VBox fx:id="templateNameVBox" maxWidth="200.0" prefWidth="205.0" VBox.vgrow="NEVER">
                                                                                 <children>
-                                                                                    <TextField fx:id="templateName" alignment="TOP_CENTER" prefWidth="266.0" promptText="Template Name" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: grey; -fx-alignment: center; -fx-border-width: 2;" />
+                                                                                    <TextField fx:id="templateName1" alignment="TOP_CENTER" prefWidth="266.0" promptText="Template Name" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: grey; -fx-alignment: center; -fx-border-width: 2;" />
                                                                                 </children>
                                                                                 <VBox.margin>
                                                                                     <Insets bottom="30.0" top="20.0" />

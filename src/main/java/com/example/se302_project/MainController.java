@@ -89,7 +89,7 @@ public class MainController {
         @FXML
         private VBox templateAttributeView;
         @FXML
-        private TextField templateName;
+        private TextField templateName1;
         @FXML
         private Button newTemplateButton;
         @FXML
@@ -251,20 +251,50 @@ public class MainController {
 
         @FXML
         public void selectFromTemplateTable() throws SQLException, IOException {
+                if (templateTableView.getSelectionModel().getSelectedCells() == null ||
+                        templateTableView.getSelectionModel().getSelectedIndex() == -1) {
+                        return;
+                }
+
                 int index = templateTableView.getSelectionModel().getSelectedIndex();
                 String templateName = (String) templateNameColumn.getCellData(index);
                 ObservableList<TablePosition> selectedCells = templateTableView.getSelectionModel().getSelectedCells();
 
+                templateName1.setText(templateName);
                 if (selectedCells.get(0).getTableColumn().equals(templateTrashColumn)) {
                         DBConnection.getInstance().deleteTemplate(templateName);
                         System.out.println(templateName);
                         initialize();
-
                 } else {
                         openTemplateScreen();
+                        Template template = DBConnection.getInstance().getTemplateObject(templateName);
+                        ObservableList<Node> children = templateList.getChildren();
+                        children.clear();
 
+                        for (String attribute : template.getAttributes()) {
+                                TextField textField = new TextField(attribute);
+                                textField.setMaxWidth(250);
+                                textField.setPromptText("Enter an attribute");
+
+                                String path = "images/trash.png";
+                                Image image = new Image(getClass().getResource(path).toExternalForm());
+
+                                Button deleteButton = new Button();
+                                deleteButton.setGraphic(new ImageView(image));
+                                deleteButton.setStyle("-fx-background-color: transparent;");
+
+                                deleteButton.setOnAction(event -> {
+                                        deleteButton.setMaxHeight(50);
+                                        children.removeAll(textField, deleteButton);
+                                });
+
+
+                                templateList.addRow(templateList.getRowCount(), textField, deleteButton);
+                        }
+                        templateList.addRow(templateList.getRowCount() + 1, newTemplateButton);
                 }
         }
+
 
         @FXML
         public void openSearchScreen() {
@@ -544,18 +574,59 @@ public class MainController {
                         }
                 }
 
-                Template template = new Template(templateName.getText());
+                Template template = new Template(templateName1.getText());
 
                 for (int i = 0; i < textFieldData.size(); i++) {
                         template.addAttribute(textFieldData.get(i));
                 }
                 DBConnection.getInstance().addTemplate(template);
-                templateName.clear();
+                templateName1.clear();
                 templateList.getChildren().clear();
                 templateList.addRow(0, newTemplateButton);
                 fillTableViews();
 
+
+                // Get the list of attributes from the text fields in the templateList
+
+
+                // Get the template name from the templateName1 text field
+                String templateName = templateName1.getText();
+
+                // Check if the template already exists in the database
+                if (DBConnection.getInstance().templateExists(templateName)) {
+                        // If the template already exists, update the attributes in the database
+                        DBConnection.getInstance().updateTemplateAttributes(templateName, textFieldData);
+                } else {
+                        // If the template does not exist, create a new template with the given attributes and add it to the database
+                        Template template2 = new Template(templateName);
+                        for (int i = 0; i < textFieldData.size(); i++) {
+                                template.addAttribute(textFieldData.get(i));
+                        }
+                        DBConnection.getInstance().addTemplate(template2);
+                }
+                if (templateTableView.getSelectionModel().getSelectedCells() == null ||
+                        templateTableView.getSelectionModel().getSelectedIndex() == -1) {
+                        return;
+                }
+
+                int index = templateTableView.getSelectionModel().getSelectedIndex();
+                templateName = (String) templateNameColumn.getCellData(index);
+                ObservableList<TablePosition> selectedCells = templateTableView.getSelectionModel().getSelectedCells();
+
+                templateName1.setText(templateName);
+                if (selectedCells.get(0).getTableColumn().equals(templateTrashColumn)) {
+                        DBConnection.getInstance().deleteTemplate(templateName);
+
+                        // Clear the templateName1 text field and templateList, and add the newTemplateButton back to the templateList
+                        templateName1.clear();
+                        templateList.getChildren().clear();
+                        templateList.addRow(0, newTemplateButton);
+
+                        // Refresh the templateTableView and resumeTableView
+                        fillTableViews();
+                }
         }
+
 
         @FXML
         private void helpMenu() throws IOException {

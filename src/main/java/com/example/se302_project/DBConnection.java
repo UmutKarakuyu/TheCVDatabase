@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DBConnection {
     private static DBConnection instance = null;
@@ -215,7 +216,27 @@ public class DBConnection {
         }
         return ar;
     }
+    public boolean templateExists(String templateName) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) FROM TEMPLATE WHERE TITLE = ?");
+            stmt.setString(1, templateName);
+            ResultSet rs = stmt.executeQuery();
+            return rs.getInt(1) > 0;
+        } catch (SQLException e) {
+            System.err.println(e);
+            return false;
+        }
+    }
+    public void updateTemplateAttributes(String templateName, List<String> attributes) throws SQLException {
+        deleteTemplate.setString(1, templateName);
+        deleteTemplate.executeUpdate();
 
+        for (String attribute : attributes) {
+            insertTemplate.setString(1, templateName);
+            insertTemplate.setString(2, attribute);
+            insertTemplate.executeUpdate();
+        }
+    }
     public ArrayList<String> getResumes() throws SQLException {
         ResultSet rs = getResumes.executeQuery();
         ArrayList<String> ar = new ArrayList<>();
