@@ -326,7 +326,7 @@
                             <children>
                                 <StackPane prefHeight="510.0" prefWidth="802.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" visible="false" StackPane.alignment="CENTER">
+                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" StackPane.alignment="CENTER">
                                             <children>
                                                 <VBox fx:id="originalResumeVBox" alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                                                     <children>
@@ -339,7 +339,7 @@
                                                                 <Insets bottom="20.0" top="10.0" />
                                                             </VBox.margin>
                                                         </HBox>
-                                                        <ScrollPane focusTraversable="false" hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" stylesheets="@css/ScrollPane.css" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                                        <ScrollPane focusTraversable="false" hbarPolicy="NEVER" maxWidth="1000.0" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" stylesheets="@css/ScrollPane.css" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                                                             <content>
                                                                 <ImageView fx:id="originalResume" fitHeight="535.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true" />
                                                             </content>
@@ -396,32 +396,36 @@
                                                                 <Insets top="5.0" />
                                                             </VBox.margin>
                                                         </HBox>
-                                                        <VBox alignment="TOP_CENTER" style="-fx-background-color: white; -fx-background-radius: 20;" VBox.vgrow="ALWAYS">
+                                                        <VBox fx:id="generatedResumeVBox" alignment="BOTTOM_CENTER" style="-fx-background-color: white; -fx-background-radius: 20;" VBox.vgrow="ALWAYS">
                                                             <children>
-                                                               <ScrollPane focusTraversable="false" hbarPolicy="NEVER" hmax="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="393.0" stylesheets="@css/ScrollPane.css" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-                                                                    <content>
-                                                                        <HBox alignment="CENTER" prefHeight="97.0" prefWidth="391.0">
-                                                                            <children>
-                                                                                <GridPane fx:id="generateResume" alignment="CENTER" prefHeight="66.0" prefWidth="347.0" vgap="10.0">
-                                                                                <columnConstraints>
-                                                                                    <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="185.0" minWidth="10.0" prefWidth="175.0" />
-                                                                                    <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="178.0" minWidth="10.0" prefWidth="172.0" />
-                                                                                </columnConstraints>
-                                                                                <rowConstraints>
-                                                                                    <RowConstraints prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-                                                                                </rowConstraints>
-                                                                                </GridPane>
-                                                                            </children>
-                                                                        </HBox>
-                                                                    </content>
+                                                <VBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
                                                    <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>
-                                                   <padding>
-                                                      <Insets top="10.0" />
-                                                   </padding>
-                                                                    </ScrollPane>
-                                                                <VBox alignment="BOTTOM_CENTER" prefHeight="56.0" prefWidth="394.0">
+                                                   <children>
+                                                                     <ScrollPane fx:id="generatedResumeScrollPane" focusTraversable="false" hbarPolicy="NEVER" hmax="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="393.0" stylesheets="@css/ScrollPane.css" vbarPolicy="NEVER">
+                                                                          <content>
+                                                                              <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="97.0" prefWidth="393.0">
+                                                                                  <children>
+                                                                                      <GridPane fx:id="generateResume" alignment="CENTER" prefHeight="66.0" prefWidth="347.0" vgap="10.0">
+                                                                                      <columnConstraints>
+                                                                                          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="185.0" minWidth="10.0" prefWidth="175.0" />
+                                                                                          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="178.0" minWidth="10.0" prefWidth="172.0" />
+                                                                                      </columnConstraints>
+                                                                                      <rowConstraints>
+                                                                                          <RowConstraints prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                                                                      </rowConstraints>
+                                                                                      </GridPane>
+                                                                                  </children>
+                                                                              </HBox>
+                                                                          </content>
+                                                         <padding>
+                                                            <Insets top="10.0" />
+                                                         </padding>
+                                                                          </ScrollPane>
+                                                   </children>
+                                                </VBox>
+                                                                <VBox alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="394.0">
                                                    <children>
                                                                       <Button mnemonicParsing="false" onAction="#newSubmitButton" prefHeight="28.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save">
                                                                           <VBox.margin>
@@ -504,7 +508,7 @@
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <HBox fx:id="templateHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="561.0" prefWidth="810.0" StackPane.alignment="CENTER">
+                                        <HBox fx:id="templateHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="561.0" prefWidth="810.0" visible="false" StackPane.alignment="CENTER">
                                             <children>
                                                 <VBox alignment="CENTER" prefHeight="620.0" prefWidth="624.0">
                                                     <HBox.margin>

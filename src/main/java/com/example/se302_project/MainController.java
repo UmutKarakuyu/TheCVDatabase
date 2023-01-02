@@ -108,6 +108,10 @@ public class MainController {
         private HBox modalHBox;
         @FXML
         private HBox allHbox;
+        @FXML 
+        private ScrollPane generatedResumeScrollPane;
+        @FXML 
+        private VBox generatedResumeVBox;
 
         public void initialize() throws SQLException, IOException {
 
@@ -140,6 +144,11 @@ public class MainController {
 
                 originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
                         originalResume.setFitWidth(originalResumeVBox.getWidth());
+                });
+
+                allHbox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                        generatedResumeScrollPane.setPrefWidth(generatedResumeVBox.getWidth());
+                        generatedResumeScrollPane.setPrefHeight(allHbox.getHeight() - 200);
                 });
 
                 fillTableViews();
