@@ -100,6 +100,8 @@ public class MainController {
         private GridPane generateResume;
         @FXML
         private VBox originalResumeVBox;
+        @FXML
+        private TextField resumeTitle;
 
         public void initialize() throws SQLException, IOException {
 
@@ -205,23 +207,25 @@ public class MainController {
                 ObservableList<TablePosition> selectedCells = resumeTableView.getSelectionModel().getSelectedCells();
 
                 if (selectedCells.get(0).getTableColumn().equals(resumeTrashColumn)) {
-                        File file = new File(resume.getfileName());
+                        File file = new File(resume.getfileName() + "_1.png");
                         originalResume.setImage(null);
                         file.delete();
                         DBConnection.getInstance().deleteResume(resumeName);
+
                         initialize();
 
                 } else {
-                        String fileName = resume.getfileName().replace(".pdf", "_1");
-                        String path1 = "images/pdfs/" + fileName + ".png";
+                        String path1 = resume.getfileName() + "_1.png";
                         Image image = new Image(getClass().getResource(path1).toExternalForm());
                         originalResume.setImage(image);
 
-                        generateResume(resume);
+                        generateResume(resume.getTemplate());
                 }
         }
 
-        public void generateResume(Resume resume) {
+        ArrayList<TextField> arr = new ArrayList<>();
+
+        public void generateResume(Template template) {
                 generateResume.getChildren().clear();
                 Label l1 = new Label("Attributes");
                 l1.setStyle("-fx-font-size: 20;");
@@ -230,13 +234,14 @@ public class MainController {
 
                 generateResume.addRow(0, l1, l2);
 
-                Template resumeTemplate = resume.getTemplate();
-                ArrayList<String> templateAttributes = resumeTemplate.getAttributes();
+                ArrayList<String> templateAttributes = template.getAttributes();
                 for (int i = 0; i < templateAttributes.size(); i++) {
                         Label label = new Label(templateAttributes.get(i));
                         TextField textField = new TextField();
+                        arr.add(textField);
                         generateResume.addRow(generateResume.getRowCount() + 1, label, textField);
                 }
+
         }
 
         @FXML
@@ -356,12 +361,14 @@ public class MainController {
         }
 
         @FXML
-        public void addResumeScreen() throws SQLException {
+        public void addResumeScreen() throws SQLException, IOException {
                 resumeHBox.setVisible(true);
                 searchHBox.setVisible(false);
                 templateHBox.setVisible(false);
-                showModal();
+                saveResume();
         }
+
+        String path = "";
 
         @FXML
         public void saveResume() throws SQLException, IOException {
@@ -371,33 +378,19 @@ public class MainController {
                 fileChooser.getExtensionFilters().add(extFilter);
                 File file = fileChooser.showOpenDialog(null);
 
-                String name = modalResumeName.getText();
-                LocalDateTime date = LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-                String formattedDate = date.format(formatter);
-
-                Template template = DBConnection.getInstance()
-                                .getTemplateObject(modalListView.getSelectionModel().getSelectedItem().toString());
-
-                Resume resume = new Resume(name, formattedDate,
-                                file.getName(),
-                                template);
-                DBConnection.getInstance().addResume(resume);
                 try {
                         String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/";
                         File destinationFile = new File(destinationDir);
                         if (!destinationFile.exists()) {
                                 destinationFile.mkdir();
-                                System.out.println("Folder Created -> " + destinationFile.getAbsolutePath());
+
                         }
                         if (file.exists()) {
-                                System.out.println("Images copied to Folder Location: "
-                                                + destinationFile.getAbsolutePath());
+
                                 PDDocument document = PDDocument.load(file);
                                 PDFRenderer pdfRenderer = new PDFRenderer(document);
 
                                 int numberOfPages = document.getNumberOfPages();
-                                System.out.println("Total files to be converting -> " + numberOfPages);
 
                                 String fileName = file.getName().replace(".pdf", "");
                                 String fileExtension = "png";
@@ -419,9 +412,12 @@ public class MainController {
                                 }
 
                                 document.close();
-                                System.out.println("Converted Images are saved at -> "
-                                                + destinationFile.getAbsolutePath());
-                                resume.setfileName(destinationDir);
+
+                                String path1 = "images/pdfs/" + fileName + "_1" + ".png";
+                                Image image = new Image(getClass().getResource(path1).toExternalForm());
+                                originalResume.setImage(image);
+
+                                path = "images/pdfs/" + fileName;
                         } else {
                                 System.err.println(file.getName() + " File not exists");
                         }
@@ -430,7 +426,6 @@ public class MainController {
                 }
 
                 fillTableViews();
-                closeModal();
 
         }
 
@@ -534,6 +529,9 @@ public class MainController {
                         template.addAttribute(textFieldData.get(i));
                 }
                 DBConnection.getInstance().addTemplate(template);
+                templateName.clear();
+                templateList.getChildren().clear();
+                templateList.addRow(0, newTemplateButton);
                 fillTableViews();
 
         }
@@ -548,5 +546,67 @@ public class MainController {
                 stage.setScene(scene);
                 stage.setResizable(false);
                 stage.showAndWait();
+        }
+
+        @FXML
+        private Template courselSelect() throws SQLException {
+
+                Template template = DBConnection.getInstance().getTemplateObject(
+                                (String) templateCarouselList.getSelectionModel().getSelectedItem());
+                generateResume(template);
+                return template;
+        }
+
+        @FXML
+        private void newSubmitButton() {
+                try {
+                        LocalDateTime date = LocalDateTime.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                        String formattedDate = date.format(formatter);
+                        Resume resume = new Resume(resumeTitle.getText(), formattedDate, path, courselSelect());
+                        HashMap<String, String> attributes = new HashMap<>();
+
+                        ObservableList<Node> childrens = generateResume.getChildren();
+
+                        String key = null;
+                        String value = null;
+                        int i = 0;
+
+                        for (Node node : childrens) {
+                                if (generateResume.getColumnIndex(node) == 0) {
+                                        Label label = (Label) node;
+                                        key = label.getText();
+                                }
+                                if (generateResume.getColumnIndex(node) == 1) {
+                                        if (node instanceof Label) {
+                                                Label label = (Label) node;
+                                                value = label.getText();
+                                        }
+                                        if (node instanceof TextField) {
+                                                TextField textFiel = arr.get(i);
+                                                value = textFiel.textProperty().get();
+                                                i++;
+                                        }
+                                }
+                                if (key != null && value != null) {
+                                        attributes.put(key, value);
+                                        key = null;
+                                        value = null;
+                                }
+                        }
+
+                        arr.clear();
+                        generateResume.getChildren().clear();
+                        for (TextField t : arr) {
+                                System.out.println(t.getText());
+
+                        }
+
+                        resume.setAttributes(attributes);
+                        DBConnection.getInstance().addResume(resume);
+                        fillTableViews();
+                } catch (Exception e) {
+
+                }
         }
 }
