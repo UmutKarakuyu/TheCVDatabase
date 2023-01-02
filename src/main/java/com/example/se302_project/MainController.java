@@ -684,9 +684,9 @@ public class MainController {
 
                 generateResume.getChildren().clear();
                 Label l1 = new Label("Attributes");
-                l1.setStyle("-fx-font-size: 20;");
+                l1.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
                 Label l2 = new Label("Values");
-                l2.setStyle("-fx-font-size: 20;");
+                l2.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
 
                 generateResume.addRow(0, l1, l2);
 
@@ -697,7 +697,7 @@ public class MainController {
                         generateResume.addRow(generateResume.getRowCount() + 1, key, value);
                 }
                 Label l3 = new Label("Tags");
-                l3.setStyle("-fx-font-size: 20;");
+                l3.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
 
                 Label l4 = new Label("");
                 generateResume.addRow(generateResume.getRowCount(), l4);
@@ -715,7 +715,7 @@ public class MainController {
                 Button button = new Button();
                 button.setPrefWidth(80);
                 button.setText("Edit");
-                button.setStyle("-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10; -fx-");
+                button.setStyle("-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;");
 
                 button.setOnAction(e -> {
                         try {
@@ -725,7 +725,7 @@ public class MainController {
                         }
                 });
                 generateResume.addRow(generateResume.getRowCount(), new Label(""));
-                generateResume.addRow(generateResume.getRowCount(), button);
+                generateResume.addRow(generateResume.getRowCount(), new Label(" "), button);
         }
 
         private void clearResumeContents() {
@@ -745,10 +745,13 @@ public class MainController {
                 String tag = (String) tagDropDown.getSelectionModel().getSelectedItem();
                 CustomImage image = (CustomImage) resumeTableView.getSelectionModel().getSelectedItem();
                 Resume resume = DBConnection.getInstance().getResumeObject(image.getName());
-                DBConnection.getInstance().addTag(resume, tag);
-                tagDropDown.getSelectionModel().clearSelection();
-                tagDropDown.setValue(null);
 
+                if (!myTagsDropDown.getItems().contains(tag)) {
+                        myTagsDropDown.getItems().add(tag);
+                        DBConnection.getInstance().addTag(resume, tag);
+                        tagDropDown.getSelectionModel().clearSelection();
+                        tagDropDown.setValue(null);
+                }
         }
 
         @FXML
@@ -756,10 +759,12 @@ public class MainController {
                 String tag = (String) tagTextField.getText();
                 CustomImage image = (CustomImage) resumeTableView.getSelectionModel().getSelectedItem();
                 Resume resume = DBConnection.getInstance().getResumeObject(image.getName());
-                DBConnection.getInstance().addTag(resume, tag);
-                tagDropDown.getItems().add(tag);
-                tagTextField.clear();
-                fillMyTags(resume);
+                if (!myTagsDropDown.getItems().contains(tag)) {
+                        DBConnection.getInstance().addTag(resume, tag);
+                        tagDropDown.getItems().add(tag);
+                        tagTextField.clear();
+                        fillMyTags(resume);
+                }
         }
 
         @FXML
