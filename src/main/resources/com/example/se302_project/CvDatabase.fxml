@@ -325,7 +325,7 @@
                             <children>
                                 <StackPane prefHeight="510.0" prefWidth="802.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" visible="false" StackPane.alignment="CENTER">
+                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" StackPane.alignment="CENTER">
                                             <children>
                                                 <VBox fx:id="originalResumeVBox" alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                                                     <children>
