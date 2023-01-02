@@ -220,7 +220,7 @@ public class MainController {
                         else
                                 ratio = originalResumeVBox.getWidth() / image.getWidth() ;        
                         originalResume.setFitWidth(originalResumeVBox.getWidth());
-                        originalResume.setFitHeight( originalResumeVBox.getHeight() * ratio);
+                        originalResume.setFitHeight(originalResumeVBox.getHeight() * ratio);
 
                         generateResume(resume);
                 }

@@ -317,7 +317,7 @@
                             <children>
                                 <StackPane prefHeight="510.0" prefWidth="802.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" StackPane.alignment="CENTER">
+                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" visible="false" StackPane.alignment="CENTER">
                                             <children>
                                                 <VBox fx:id="originalResumeVBox" alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                                                     <children>
@@ -332,7 +332,7 @@
                                                         </HBox>
                                           <ScrollPane hbarPolicy="NEVER" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                                              <content>
-                                                              <ImageView fx:id="originalResume" fitHeight="536.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true" />
+                                                              <ImageView fx:id="originalResume" fitHeight="535.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true" />
                                              </content>
                                           </ScrollPane>
                                                     </children>
@@ -501,66 +501,74 @@
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <HBox fx:id="templateHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="561.0" prefWidth="810.0" visible="false" StackPane.alignment="CENTER">
+                                        <HBox fx:id="templateHBox" alignment="CENTER" minHeight="-Infinity" prefHeight="561.0" prefWidth="810.0" StackPane.alignment="CENTER">
                                             <children>
-                                                <StackPane prefHeight="660.0" prefWidth="460.0" style="-fx-background-color: grey; -fx-background-radius: 20;" HBox.hgrow="NEVER">
-                                                    <HBox.margin>
-                                                        <Insets />
-                                                    </HBox.margin>
-                                                    <children>
-                                                        <VBox fx:id="templatePane" alignment="CENTER" maxHeight="800.0" maxWidth="600.0" prefHeight="700.0" prefWidth="405.0" style="-fx-background-color: white; -fx-background-radius: 20;">
-                                                            <children>
-                                                                <VBox fx:id="templateNameVBox" maxWidth="200.0" prefWidth="205.0" VBox.vgrow="NEVER">
-                                                                    <children>
-                                                                        <TextField fx:id="templateName" alignment="TOP_CENTER" prefWidth="266.0" promptText="Template Name" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: grey; -fx-alignment: center; -fx-border-width: 2;" />
-                                                                    </children>
-                                                                    <VBox.margin>
-                                                                        <Insets bottom="30.0" top="20.0" />
-                                                                    </VBox.margin>
-                                                                </VBox>
-                                                                <VBox fx:id="templateAttributeView" alignment="TOP_CENTER" prefHeight="636.0" prefWidth="402.0" VBox.vgrow="ALWAYS">
-                                                                    <VBox.margin>
-                                                                        <Insets bottom="50.0" />
-                                                                    </VBox.margin>
-                                                                    <children>
-                                                                        <GridPane fx:id="templateList" alignment="CENTER_LEFT" maxWidth="500.0" prefHeight="60.0" prefWidth="344.0" stylesheets="@css/textFields.css" vgap="10.0">
-                                                                            <columnConstraints>
-                                                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                                            </columnConstraints>
-                                                                            <rowConstraints>
-                                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                                            </rowConstraints>
-                                                                            <children>
-                                                                                <Button fx:id="newTemplateButton" alignment="CENTER" mnemonicParsing="false" onAction="#buttonAdd" prefHeight="64.0" prefWidth="387.0" style="-fx-background-color: transparent;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
-                                                                                    <graphic>
-                                                                                        <ImageView fitHeight="28.0" fitWidth="315.0" pickOnBounds="true" preserveRatio="true">
-                                                                                            <image>
-                                                                                                <Image url="@images/addTuple.png" />
-                                                                                            </image>
-                                                                                        </ImageView>
-                                                                                    </graphic>
-                                                                                </Button>
-                                                                            </children>
-                                                                            <VBox.margin>
-                                                                                <Insets bottom="30.0" top="10.0" />
-                                                                            </VBox.margin>
-                                                                        </GridPane>
-                                                                        <Button mnemonicParsing="false" onAction="#saveTemplate" prefHeight="28.0" prefWidth="78.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save" />
-                                                                    </children>
-                                                                </VBox>
-                                                            </children>
-                                                            <padding>
-                                                                <Insets left="20.0" right="20.0" />
-                                                            </padding>
-                                                            <effect>
-                                                                <DropShadow />
-                                                            </effect>
-                                                        </VBox>
-                                                    </children>
-                                                    <padding>
-                                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                    </padding>
-                                                </StackPane>
+                                    <VBox HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <children>
+                                                      <StackPane prefHeight="660.0" prefWidth="460.0" style="-fx-background-color: grey; -fx-background-radius: 20;" VBox.vgrow="ALWAYS">
+                                                          <children>
+                                                <HBox alignment="CENTER">
+                                                   <children>
+                                                                    <VBox fx:id="templatePane" alignment="CENTER" prefHeight="700.0" prefWidth="405.0" style="-fx-background-color: white; -fx-background-radius: 20;" HBox.hgrow="ALWAYS">
+                                                                        <children>
+                                                                            <VBox fx:id="templateNameVBox" maxWidth="200.0" prefWidth="205.0" VBox.vgrow="NEVER">
+                                                                                <children>
+                                                                                    <TextField fx:id="templateName" alignment="TOP_CENTER" prefWidth="266.0" promptText="Template Name" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: grey; -fx-alignment: center; -fx-border-width: 2;" />
+                                                                                </children>
+                                                                                <VBox.margin>
+                                                                                    <Insets bottom="30.0" top="20.0" />
+                                                                                </VBox.margin>
+                                                                            </VBox>
+                                                                            <VBox fx:id="templateAttributeView" alignment="TOP_CENTER" prefHeight="636.0" prefWidth="402.0" VBox.vgrow="ALWAYS">
+                                                                                <VBox.margin>
+                                                                                    <Insets bottom="50.0" />
+                                                                                </VBox.margin>
+                                                                                <children>
+                                                                                    <GridPane fx:id="templateList" alignment="CENTER_LEFT" maxWidth="500.0" prefHeight="60.0" prefWidth="344.0" stylesheets="@css/textFields.css" vgap="10.0">
+                                                                                        <columnConstraints>
+                                                                                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                                        </columnConstraints>
+                                                                                        <rowConstraints>
+                                                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                                        </rowConstraints>
+                                                                                        <children>
+                                                                                            <Button fx:id="newTemplateButton" alignment="CENTER" mnemonicParsing="false" onAction="#buttonAdd" prefHeight="64.0" prefWidth="387.0" style="-fx-background-color: transparent;" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER">
+                                                                                                <graphic>
+                                                                                                    <ImageView fitHeight="28.0" fitWidth="315.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                        <image>
+                                                                                                            <Image url="@images/addTuple.png" />
+                                                                                                        </image>
+                                                                                                    </ImageView>
+                                                                                                </graphic>
+                                                                                            </Button>
+                                                                                        </children>
+                                                                                        <VBox.margin>
+                                                                                            <Insets bottom="30.0" top="10.0" />
+                                                                                        </VBox.margin>
+                                                                                    </GridPane>
+                                                                                    <Button mnemonicParsing="false" onAction="#saveTemplate" prefHeight="28.0" prefWidth="78.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save" />
+                                                                                </children>
+                                                                            </VBox>
+                                                                        </children>
+                                                                        <padding>
+                                                                            <Insets left="20.0" right="20.0" />
+                                                                        </padding>
+                                                                        <effect>
+                                                                            <DropShadow />
+                                                                        </effect>
+                                                                    </VBox>
+                                                   </children>
+                                                </HBox>
+                                                          </children>
+                                                          <padding>
+                                                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                          </padding>
+                                                      </StackPane>
+                                       </children>
+                                    </VBox>
                                             </children>
                                             <StackPane.margin>
                                                 <Insets />
