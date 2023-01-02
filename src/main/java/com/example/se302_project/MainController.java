@@ -32,6 +32,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
+import javafx.scene.effect.*;
 import javafx.stage.Stage;
 
 public class MainController {
@@ -105,6 +106,8 @@ public class MainController {
         private ChoiceBox<String> myTagsDropDown;
         @FXML
         private HBox modalHBox;
+        @FXML
+        private HBox allHbox;
 
         public void initialize() throws SQLException, IOException {
 
@@ -228,12 +231,7 @@ public class MainController {
                         originalResume.setFitHeight(originalResumeVBox.getHeight() * ratio);
                         resumeTitle.setText(resume.getName());
                         showGeneratedResume(resume);
-
-                        tagDropDown.getItems().clear();
-                        for (String s : DBConnection.getInstance().getTags()) {
-                                tagDropDown.getItems().add(s);
-                        }
-
+                        fillAllTags();
                 }
         }
 
@@ -407,6 +405,7 @@ public class MainController {
 
         @FXML
         public void saveResume() throws SQLException, IOException {
+                clearResumeContents();
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Select a file");
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
@@ -713,6 +712,20 @@ public class MainController {
                         Label label = new Label(resume.getTag(resume.getTags().size() - 1));
                         generateResume.addRow(generateResume.getRowCount(), label);
                 }
+                Button button = new Button();
+                button.setPrefWidth(80);
+                button.setText("Edit");
+                button.setStyle("-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10; -fx-");
+
+                button.setOnAction(e -> {
+                        try {
+                                openTags();
+                        } catch (SQLException e1) {
+                                e1.printStackTrace();
+                        }
+                });
+                generateResume.addRow(generateResume.getRowCount(), new Label(""));
+                generateResume.addRow(generateResume.getRowCount(), button);
         }
 
         private void clearResumeContents() {
@@ -733,6 +746,8 @@ public class MainController {
                 CustomImage image = (CustomImage) resumeTableView.getSelectionModel().getSelectedItem();
                 Resume resume = DBConnection.getInstance().getResumeObject(image.getName());
                 DBConnection.getInstance().addTag(resume, tag);
+                tagDropDown.getSelectionModel().clearSelection();
+                tagDropDown.setValue(null);
 
         }
 
@@ -744,11 +759,12 @@ public class MainController {
                 DBConnection.getInstance().addTag(resume, tag);
                 tagDropDown.getItems().add(tag);
                 tagTextField.clear();
+                fillMyTags(resume);
         }
 
         @FXML
         private void fillMyTags(Resume resume) throws SQLException {
-
+                myTagsDropDown.getItems().clear();
                 for (String s : DBConnection.getInstance().getResumeTags(resume.getName())) {
                         myTagsDropDown.getItems().add(s);
                 }
@@ -760,5 +776,50 @@ public class MainController {
                 CustomImage image = (CustomImage) resumeTableView.getSelectionModel().getSelectedItem();
                 Resume resume = DBConnection.getInstance().getResumeObject(image.getName());
                 fillMyTags(resume);
+
+                // create a gaussian blur effect
+                GaussianBlur gaussian_blur = new GaussianBlur();
+
+                // set radius for gaussian blur
+                gaussian_blur.setRadius(20.0f);
+
+                // set effect
+                firstEllipses.setEffect(gaussian_blur);
+                secondEllipses.setEffect(gaussian_blur);
+                thirdEllipses.setEffect(gaussian_blur);
+                allHbox.setEffect(gaussian_blur);
+        }
+
+        @FXML
+        private void closeTags() throws SQLException {
+                CustomImage image = (CustomImage) resumeTableView.getSelectionModel().getSelectedItem();
+                Resume resume = DBConnection.getInstance().getResumeObject(image.getName());
+                modalHBox.setVisible(false);
+                firstEllipses.setEffect(null);
+                secondEllipses.setEffect(null);
+                thirdEllipses.setEffect(null);
+                allHbox.setEffect(null);
+                showGeneratedResume(resume);
+        }
+
+        @FXML
+        private void deleteTag() throws SQLException {
+                CustomImage image = (CustomImage) resumeTableView.getSelectionModel().getSelectedItem();
+                Resume resume = DBConnection.getInstance().getResumeObject(image.getName());
+                String tag = myTagsDropDown.getSelectionModel().getSelectedItem();
+                DBConnection.getInstance().deleteTag(resume, tag);
+                myTagsDropDown.getItems().remove(tag);
+                myTagsDropDown.getSelectionModel().clearSelection();
+                myTagsDropDown.setValue(null);
+                fillAllTags();
+
+        }
+
+        @FXML
+        private void fillAllTags() throws SQLException {
+                tagDropDown.getItems().clear();
+                for (String s : DBConnection.getInstance().getTags()) {
+                        tagDropDown.getItems().add(s);
+                }
         }
 }

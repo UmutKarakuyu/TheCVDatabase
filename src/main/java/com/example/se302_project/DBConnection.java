@@ -2,6 +2,7 @@ package com.example.se302_project;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.DrbgParameters.Reseed;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -387,6 +388,17 @@ public class DBConnection {
             deleteTemplate.setString(1, templateName);
             deleteTemplate.execute();
         } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void deleteTag(Resume resume, String tag) {
+        try {
+            PreparedStatement stmt = connection.prepareStatement("DELETE FROM TAG WHERE RESUME_NAME = ? AND NAME = ?");
+            stmt.setString(1, resume.getName());
+            stmt.setString(2, tag);
+            stmt.execute();
+        } catch (Exception e) {
             System.out.println(e);
         }
     }

@@ -89,7 +89,7 @@
                 </VBox>
             </children>
         </HBox>
-        <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0">
+        <HBox fx:id="allHbox" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0">
             <children>
                 <StackPane fx:id="drawerStackPane" alignment="TOP_LEFT" maxWidth="300.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="276.0">
                     <children>
@@ -583,18 +583,37 @@
             <children>
                 <VBox alignment="CENTER" maxHeight="723.0" maxWidth="370.0" prefHeight="723.0" prefWidth="358.0" HBox.hgrow="NEVER">
                <children>
-                  <HBox prefHeight="402.0" prefWidth="358.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 20; -fx-border-width: 2;" VBox.vgrow="NEVER">
+                  <HBox prefHeight="269.0" prefWidth="358.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 20; -fx-border-width: 2; -fx-background-radius: 20;" VBox.vgrow="NEVER">
                      <children>
-                        <VBox prefHeight="398.0" prefWidth="438.0" HBox.hgrow="ALWAYS">
+                        <VBox prefHeight="398.0" prefWidth="354.0" HBox.hgrow="ALWAYS">
                            <children>
                               <HBox alignment="CENTER" prefHeight="35.0" prefWidth="354.0">
                                  <children>
-                                    <Label text="TAG OPERATIONS" />
+                                    <Label prefHeight="30.0" prefWidth="200.0" text="TAG OPERATIONS">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="85.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button mnemonicParsing="false" onAction="#closeTags" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 50;" text="X">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                    </Button>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="354.0">
                                  <children>
-                                    <Label text="ADD TAGS:" />
+                                    <Label text="ADD TAGS:">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                                  <VBox.margin>
                                     <Insets left="10.0" />
@@ -614,7 +633,11 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="354.0">
                                  <children>
-                                    <Label text="DELETE TAGS:" />
+                                    <Label text="DELETE TAGS:">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                                  <VBox.margin>
                                     <Insets left="10.0" />
@@ -623,7 +646,7 @@
                               <HBox alignment="CENTER" prefHeight="38.0" prefWidth="354.0" spacing="100.0">
                                  <children>
                                     <ChoiceBox fx:id="myTagsDropDown" prefWidth="150.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" />
-                                    <Button mnemonicParsing="false" onAction="#addTagDrop" prefHeight="27.0" prefWidth="56.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" text="Delete" />
+                                    <Button mnemonicParsing="false" onAction="#deleteTag" prefHeight="27.0" prefWidth="56.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" text="Delete" />
                                  </children>
                               </HBox>
                            </children>
