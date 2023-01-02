@@ -15,7 +15,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException, ParseException, ClassNotFoundException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("CvDatabase.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        String path = "images/logo.png";
+        String path = "images/a.png";
         Image image = new Image(getClass().getResource(path).toExternalForm());
         stage.getIcons().add(image);
         stage.setTitle("CV Database");
