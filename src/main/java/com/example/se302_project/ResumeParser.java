@@ -143,7 +143,7 @@ public class ResumeParser{
         for(String orig_text: matchList.values()){
             for(String match: matches){
                 if(orig_text.equals(match)){
-                    if(!ordered_matches.contains(orig_text)){
+                    if(!ordered_matches.contains(orig_text.toUpperCase(Locale.forLanguageTag("en")))){
                         ordered_matches.add(orig_text.toUpperCase(Locale.forLanguageTag("en")));
                     }
                     break;
