@@ -324,7 +324,7 @@
                                                         <HBox alignment="CENTER" spacing="40.0" VBox.vgrow="NEVER">
                                                             <children>
                                                                 <Label prefHeight="17.0" prefWidth="45.0" style="-fx-font-size: 16;" text="Title:" />
-                                                                <TextField prefHeight="26.0" prefWidth="257.0" style="-fx-background-radius: 10;" />
+                                                                <TextField fx:id="resumeTitle" prefHeight="26.0" prefWidth="257.0" style="-fx-background-radius: 10;" />
                                                             </children>
                                                             <VBox.margin>
                                                                 <Insets bottom="20.0" top="10.0" />
@@ -352,7 +352,7 @@
                                                                         <Image url="@images/leftArrow.png" />
                                                                     </image>
                                                                 </ImageView>
-                                                                <ListView fx:id="templateCarouselList" orientation="HORIZONTAL" prefHeight="200.0" prefWidth="323.0" style="-fx-background-color: transparent;" stylesheets="@css/ListView.css" HBox.hgrow="ALWAYS" />
+                                                                <ListView fx:id="templateCarouselList" onMouseClicked="#courselSelect" orientation="HORIZONTAL" prefHeight="200.0" prefWidth="323.0" style="-fx-background-color: transparent;" stylesheets="@css/ListView.css" HBox.hgrow="ALWAYS" />
                                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                     <image>
                                                                         <Image url="@images/rightArrow.png" />
@@ -414,7 +414,7 @@
                                                                 </HBox>
                                                                 <HBox alignment="BOTTOM_CENTER" prefHeight="60.0" prefWidth="411.0" VBox.vgrow="ALWAYS">
                                                                     <children>
-                                                                        <Button mnemonicParsing="false" prefHeight="28.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save" />
+                                                                        <Button mnemonicParsing="false" onAction="#newSubmitButton" prefHeight="28.0" prefWidth="139.0" style="-fx-background-color: transparent; -fx-border-color: grey; -fx-border-radius: 10;" text="Save" />
                                                                     </children>
                                                                     <VBox.margin>
                                                                         <Insets />
