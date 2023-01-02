@@ -144,8 +144,7 @@ public class ResumeParser{
             for(String match: matches){
                 if(orig_text.equals(match)){
                     if(!ordered_matches.contains(orig_text)){
-                        ordered_matches.add(orig_text);
-                        System.out.println(orig_text);
+                        ordered_matches.add(orig_text.toUpperCase(Locale.forLanguageTag("en")));
                     }
                     break;
                 }

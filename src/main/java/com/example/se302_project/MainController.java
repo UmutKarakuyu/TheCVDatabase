@@ -21,6 +21,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -113,7 +114,12 @@ public class MainController {
         @FXML
         private VBox generatedResumeVBox;
 
+        private ResumeParser resumeParser;
+
         public void initialize() throws SQLException, IOException {
+                resumeParser = new ResumeParser("src/main/resources/com/example/se302_project/nlp/skills_t100.txt",
+                                                             "src/main/resources/com/example/se302_project/nlp/titles/titles_combined.txt",
+                                                             "src/main/resources/com/example/se302_project/nlp/stopwords.txt");
 
                 tagSearchField.setOnKeyPressed(event -> {
                         if (event.getCode() == KeyCode.ENTER) {
@@ -422,7 +428,7 @@ public class MainController {
         }
 
         String path = "";
-
+        String resume_text = "";
         @FXML
         public void saveResume() throws SQLException, IOException {
                 FileChooser fileChooser = new FileChooser();
@@ -447,10 +453,11 @@ public class MainController {
                                 try {
                                         if (file.exists()) {
                                                 PDDocument document = PDDocument.load(file);
+                                                PDFTextStripper pdfStripper = new PDFTextStripper();
+                                                resume_text = pdfStripper.getText(document);
+
                                                 PDFRenderer pdfRenderer = new PDFRenderer(document);
-
                                                 int numberOfPages = document.getNumberOfPages();
-
                                                 String fileName = file.getName().replace(".pdf", "");
                                                 String fileExtension = "png";
                                                 int dpi = 300;
@@ -695,6 +702,14 @@ public class MainController {
                         }
 
                         resume.setAttributes(attributes);
+                        
+                        List<String> tokens = resumeParser.extractTokensFromResume(resume_text);
+                        List<String> titles = resumeParser.match(tokens, "TITLE");
+                        List<String> skills = resumeParser.match(tokens, "SKILL");
+                        resume.setTags((ArrayList<String>) skills);
+                        for(String title: titles){
+                                resume.addTag(title);
+                        }
                         DBConnection.getInstance().addResume(resume);
                         fillTableViews();
                         clearResumeContents();
