@@ -327,6 +327,7 @@ public class MainController {
                 firstEllipses.setVisible(false);
                 secondEllipses.setVisible(false);
                 thirdEllipses.setVisible(true);
+
         }
 
         @FXML
@@ -564,30 +565,15 @@ public class MainController {
 
         }
 
+
         public void saveTemplate() throws SQLException, IOException {
-
+                // Get the list of attributes from the text fields in the templateList
                 List<String> textFieldData = new ArrayList<>();
-
                 for (Node node : templateList.getChildren()) {
                         if (node instanceof TextField) {
                                 textFieldData.add(((TextField) node).getText());
                         }
                 }
-
-                Template template = new Template(templateName1.getText());
-
-                for (int i = 0; i < textFieldData.size(); i++) {
-                        template.addAttribute(textFieldData.get(i));
-                }
-                DBConnection.getInstance().addTemplate(template);
-                templateName1.clear();
-                templateList.getChildren().clear();
-                templateList.addRow(0, newTemplateButton);
-                fillTableViews();
-
-
-                // Get the list of attributes from the text fields in the templateList
-
 
                 // Get the template name from the templateName1 text field
                 String templateName = templateName1.getText();
@@ -598,25 +584,12 @@ public class MainController {
                         DBConnection.getInstance().updateTemplateAttributes(templateName, textFieldData);
                 } else {
                         // If the template does not exist, create a new template with the given attributes and add it to the database
-                        Template template2 = new Template(templateName);
+                        Template template = new Template(templateName);
                         for (int i = 0; i < textFieldData.size(); i++) {
                                 template.addAttribute(textFieldData.get(i));
                         }
-                        DBConnection.getInstance().addTemplate(template2);
+                        DBConnection.getInstance().addTemplate(template);
                 }
-                if (templateTableView.getSelectionModel().getSelectedCells() == null ||
-                        templateTableView.getSelectionModel().getSelectedIndex() == -1) {
-                        return;
-                }
-
-                int index = templateTableView.getSelectionModel().getSelectedIndex();
-                templateName = (String) templateNameColumn.getCellData(index);
-                ObservableList<TablePosition> selectedCells = templateTableView.getSelectionModel().getSelectedCells();
-
-                templateName1.setText(templateName);
-                if (selectedCells.get(0).getTableColumn().equals(templateTrashColumn)) {
-                        DBConnection.getInstance().deleteTemplate(templateName);
-
                         // Clear the templateName1 text field and templateList, and add the newTemplateButton back to the templateList
                         templateName1.clear();
                         templateList.getChildren().clear();
@@ -625,7 +598,6 @@ public class MainController {
                         // Refresh the templateTableView and resumeTableView
                         fillTableViews();
                 }
-        }
 
 
         @FXML
