@@ -24,6 +24,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -398,69 +399,66 @@ public class MainController {
                 fileChooser.getExtensionFilters().add(extFilter);
                 File file = fileChooser.showOpenDialog(null);
 
-                try {
-                        String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/";
-                        File destinationFile = new File(destinationDir);
-                        if (!destinationFile.exists()) {
-                                destinationFile.mkdir();
+                // Create a task to perform the file conversion in the background
+                Task<Void> task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                                try {
+                                        String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/";
+                                        File destinationFile = new File(destinationDir);
+                                        if (!destinationFile.exists()) {
+                                                destinationFile.mkdir();
+                                        }
+                                        if (file.exists()) {
+                                                PDDocument document = PDDocument.load(file);
+                                                PDFRenderer pdfRenderer = new PDFRenderer(document);
 
-                        }
-                        if (file.exists()) {
+                                                int numberOfPages = document.getNumberOfPages();
 
-                                PDDocument document = PDDocument.load(file);
-                                PDFRenderer pdfRenderer = new PDFRenderer(document);
+                                                String fileName = file.getName().replace(".pdf", "");
+                                                String fileExtension = "png";
+                                                int dpi = 300;
 
-                                int numberOfPages = document.getNumberOfPages();
+                                                for (int i = 0; i < numberOfPages; ++i) {
+                                                        File outPutFile = new File(destinationDir + fileName + "_"
+                                                                        + (i + 1) + "." + fileExtension);
+                                                        BufferedImage bImage = pdfRenderer.renderImageWithDPI(i, dpi,
+                                                                        ImageType.RGB);
+                                                        ImageIO.write(bImage, fileExtension, outPutFile);
+                                                }
 
-                                String fileName = file.getName().replace(".pdf", "");
-                                String fileExtension = "png";
-                                /*
-                                 * 600 dpi give good image clarity but size of each image is 2x times of 300
-                                 * dpi.
-                                 * Ex: 1. For 300dpi 04-Request-Headers_2.png expected size is 797 KB
-                                 * 2. For 600dpi 04-Request-Headers_2.png expected size is 2.42 MB
-                                 */
-                                int dpi = 300;// use less dpi for to save more space in harddisk.
-                                // For professional usage
-                                // you can use more than 300dpi
+                                                document.close();
 
-                                for (int i = 0; i < numberOfPages; ++i) {
-                                        File outPutFile = new File(destinationDir + fileName + "_" + (i + 1) + "."
-                                                        + fileExtension);
-                                        BufferedImage bImage = pdfRenderer.renderImageWithDPI(i, dpi, ImageType.RGB);
-                                        ImageIO.write(bImage, fileExtension, outPutFile);
+                                                path = "images/pdfs/" + fileName;
+                                        } else {
+                                                System.err.println(file.getName() + " File not exists");
+                                        }
+                                } catch (Exception e) {
+                                        e.printStackTrace();
                                 }
-
-                                document.close();
-
-                                String path1 = "images/pdfs/" + fileName + "_1" + ".png";
-                                Image image = new Image(getClass().getResource(path1).toExternalForm());
-                                originalResume.setImage(image);
-                                double ratio;
-                                if (image.getWidth() > originalResumeVBox.getWidth())
-                                        ratio = image.getWidth() / originalResumeVBox.getWidth();
-                                else
-                                        ratio = originalResumeVBox.getWidth() / image.getWidth();
-                                originalResume.setFitWidth(originalResumeVBox.getWidth());
-                                originalResume.setFitHeight(originalResumeVBox.getHeight() * ratio);
-
-                                path = "images/pdfs/" + fileName;
-                        } else {
-                                System.err.println(file.getName() + " File not exists");
+                                return null;
                         }
-                } catch (Exception e) {
-                        e.printStackTrace();
+                };
+
+                // Set the image in the "originalResume" ImageView when the task is complete
+                task.setOnSucceeded(event -> setOriginalResumeImage());
+
+                // Start the task
+                new Thread(task).start();
+        }
+
+        private void setOriginalResumeImage() {
+                String path1 = "file:src/main/resources/com/example/se302_project/" + path + "_1" + ".png";
+                Image image = new Image(path1);
+                originalResume.setImage(image);
+                double ratio;
+                if (image.getWidth() > originalResumeVBox.getWidth()) {
+                        ratio = image.getWidth() / originalResumeVBox.getWidth();
+                } else {
+                        ratio = originalResumeVBox.getWidth() / image.getWidth();
                 }
-
-                generateResume.getChildren().clear();
-                Label l1 = new Label("Attributes");
-                l1.setStyle("-fx-font-size: 20;");
-                Label l2 = new Label("Values");
-                l2.setStyle("-fx-font-size: 20;");
-                generateResume.addRow(0, l1, l2);
-                resumeTitle.setText(null);
-                fillTableViews();
-
+                originalResume.setFitWidth(originalResumeVBox.getWidth());
+                originalResume.setFitHeight(originalResumeVBox.getHeight() * ratio);
         }
 
         @FXML
