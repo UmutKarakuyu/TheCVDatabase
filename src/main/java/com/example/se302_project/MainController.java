@@ -792,6 +792,8 @@ public class MainController {
                         if(DBConnection.getInstance().getResumeObject(resume.getName()) == null)
                                 DBConnection.getInstance().addResume(resume);
                         else {
+                                ArrayList<String> tags = DBConnection.getInstance().getResumeTags(resume.getName());
+                                resume.setTags(tags);
                                 DBConnection.getInstance().updateResumeAttributes(resume);
                         }
                         fillTableViews();
