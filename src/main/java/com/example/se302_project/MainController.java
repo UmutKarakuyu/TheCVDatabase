@@ -31,6 +31,8 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.controlsfx.control.CheckListView;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -42,6 +44,7 @@ import javafx.print.Paper;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.skin.TableHeaderRow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -178,6 +181,30 @@ public class MainController {
                         generatedResumeScrollPane.setPrefWidth(generatedResumeVBox.getWidth());
                         generatedResumeScrollPane.setPrefHeight(allHbox.getHeight() - 200);
                 });
+
+                resumeTableView.widthProperty().addListener(new ChangeListener<Number>()
+{
+                @Override
+                public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth)
+                {
+                        TableHeaderRow header = (TableHeaderRow) resumeTableView.lookup("TableHeaderRow");
+                        header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        header.setReordering(false);
+                 }});}});
+
+                 templateTableView.widthProperty().addListener(new ChangeListener<Number>()
+{
+                @Override
+                public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth)
+                {
+                        TableHeaderRow header = (TableHeaderRow) templateTableView.lookup("TableHeaderRow");
+                        header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        header.setReordering(false);
+                 }});}});
 
                 fillTableViews();
 
