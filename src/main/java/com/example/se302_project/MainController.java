@@ -287,12 +287,13 @@ public class MainController {
                         scrollVBox.getChildren().clear();
                         String path = resume.getfileName();
                         String[] parts = path.split("/");
-                        String destinationDir = "src\\main\\resources\\com\\example\\se302_project\\images\\pdfs\\"
+                        String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/"
                                         + parts[parts.length - 1];
                         ;
                         List<ImageView> imageViewList = new ArrayList<>();
                         File directory = new File(destinationDir);
                         FilenameFilter pngFilter = (dir, name) -> name.endsWith(".png");
+
                         File[] pngFiles = directory.listFiles(pngFilter);
                         for (File pngFile : pngFiles) {
                                 Image image = new Image(pngFile.toURI().toString());
