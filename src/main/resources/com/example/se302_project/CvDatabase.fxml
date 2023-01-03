@@ -476,7 +476,7 @@
                                                                 </HBox>
                                                                 <HBox alignment="BOTTOM_RIGHT" prefWidth="32.0">
                                                                     <children>
-                                                                        <Button fx:id="filterOptionButton" accessibleRole="COMBO_BOX" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                                                        <Button fx:id="sortOptionButton" accessibleRole="COMBO_BOX" mnemonicParsing="false" onMouseClicked="#sortByDateResults" style="-fx-background-color: transparent;">
                                                                             <graphic>
                                                                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                                                     <image>

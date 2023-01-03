@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -29,12 +31,14 @@ import org.controlsfx.control.CheckListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.scene.effect.*;
 import javafx.stage.Stage;
@@ -51,13 +55,13 @@ public class MainController {
         @FXML
         private Button leftBarButton;
         @FXML
-        private Button filterOptionButton;
+        private Button sortOptionButton;
         @FXML
         private ComboBox<String> tags;
         @FXML
         private ComboBox<String> templates;
         @FXML
-        private TableView searchTableView;
+        private TableView<SearchResult> searchTableView;
         @FXML
         private TableColumn searchTResumeNameColumn, searchTResumeDateColumn;
         @FXML
@@ -122,6 +126,7 @@ public class MainController {
         private CheckListView<String> checkListView;
 
         private ResumeParser resumeParser;
+        boolean sortDesc = true;
 
         public void initialize() throws SQLException, IOException {
                 DBConnection.getInstance();
@@ -960,5 +965,18 @@ public class MainController {
                 for (String s : DBConnection.getInstance().getTags()) {
                         tagDropDown.getItems().add(s);
                 }
+        }
+
+        @FXML
+        public void sortByDateResults(){
+                ObservableList<SearchResult> search_results = searchTableView.getItems();
+                
+                if(sortDesc == true){
+                        Collections.sort(search_results, Comparator.comparing(SearchResult::getDate));
+                } else{
+                        Collections.sort(search_results, Comparator.comparing(SearchResult::getDate).reversed());
+                }
+                searchTableView.setItems(search_results);
+                sortDesc = !sortDesc;
         }
 }
