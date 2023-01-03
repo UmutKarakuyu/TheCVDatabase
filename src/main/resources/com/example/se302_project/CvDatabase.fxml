@@ -22,7 +22,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckListView?>
 
-<StackPane alignment="TOP_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
+<StackPane alignment="TOP_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
     <children>
         <HBox fx:id="firstEllipses" prefHeight="100.0" prefWidth="200.0">
             <children>
@@ -345,7 +345,7 @@
                                                                 <Insets bottom="10.0" />
                                                             </VBox.margin>
                                              <content>
-                                                <VBox fx:id="scrollVBox" prefHeight="200.0" prefWidth="100.0" />
+                                                <VBox fx:id="scrollVBox" prefHeight="523.0" prefWidth="502.0" />
                                              </content>
                                                         </ScrollPane>
                                                     </children>

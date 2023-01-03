@@ -290,10 +290,14 @@ public class MainController {
                         for (File pngFile : pngFiles) {
                                 Image image = new Image(pngFile.toURI().toString());
                                 ImageView imageView = new ImageView(image);
-                                scrollVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
-                                        double ratio = image.getHeight() / image.getWidth();
+                                imageView.setFitWidth(originalResumeVBox.getWidth());
+                                imageView.setFitHeight(originalResumeVBox.getHeight());
+
+                                originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
                                         imageView.setFitWidth(originalResumeVBox.getWidth());
-                                        imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
+                                });
+                                originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                                        imageView.setFitWidth(originalResumeVBox.getWidth());
                                 });
                                 imageViewList.add(imageView);
                         }
@@ -583,10 +587,14 @@ public class MainController {
                 for (File pngFile : pngFiles) {
                         Image image = new Image(pngFile.toURI().toString());
                         ImageView imageView = new ImageView(image);
-                        scrollVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
-                                double ratio = image.getHeight() / image.getWidth();
+                        imageView.setFitWidth(originalResumeVBox.getWidth());
+                        imageView.setFitHeight(originalResumeVBox.getHeight());
+
+                        originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
-                                imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
+                        });
+                        originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                                imageView.setFitWidth(originalResumeVBox.getWidth());
                         });
                         imageViewList.add(imageView);
                 }
@@ -990,12 +998,12 @@ public class MainController {
         }
 
         @FXML
-        public void sortByDateResults(){
+        public void sortByDateResults() {
                 ObservableList<SearchResult> search_results = searchTableView.getItems();
-                
-                if(sortDesc == true){
+
+                if (sortDesc == true) {
                         Collections.sort(search_results, Comparator.comparing(SearchResult::getDate));
-                } else{
+                } else {
                         Collections.sort(search_results, Comparator.comparing(SearchResult::getDate).reversed());
                 }
                 searchTableView.setItems(search_results);
