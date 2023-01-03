@@ -21,6 +21,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.transform.Scale;
+
 import java.awt.Desktop;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -34,6 +36,11 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.print.PageLayout;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -131,6 +138,8 @@ public class MainController {
 
         private ResumeParser resumeParser;
         boolean sortDesc = true;
+        private Button editButton;
+        private GridPane currentGridPane;
 
         public void initialize() throws SQLException, IOException {
                 DBConnection.getInstance();
@@ -311,7 +320,7 @@ public class MainController {
                         }
                         scrollVBox.getChildren().addAll(imageViewList);
                         resumeTitle.setText(resume.getName());
-                        showGeneratedResume(resume);
+                        currentGridPane = showGeneratedResume(resume);
                         fillAllTags();
                 } else {
                         return;
@@ -840,7 +849,7 @@ public class MainController {
         }
 
         @FXML
-        private void showGeneratedResume(Resume resume) {
+        private GridPane showGeneratedResume(Resume resume) {
 
                 generateResume.getChildren().clear();
                 Label l1 = new Label("Attributes");
@@ -872,12 +881,12 @@ public class MainController {
                         Label label = new Label(resume.getTag(resume.getTags().size() - 1));
                         generateResume.addRow(generateResume.getRowCount(), label);
                 }
-                Button button = new Button();
-                button.setPrefWidth(80);
-                button.setText("Edit");
-                button.setStyle("-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;");
+                editButton = new Button();
+                editButton.setPrefWidth(80);
+                editButton.setText("Edit");
+                editButton.setStyle("-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;");
 
-                button.setOnAction(e -> {
+                editButton.setOnAction(e -> {
                         try {
                                 openTags();
                         } catch (SQLException e1) {
@@ -885,7 +894,8 @@ public class MainController {
                         }
                 });
                 generateResume.addRow(generateResume.getRowCount(), new Label(""));
-                generateResume.addRow(generateResume.getRowCount(), new Label(" "), button);
+                generateResume.addRow(generateResume.getRowCount(), new Label(" "), editButton);
+                return generateResume;
         }
 
         private void clearResumeContents() {
@@ -1039,5 +1049,36 @@ public class MainController {
                                 desktop.open(file);
                         }
                 }
+        }
+
+        @FXML
+        private void printPDF() {
+                if (editButton != null)
+                        editButton.setVisible(false);
+                Printer printer = Printer.getDefaultPrinter();
+                PageLayout pageLayout = printer.createPageLayout(Paper.A4, PageOrientation.PORTRAIT,
+                                Printer.MarginType.DEFAULT);
+                double scaleX = pageLayout.getPrintableWidth() / currentGridPane.getBoundsInParent().getWidth();
+                double scaleY = pageLayout.getPrintableHeight()
+                                / currentGridPane.getBoundsInParent().getHeight();
+                double minScale = Math.min(scaleX, scaleY);
+                Scale scale = new Scale(minScale, minScale);
+                currentGridPane.getTransforms().add(scale);
+                PrinterJob job = PrinterJob.createPrinterJob();
+                if (job != null) {
+                        boolean printed = job.printPage(currentGridPane);
+                        if (printed) {
+                                job.endJob();
+                        }
+                } else if (job == null) {
+                        Alert a = new Alert(Alert.AlertType.ERROR);
+                        a.setResizable(false);
+                        a.setTitle("Error");
+                        a.setContentText("There is no printer in your device. Please add a printer to your device.");
+                        a.showAndWait();
+                }
+                if (editButton != null)
+                        editButton.setVisible(true);
+                currentGridPane.getTransforms().remove(scale);
         }
 }
