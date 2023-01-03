@@ -36,12 +36,12 @@ import org.apache.lucene.document.StoredField;
 public class Index {
     private String indexDir;
     private int hitsPerPage;
-    
+
     private StandardAnalyzer analyzer;
     private Directory index;
     private IndexWriter indexWriter;
-    
-    public Index(String indexDir, int hitsPerPage) throws IOException{
+
+    public Index(String indexDir, int hitsPerPage) throws IOException {
         StandardAnalyzer analyzer = new StandardAnalyzer();
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         Directory index = FSDirectory.open(Paths.get(indexDir));
@@ -55,7 +55,8 @@ public class Index {
     }
 
     private byte[] serialize(ArrayList<String> tags) throws IOException {
-        ArrayList<Object> tagsObj = new ArrayList<Object>(tags.stream().map(tag -> (Object) tag).collect(Collectors.toList()));
+        ArrayList<Object> tagsObj = new ArrayList<Object>(
+                tags.stream().map(tag -> (Object) tag).collect(Collectors.toList()));
         ByteArrayOutputStream bos = new ByteArrayOutputStream(200000);
         ObjectOutputStream os = new ObjectOutputStream(bos);
         os.writeObject(tagsObj);
@@ -67,7 +68,8 @@ public class Index {
         ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
         ArrayList<Object> result = (ArrayList<Object>) is.readObject();
         is.close();
-        List<String> docTags = result.stream().map(object -> Objects.toString(object, null)).collect(Collectors.toList());
+        List<String> docTags = result.stream().map(object -> Objects.toString(object, null))
+                .collect(Collectors.toList());
         return docTags;
     }
 
@@ -78,68 +80,67 @@ public class Index {
         doc.add(new TextField("resume_text", text.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
 
         String tags_text = "";
-        for(String tag: tags){
+        for (String tag : tags) {
             tags_text += tag + " ";
         }
         doc.add(new TextField("tags_text", tags_text.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
 
-        
         doc.add(new StoredField("tags", this.serialize(tags)));
 
         this.indexWriter.addDocument(doc);
         this.indexWriter.commit();
     }
 
-    public void deleteDoc(String name) throws IOException{
+    public void deleteDoc(String name) throws IOException {
         this.indexWriter.deleteDocuments(new Term("name", name));
         this.indexWriter.commit();
     }
 
-    public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters) throws IOException, ParseException, ClassNotFoundException{
+    public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters)
+            throws IOException, ParseException, ClassNotFoundException {
         query_text = query_text.toLowerCase(Locale.forLanguageTag("en"));
 
         ArrayList<Query> queries = new ArrayList<>();
-        queries.add(new WildcardQuery(new Term("name", "*"+query_text+"*")));
-        queries.add(new WildcardQuery(new Term("date", "*"+query_text+"*")));
-        queries.add(new WildcardQuery(new Term("resume_text", "*"+query_text+"*")));
-        queries.add(new WildcardQuery(new Term("tags_text", "*"+query_text+"*")));
+        queries.add(new WildcardQuery(new Term("name", "*" + query_text + "*")));
+        queries.add(new WildcardQuery(new Term("date", "*" + query_text + "*")));
+        queries.add(new WildcardQuery(new Term("resume_text", "*" + query_text + "*")));
+        queries.add(new WildcardQuery(new Term("tags_text", "*" + query_text + "*")));
 
         IndexReader reader = DirectoryReader.open(this.index);
         IndexSearcher searcher = new IndexSearcher(reader);
 
-        
         System.out.printf("Query: %s\n", query_text);
         HashMap<String, String> query_results = new HashMap<>();
-        for(Query q: queries){
+        for (Query q : queries) {
             TopDocs docs = searcher.search(q, this.hitsPerPage);
             ScoreDoc[] hits = docs.scoreDocs;
 
-            for(int i=0;i<hits.length;++i) {
+            for (int i = 0; i < hits.length; ++i) {
                 int docId = hits[i].doc;
                 Document d = searcher.doc(docId);
                 List<String> docTags = this.unserialize(d.getBinaryValue("tags").bytes);
 
-                if(tagFilters.size() != 0){
-                    for(String docTag: docTags){
-                        for(String tagFilter: tagFilters){
-                            if(docTag.equals(tagFilter)){
+                if (tagFilters.size() != 0) {
+                    for (String docTag : docTags) {
+                        for (String tagFilter : tagFilters) {
+                            if (docTag.equals(tagFilter)) {
                                 query_results.put(d.get("name"), d.get("date"));
                                 break;
                             }
                         }
                     }
-                } else{
+                } else {
                     query_results.put(d.get("name"), d.get("date"));
                 }
             }
-            
+
         }
-        
+
         System.out.println(String.valueOf(query_results));
         return query_results;
     }
 
-    public void close() throws IOException{
+    public void close() throws IOException {
         this.indexWriter.close();
     }
 

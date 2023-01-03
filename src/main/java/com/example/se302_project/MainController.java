@@ -702,19 +702,6 @@ public class MainController {
                         childrens.remove(0); // Removing the Attributes and Values strings.
                         childrens.remove(0);
 
-                        // Get the resume name from the resumeName1 text field
-                        String resumeName = resumeTitle.getText();
-
-                        // Check if the resume already exists in the database
-                        if (DBConnection.getInstance().resumeExists(resumeName)) {
-                                // If the resume already exists, update the resume in the database
-                                DBConnection.getInstance().updateResume(resumeName,path);
-                        } else {
-                                // If the resume does not exist, create a new resume with the given name andpath and add it to the database
-                                resume = new Resume(resumeName, formattedDate, path, courselSelect());
-                                DBConnection.getInstance().addResume(resume);
-                        }
-
                         for (Node node : childrens) {
                                 if (generateResume.getColumnIndex(node) == 0) {
                                         Label label = (Label) node;
@@ -757,6 +744,7 @@ public class MainController {
 
                         List<String> skills = resumeParser.match(tokens, "SKILL");
                         resume.setTags((ArrayList<String>) skills);
+                        DBConnection.getInstance().addResume(resume);
                         fillTableViews();
                         clearResumeContents();
 

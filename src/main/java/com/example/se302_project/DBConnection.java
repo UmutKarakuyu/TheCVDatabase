@@ -229,9 +229,10 @@ public class DBConnection {
             return false;
         }
     }
+
     public boolean resumeExists(String name) {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM resume WHERE name = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM resumes WHERE name = ?");
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
             return resultSet.next();
@@ -241,12 +242,9 @@ public class DBConnection {
         }
     }
 
-    public void updateResume(String name, String path) throws SQLException {
-        String alterTableSql = "ALTER TABLE resume ADD COLUMN path TEXT";
-        Statement statement1 = connection.createStatement();
-        statement1.executeUpdate(alterTableSql);
+    public void updateResume(String name, String path) {
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE resume SET path = ? WHERE name = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE resumes SET path = ? WHERE name = ?");
             statement.setString(1, path);
             statement.setString(2, name);
             statement.executeUpdate();
@@ -254,6 +252,7 @@ public class DBConnection {
             e.printStackTrace();
         }
     }
+
     public void updateTemplateAttributes(String templateName, List<String> attributes) throws SQLException {
         deleteTemplate.setString(1, templateName);
         deleteTemplate.executeUpdate();
