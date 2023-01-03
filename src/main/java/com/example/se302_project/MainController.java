@@ -288,14 +288,24 @@ public class MainController {
                         for (File pngFile : pngFiles) {
                                 Image image = new Image(pngFile.toURI().toString());
                                 ImageView imageView = new ImageView(image);
+                                imageView.setPreserveRatio(true);
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
                                 imageView.setFitHeight(originalResumeVBox.getHeight());
 
+                                double ratio;
+                                if (image.getWidth() > originalResumeVBox.getWidth())
+                                        ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                else
+                                        ratio = originalResumeVBox.getWidth() / image.getWidth();
+                                imageView.setFitWidth(originalResumeVBox.getWidth());
+                                imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
                                 originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
                                         imageView.setFitWidth(originalResumeVBox.getWidth());
+                                        imageView.setFitHeight(originalResumeVBox.getHeight());
                                 });
                                 originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
                                         imageView.setFitWidth(originalResumeVBox.getWidth());
+                                        imageView.setFitHeight(originalResumeVBox.getHeight());
                                 });
                                 imageViewList.add(imageView);
                         }
@@ -585,14 +595,24 @@ public class MainController {
                 for (File pngFile : pngFiles) {
                         Image image = new Image(pngFile.toURI().toString());
                         ImageView imageView = new ImageView(image);
+                        imageView.setPreserveRatio(true);
                         imageView.setFitWidth(originalResumeVBox.getWidth());
                         imageView.setFitHeight(originalResumeVBox.getHeight());
 
+                        double ratio;
+                        if (image.getWidth() > originalResumeVBox.getWidth())
+                                ratio = image.getWidth() / originalResumeVBox.getWidth();
+                        else
+                                ratio = originalResumeVBox.getWidth() / image.getWidth();
+                        imageView.setFitWidth(originalResumeVBox.getWidth());
+                        imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
                         originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
+                                imageView.setFitHeight(originalResumeVBox.getHeight());
                         });
                         originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
+                                imageView.setFitHeight(originalResumeVBox.getHeight());
                         });
                         imageViewList.add(imageView);
                 }
