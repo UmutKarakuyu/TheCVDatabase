@@ -2,7 +2,6 @@ package com.example.se302_project;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.DrbgParameters.Reseed;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,11 +120,12 @@ public class DBConnection {
             String resume_name = resume.getName();
             String resume_date = resume.getDate();
             ArrayList<String> resume_tags = resume.getTags();
+            String resume_template_title = resume.getTemplate().getTitle();
 
             insertResume.setString(1, resume_name);
             insertResume.setString(2, resume_date);
             insertResume.setString(3, resume.getfileName());
-            insertResume.setString(4, resume.getTemplate().getTitle());
+            insertResume.setString(4, resume_template_title);
             insertResume.execute();
 
             for (int i = 0; i < resume_tags.size(); i++) {
@@ -146,7 +146,7 @@ public class DBConnection {
                 resume_text += attrVal + " ";
             }
 
-            this.index.addDoc(resume_name, resume_date, resume_text, resume_tags);
+            this.index.addDoc(resume_name, resume_date, resume_text, resume_tags, resume_template_title);
 
         } catch (SQLException | IOException e) {
             System.err.println(e);

@@ -73,19 +73,18 @@ public class Index {
         return docTags;
     }
 
-    public void addDoc(String name, String date, String text, ArrayList<String> tags) throws IOException {
+    public void addDoc(String name, String date, String text, ArrayList<String> tags, String template_title) throws IOException {
         Document doc = new Document();
         doc.add(new TextField("name", name.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
         doc.add(new TextField("date", date.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
         doc.add(new TextField("resume_text", text.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
-
+        doc.add(new TextField("template_title", template_title.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
+        doc.add(new StoredField("tags", this.serialize(tags)));
         String tags_text = "";
         for (String tag : tags) {
             tags_text += tag + " ";
         }
         doc.add(new TextField("tags_text", tags_text.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
-
-        doc.add(new StoredField("tags", this.serialize(tags)));
 
         this.indexWriter.addDocument(doc);
         this.indexWriter.commit();
@@ -96,9 +95,10 @@ public class Index {
         this.indexWriter.commit();
     }
 
-    public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters)
+    public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters, String templateFilter)
             throws IOException, ParseException, ClassNotFoundException {
         query_text = query_text.toLowerCase(Locale.forLanguageTag("en"));
+        templateFilter = templateFilter.toLowerCase(Locale.forLanguageTag("en"));
 
         ArrayList<Query> queries = new ArrayList<>();
         queries.add(new WildcardQuery(new Term("name", "*" + query_text + "*")));
@@ -109,7 +109,6 @@ public class Index {
         IndexReader reader = DirectoryReader.open(this.index);
         IndexSearcher searcher = new IndexSearcher(reader);
 
-        System.out.printf("Query: %s\n", query_text);
         HashMap<String, String> query_results = new HashMap<>();
         for (Query q : queries) {
             TopDocs docs = searcher.search(q, this.hitsPerPage);
@@ -120,23 +119,38 @@ public class Index {
                 Document d = searcher.doc(docId);
                 List<String> docTags = this.unserialize(d.getBinaryValue("tags").bytes);
 
+                boolean add2results = false;
+                boolean tags_condition = false;
+                boolean template_condition = false;
                 if (tagFilters.size() != 0) {
                     for (String docTag : docTags) {
                         for (String tagFilter : tagFilters) {
                             if (docTag.equals(tagFilter)) {
-                                query_results.put(d.get("name"), d.get("date"));
+                                tags_condition = true;
                                 break;
                             }
                         }
                     }
                 } else {
+                    tags_condition = true;
+                }
+
+                if(!templateFilter.equals("")){
+                    if(d.get("template_title").equals(templateFilter)){
+                        template_condition = true;
+                    }
+                } else{
+                    template_condition = true;
+                }
+
+                add2results = tags_condition && template_condition;
+                if(add2results){
                     query_results.put(d.get("name"), d.get("date"));
                 }
             }
 
         }
 
-        System.out.println(String.valueOf(query_results));
         return query_results;
     }
 

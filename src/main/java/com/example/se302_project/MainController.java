@@ -17,6 +17,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+
+import org.apache.lucene.index.IndexNotFoundException;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
@@ -117,19 +119,20 @@ public class MainController {
         @FXML
         private TextField tagFilterTextField;
         @FXML
-        private CheckListView checkListView;
+        private CheckListView<String> checkListView;
 
         private ResumeParser resumeParser;
 
         public void initialize() throws SQLException, IOException {
+                DBConnection.getInstance();
+
                 resumeParser = new ResumeParser("src/main/resources/com/example/se302_project/nlp/skills_t100.txt",
                                 "src/main/resources/com/example/se302_project/nlp/titles/titles_combined.txt",
                                 "src/main/resources/com/example/se302_project/nlp/stopwords.txt");
-
-                tagFilterTextField.setOnKeyPressed(event -> {
-                        if (event.getCode() == KeyCode.ENTER) {
-                                addTag();
-                        }
+                
+                tagFilterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+                        tagSearchRetrieve();
+                        tagFilterTextField.requestFocus();
                 });
 
                 firstEllipses.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -219,6 +222,22 @@ public class MainController {
                  * DBConnection.getInstance().addResume(resume1);
                  * DBConnection.getInstance().addResume(resume2);
                  */
+        }
+
+        private void retrieveSetTemplates(){
+                ArrayList<String> available_templates = new ArrayList<>();
+                try {
+                        available_templates = DBConnection.getInstance().getTemplates();
+                } catch (SQLException e) {
+                        e.printStackTrace();
+                }
+                ObservableList<String> available_templates_observable_list = FXCollections.observableArrayList();
+                available_templates_observable_list.add("");
+                for(String t: available_templates){
+                        available_templates_observable_list.add(t);
+                }
+                templates.setItems(available_templates_observable_list);
+                templates.getSelectionModel().selectFirst();
         }
 
         @FXML
@@ -369,40 +388,38 @@ public class MainController {
         @FXML
         public void search() {
                 String query = filterSearchField.getText();
-                if (query.equals("")) {
-                        return;
-                }
-
+                
                 ArrayList<String> tagFilters = new ArrayList<String>();
-                // tagFilters.add("SQLite");
-                for (String tag : tags.getItems()) {
+                for (String tag : checkListView.getCheckModel().getCheckedItems()) {
                         tagFilters.add(tag);
                 }
+
+                String template_filter = templates.getSelectionModel().getSelectedItem();
+
                 Index index = DBConnection.getInstance().getIndex();
                 HashMap<String, String> findings = null;
                 try {
-                        findings = index.query(query, tagFilters);
-                } catch (IOException | ParseException | ClassNotFoundException e) {
+                        findings = index.query(query, tagFilters, template_filter);
+                } catch (ParseException | ClassNotFoundException e) {
                         e.printStackTrace();
+                } catch (IOException e){
+                        findings = null;
                 }
 
                 ObservableList<SearchResult> query_results = FXCollections.observableArrayList();
                 searchTResumeNameColumn.setCellValueFactory(new PropertyValueFactory<SearchResult, String>("name"));
                 searchTResumeDateColumn.setCellValueFactory(new PropertyValueFactory<SearchResult, String>("date"));
 
-                for (String resumeName : findings.keySet()) {
-                        query_results.add(new SearchResult(resumeName, findings.get(resumeName)));
+                if(findings != null){
+                        for (String resumeName : findings.keySet()) {
+                                query_results.add(new SearchResult(resumeName, findings.get(resumeName)));
+                        }
                 }
                 searchTableView.setItems(query_results);
         }
 
-        private void addTag() {
-                // Search for tag query if it's found, added to combobox
-                // burası siilinebilir gibi artık kontrol et ama yine de
+        private void tagSearchRetrieve() {
                 String tag_query = tagFilterTextField.getText();
-                if (tag_query.equals("")) {
-                        return;
-                }
 
                 ArrayList<String> available_tags = new ArrayList<>();
                 try {
@@ -411,20 +428,33 @@ public class MainController {
                         e.printStackTrace();
                 }
 
-                boolean match_found = false;
-                ObservableList<String> combobox_tags = tags.getItems();
-                for (String available_tag : available_tags) {
-                        if (tag_query.toLowerCase(Locale.forLanguageTag("en")).equals(
-                                        available_tag.toLowerCase(Locale.forLanguageTag("en")))) {
-                                combobox_tags.add(available_tag);
-                                match_found = true;
-                                break;
+                ObservableList<String> view_tags = FXCollections.observableArrayList();
+                ObservableList<String> checkedTags = checkListView.getCheckModel().getCheckedItems();
+                
+                if(!tag_query.equals("")){
+                        for (String available_tag : available_tags) {
+                                if (available_tag.toLowerCase(Locale.forLanguageTag("en")).contains(
+                                        tag_query.toLowerCase(Locale.forLanguageTag("en")))) {
+                                        view_tags.add(available_tag);
+                                }
                         }
                 }
 
-                if (match_found) {
-                        tags.setItems(combobox_tags);
-                        tagFilterTextField.clear();
+                for(String t: checkedTags){
+                        if(!view_tags.contains(t)){
+                                view_tags.add(t);
+                        }
+                }
+                
+                for(String t: available_tags){
+                        if(!view_tags.contains(t)){
+                                view_tags.add(t);
+                        }
+                }
+
+                checkListView.setItems(view_tags);
+                for(String t: checkedTags){
+                        checkListView.getCheckModel().check(t);
                 }
         }
 
@@ -587,6 +617,10 @@ public class MainController {
                 templateTableView.setItems(templateList);
                 templateCarouselList
                                 .setItems(FXCollections.observableArrayList(DBConnection.getInstance().getTemplates()));
+
+                retrieveSetTemplates();
+                tagSearchRetrieve();
+                search();
         }
 
         public void buttonAdd() {
@@ -834,6 +868,7 @@ public class MainController {
                 secondEllipses.setEffect(null);
                 thirdEllipses.setEffect(null);
                 allHbox.setEffect(null);
+                search();
         }
 
         @FXML
