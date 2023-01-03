@@ -883,6 +883,7 @@ public class MainController {
                         DBConnection.getInstance().addTag(resume, tag);
                         tagDropDown.getSelectionModel().clearSelection();
                         tagDropDown.setValue(null);
+                        search();
                 }
         }
 
@@ -896,6 +897,7 @@ public class MainController {
                         tagDropDown.getItems().add(tag);
                         tagTextField.clear();
                         fillMyTags(resume);
+                        search();
                 }
         }
 
@@ -949,7 +951,7 @@ public class MainController {
                 myTagsDropDown.getSelectionModel().clearSelection();
                 myTagsDropDown.setValue(null);
                 fillAllTags();
-
+                search();
         }
 
         @FXML

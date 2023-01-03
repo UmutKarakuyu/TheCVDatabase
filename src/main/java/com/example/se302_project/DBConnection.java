@@ -169,10 +169,27 @@ public class DBConnection {
 
     public void addTag(Resume resume, String tag) {
         try {
-            insertTag.setString(1, resume.getName());
+            String resume_name = resume.getName();
+            String resume_date = resume.getDate();
+            Object[] attributeKeys = resume.getAttributes().keySet().toArray();
+            String resume_text = "";
+            for (int i = 0; i < attributeKeys.length; i++) {
+                String attrVal = resume.getAttributes().get(attributeKeys[i].toString());
+                resume_text += attrVal + " ";
+            }
+            ArrayList<String> resume_tags = resume.getTags();
+            if(!resume_tags.contains(tag)){
+                resume_tags.add(tag);
+            }
+            String resume_template_title = resume.getTemplate().getTitle();
+
+            this.index.deleteDoc(resume_name);
+            this.index.addDoc(resume_name, resume_date, resume_text, resume_tags, resume_template_title);
+
+            insertTag.setString(1, resume_name);
             insertTag.setString(2, tag);
             insertTag.execute();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
 
@@ -417,6 +434,21 @@ public class DBConnection {
 
     public void deleteTag(Resume resume, String tag) {
         try {
+            String resume_name = resume.getName();
+            String resume_date = resume.getDate();
+            Object[] attributeKeys = resume.getAttributes().keySet().toArray();
+            String resume_text = "";
+            for (int i = 0; i < attributeKeys.length; i++) {
+                String attrVal = resume.getAttributes().get(attributeKeys[i].toString());
+                resume_text += attrVal + " ";
+            }
+            ArrayList<String> resume_tags = resume.getTags();
+            resume_tags.remove(tag);
+            String resume_template_title = resume.getTemplate().getTitle();
+
+            this.index.deleteDoc(resume_name);
+            this.index.addDoc(resume_name, resume_date, resume_text, resume_tags, resume_template_title);
+            
             PreparedStatement stmt = connection.prepareStatement("DELETE FROM TAG WHERE RESUME_NAME = ? AND NAME = ?");
             stmt.setString(1, resume.getName());
             stmt.setString(2, tag);
