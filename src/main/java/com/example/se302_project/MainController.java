@@ -788,7 +788,12 @@ public class MainController {
 
                         List<String> skills = resumeParser.match(tokens, "SKILL");
                         resume.setTags((ArrayList<String>) skills);
-                        DBConnection.getInstance().addResume(resume);
+
+                        if(DBConnection.getInstance().getResumeObject(resume.getName()) == null)
+                                DBConnection.getInstance().addResume(resume);
+                        else {
+                                DBConnection.getInstance().updateResumeAttributes(resume);
+                        }
                         fillTableViews();
                         clearResumeContents();
 

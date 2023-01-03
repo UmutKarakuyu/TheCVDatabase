@@ -247,6 +247,12 @@ public class DBConnection {
         }
     }
 
+    public void updateResumeAttributes(Resume newResume) {
+        String oldResumeName = newResume.getName();
+        deleteResume(oldResumeName);
+        addResume(newResume);
+    }
+
     public void updateTemplateAttributes(String templateName, List<String> attributes) throws SQLException {
         deleteTemplate.setString(1, templateName);
         deleteTemplate.executeUpdate();
