@@ -265,7 +265,7 @@ public class MainController {
                 if (selectedCells.get(0).getTableColumn().equals(resumeTrashColumn)) {
                         String path = resume.getfileName();
                         String[] parts = path.split("/");
-                        String destinationDir = "src\\main\\resources\\com\\example\\se302_project\\images\\pdfs\\"
+                        String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/"
                                         + parts[parts.length - 1];
                         ;
                         File dir = new File(
