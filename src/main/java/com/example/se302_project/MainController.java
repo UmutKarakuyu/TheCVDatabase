@@ -370,6 +370,9 @@ public class MainController {
 
                 ArrayList<String> tagFilters = new ArrayList<String>();
                 // tagFilters.add("SQLite");
+                for(String tag: tags.getItems()){
+                        tagFilters.add(tag);
+                }
                 Index index = DBConnection.getInstance().getIndex();
                 HashMap<String, String> findings = null;
                 try {
