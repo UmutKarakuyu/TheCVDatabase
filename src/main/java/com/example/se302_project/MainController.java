@@ -2,6 +2,7 @@ package com.example.se302_project;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -71,7 +72,7 @@ public class MainController {
         @FXML
         private HBox resumeHBox, searchHBox, templateHBox;
         @FXML
-        private ImageView pdfUploadView, originalResume;
+        private ImageView pdfUploadView;
         @FXML
         private VBox drawerShort, drawerLong;
         @FXML
@@ -124,6 +125,11 @@ public class MainController {
         private TextField tagFilterTextField;
         @FXML
         private CheckListView<String> checkListView;
+        @FXML
+        private VBox scrollVBox;
+
+        @FXML
+        private ScrollPane imageScrollPane;
 
         private ResumeParser resumeParser;
         boolean sortDesc = true;
@@ -134,7 +140,7 @@ public class MainController {
                 resumeParser = new ResumeParser("src/main/resources/com/example/se302_project/nlp/skills_t100.txt",
                                 "src/main/resources/com/example/se302_project/nlp/titles/titles_combined.txt",
                                 "src/main/resources/com/example/se302_project/nlp/stopwords.txt");
-                
+
                 tagFilterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
                         tagSearchRetrieve();
                         tagFilterTextField.requestFocus();
@@ -157,12 +163,8 @@ public class MainController {
                         ellipse2.setFitWidth(generatedResumeBox.getWidth() / 2);
                 });
 
-                originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
-                        originalResume.setFitWidth(originalResumeVBox.getWidth());
-                });
-
                 originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
-                        originalResume.setFitWidth(originalResumeVBox.getWidth());
+                        scrollVBox.minWidth(originalResumeVBox.getWidth());
                 });
 
                 allHbox.heightProperty().addListener((obs, oldVal, newVal) -> {
@@ -229,7 +231,7 @@ public class MainController {
                  */
         }
 
-        private void retrieveSetTemplates(){
+        private void retrieveSetTemplates() {
                 ArrayList<String> available_templates = new ArrayList<>();
                 try {
                         available_templates = DBConnection.getInstance().getTemplates();
@@ -238,7 +240,7 @@ public class MainController {
                 }
                 ObservableList<String> available_templates_observable_list = FXCollections.observableArrayList();
                 available_templates_observable_list.add("");
-                for(String t: available_templates){
+                for (String t : available_templates) {
                         available_templates_observable_list.add(t);
                 }
                 templates.setItems(available_templates_observable_list);
@@ -268,26 +270,41 @@ public class MainController {
                                 }
                         }
                         dir.delete();
-                        originalResume.setImage(null);
+                        scrollVBox.getChildren().removeAll(scrollVBox.getChildren());
                         DBConnection.getInstance().deleteResume(resumeName);
                         clearResumeContents();
                         fillTableViews();
 
-                } else {
-                        String path1 = resume.getfileName() + "_1.png";
-                        Image image = new Image(getClass().getResource(path1).toExternalForm());
-                        originalResume.setImage(image);
-                        double ratio;
-                        if (image.getWidth() > originalResumeVBox.getWidth())
-                                ratio = image.getWidth() / originalResumeVBox.getWidth();
-                        else
-                                ratio = originalResumeVBox.getWidth() / image.getWidth();
-                        originalResume.setFitWidth(originalResumeVBox.getWidth());
-                        originalResume.setFitHeight(originalResumeVBox.getHeight() * ratio);
+                } else if (selectedCells.get(0).getTableColumn().equals(resumeNameColumn)) {
+                        scrollVBox.getChildren().removeAll(scrollVBox.getChildren());
+                        scrollVBox.getChildren().clear();
+                        String path = resume.getfileName();
+                        String[] parts = path.split("/");
+                        String destinationDir = "src\\main\\resources\\com\\example\\se302_project\\images\\pdfs\\"
+                                        + parts[parts.length - 1];
+                        ;
+                        List<ImageView> imageViewList = new ArrayList<>();
+                        File directory = new File(destinationDir);
+                        FilenameFilter pngFilter = (dir, name) -> name.endsWith(".png");
+                        File[] pngFiles = directory.listFiles(pngFilter);
+                        for (File pngFile : pngFiles) {
+                                Image image = new Image(pngFile.toURI().toString());
+                                ImageView imageView = new ImageView(image);
+                                scrollVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                                        double ratio = image.getHeight() / image.getWidth();
+                                        imageView.setFitWidth(originalResumeVBox.getWidth());
+                                        imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
+                                });
+                                imageViewList.add(imageView);
+                        }
+                        scrollVBox.getChildren().addAll(imageViewList);
                         resumeTitle.setText(resume.getName());
                         showGeneratedResume(resume);
                         fillAllTags();
+                } else {
+                        return;
                 }
+
         }
 
         ArrayList<TextField> arr = new ArrayList<>();
@@ -393,7 +410,7 @@ public class MainController {
         @FXML
         public void search() {
                 String query = filterSearchField.getText();
-                
+
                 ArrayList<String> tagFilters = new ArrayList<String>();
                 for (String tag : checkListView.getCheckModel().getCheckedItems()) {
                         tagFilters.add(tag);
@@ -407,7 +424,7 @@ public class MainController {
                         findings = index.query(query, tagFilters, template_filter);
                 } catch (ParseException | ClassNotFoundException e) {
                         e.printStackTrace();
-                } catch (IOException e){
+                } catch (IOException e) {
                         findings = null;
                 }
 
@@ -415,7 +432,7 @@ public class MainController {
                 searchTResumeNameColumn.setCellValueFactory(new PropertyValueFactory<SearchResult, String>("name"));
                 searchTResumeDateColumn.setCellValueFactory(new PropertyValueFactory<SearchResult, String>("date"));
 
-                if(findings != null){
+                if (findings != null) {
                         for (String resumeName : findings.keySet()) {
                                 query_results.add(new SearchResult(resumeName, findings.get(resumeName)));
                         }
@@ -435,30 +452,30 @@ public class MainController {
 
                 ObservableList<String> view_tags = FXCollections.observableArrayList();
                 ObservableList<String> checkedTags = checkListView.getCheckModel().getCheckedItems();
-                
-                if(!tag_query.equals("")){
+
+                if (!tag_query.equals("")) {
                         for (String available_tag : available_tags) {
                                 if (available_tag.toLowerCase(Locale.forLanguageTag("en")).contains(
-                                        tag_query.toLowerCase(Locale.forLanguageTag("en")))) {
+                                                tag_query.toLowerCase(Locale.forLanguageTag("en")))) {
                                         view_tags.add(available_tag);
                                 }
                         }
                 }
 
-                for(String t: checkedTags){
-                        if(!view_tags.contains(t)){
+                for (String t : checkedTags) {
+                        if (!view_tags.contains(t)) {
                                 view_tags.add(t);
                         }
                 }
-                
-                for(String t: available_tags){
-                        if(!view_tags.contains(t)){
+
+                for (String t : available_tags) {
+                        if (!view_tags.contains(t)) {
                                 view_tags.add(t);
                         }
                 }
 
                 checkListView.setItems(view_tags);
-                for(String t: checkedTags){
+                for (String t : checkedTags) {
                         checkListView.getCheckModel().check(t);
                 }
         }
@@ -551,24 +568,29 @@ public class MainController {
                  * new Thread(task).start();
                  * 
                  */ // Set the image in the "originalResume" ImageView when the task is complete
-                task.setOnSucceeded(event -> setOriginalResumeImage());
+                task.setOnSucceeded(event -> setOriginalResumeImage(destinationDir));
 
                 // Start the task
                 new Thread(task).start();
         }
 
-        private void setOriginalResumeImage() {
-                String path1 = "file:src/main/resources/com/example/se302_project/" + path + "_1" + ".png";
-                Image image = new Image(path1);
-                originalResume.setImage(image);
-                double ratio;
-                if (image.getWidth() > originalResumeVBox.getWidth()) {
-                        ratio = image.getWidth() / originalResumeVBox.getWidth();
-                } else {
-                        ratio = originalResumeVBox.getWidth() / image.getWidth();
+        private void setOriginalResumeImage(String destinationDir) {
+                scrollVBox.getChildren().removeAll(scrollVBox.getChildren());
+                List<ImageView> imageViewList = new ArrayList<>();
+                File directory = new File(destinationDir);
+                FilenameFilter pngFilter = (dir, name) -> name.endsWith(".png");
+                File[] pngFiles = directory.listFiles(pngFilter);
+                for (File pngFile : pngFiles) {
+                        Image image = new Image(pngFile.toURI().toString());
+                        ImageView imageView = new ImageView(image);
+                        scrollVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                                double ratio = image.getHeight() / image.getWidth();
+                                imageView.setFitWidth(originalResumeVBox.getWidth());
+                                imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
+                        });
+                        imageViewList.add(imageView);
                 }
-                originalResume.setFitWidth(originalResumeVBox.getWidth());
-                originalResume.setFitHeight(originalResumeVBox.getHeight() * ratio);
+                scrollVBox.getChildren().addAll(imageViewList);
         }
 
         @FXML
@@ -848,7 +870,7 @@ public class MainController {
                 l2.setStyle("-fx-font-size: 20;");
                 generateResume.addRow(0, l1, l2);
                 resumeTitle.setText(null);
-                originalResume.setImage(null);
+                scrollVBox.getChildren().removeAll(scrollVBox.getChildren());
         }
 
         @FXML
