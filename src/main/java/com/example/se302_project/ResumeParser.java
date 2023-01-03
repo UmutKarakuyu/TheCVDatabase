@@ -51,6 +51,20 @@ public class ResumeParser {
         return text.toLowerCase(Locale.forLanguageTag("en"));
     }
 
+    private String capitalizeText(String text) {
+        char[] chars = this.lowercaseText(text).toCharArray();
+        boolean found = false;
+        for (int i = 0; i < chars.length; i++) {
+          if (!found && Character.isLetter(chars[i])) {
+            chars[i] = Character.toUpperCase(chars[i]);
+            found = true;
+          } else if (Character.isWhitespace(chars[i])) {
+            found = false;
+          }
+        }
+        return String.valueOf(chars);
+      }
+
     private List<String> removePunctuationMark(List<String> tokens) {
         List<String> refined_tokens = new LinkedList<>();
         for (String token : tokens) {
@@ -143,8 +157,8 @@ public class ResumeParser {
         for (String orig_text : matchList.values()) {
             for (String match : matches) {
                 if (orig_text.equals(match)) {
-                    if (!ordered_matches.contains(orig_text.toUpperCase(Locale.forLanguageTag("en")))) {
-                        ordered_matches.add(orig_text.toUpperCase(Locale.forLanguageTag("en")));
+                    if (!ordered_matches.contains(this.capitalizeText(orig_text))) {
+                        ordered_matches.add(this.capitalizeText(orig_text));
                     }
                     break;
                 }
