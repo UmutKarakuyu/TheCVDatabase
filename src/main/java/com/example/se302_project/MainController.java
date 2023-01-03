@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,8 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-
-import org.apache.lucene.index.IndexNotFoundException;
+import java.awt.Desktop;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
@@ -32,14 +32,11 @@ import org.controlsfx.control.CheckListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.scene.effect.*;
 import javafx.stage.Stage;
@@ -127,9 +124,10 @@ public class MainController {
         private CheckListView<String> checkListView;
         @FXML
         private VBox scrollVBox;
-
         @FXML
         private ScrollPane imageScrollPane;
+        @FXML
+        private Button share;
 
         private ResumeParser resumeParser;
         boolean sortDesc = true;
@@ -1008,5 +1006,18 @@ public class MainController {
                 }
                 searchTableView.setItems(search_results);
                 sortDesc = !sortDesc;
+        }
+
+        @FXML
+        public void share() throws URISyntaxException, IOException, SQLException {
+
+                if (Desktop.isDesktopSupported()) {
+                        Desktop desktop = Desktop.getDesktop();
+                        if (desktop.isSupported(Desktop.Action.MAIL)) {
+                                File file = new File("src/main/resources/com/example/se302_project/images/pdfs");
+                                desktop.mail();
+                                desktop.open(file);
+                        }
+                }
         }
 }
