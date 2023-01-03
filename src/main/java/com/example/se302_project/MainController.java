@@ -482,7 +482,7 @@ public class MainController {
 
                                                 document.close();
 
-                                                path = "images/pdfs/" + file.getName().trim().replace("pdf", "") + "/"
+                                                path = "images/pdfs/" + file.getName().trim().replace(".pdf", "") + "/"
                                                                 + fileName;
                                         } else {
                                                 System.err.println(file.getName() + " File not exists");
