@@ -301,20 +301,30 @@ public class MainController {
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
                                 imageView.setFitHeight(originalResumeVBox.getHeight());
 
-                                double ratio;
+                                double initRatio;
                                 if (image.getWidth() > originalResumeVBox.getWidth())
-                                        ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                        initRatio = image.getWidth() / originalResumeVBox.getWidth();
                                 else
-                                        ratio = originalResumeVBox.getWidth() / image.getWidth();
+                                        initRatio = originalResumeVBox.getWidth() / image.getWidth();
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
-                                imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
-                                originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                                imageView.setFitHeight(originalResumeVBox.getHeight() * initRatio);
+                                allHbox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                                        double ratio;
+                                        if (image.getWidth() > originalResumeVBox.getWidth())
+                                                ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                        else
+                                                ratio = originalResumeVBox.getWidth() / image.getWidth();
                                         imageView.setFitWidth(originalResumeVBox.getWidth());
-                                        imageView.setFitHeight(originalResumeVBox.getHeight());
+                                        imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
                                 });
-                                originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                                allHbox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                                        double ratio;
+                                        if (image.getWidth() > originalResumeVBox.getWidth())
+                                                ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                        else
+                                                ratio = originalResumeVBox.getWidth() / image.getWidth();
                                         imageView.setFitWidth(originalResumeVBox.getWidth());
-                                        imageView.setFitHeight(originalResumeVBox.getHeight());
+                                        imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
                                 });
                                 imageViewList.add(imageView);
                         }
@@ -608,20 +618,30 @@ public class MainController {
                         imageView.setFitWidth(originalResumeVBox.getWidth());
                         imageView.setFitHeight(originalResumeVBox.getHeight());
 
-                        double ratio;
+                        double initRatio;
                         if (image.getWidth() > originalResumeVBox.getWidth())
-                                ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                initRatio = image.getWidth() / originalResumeVBox.getWidth();
                         else
-                                ratio = originalResumeVBox.getWidth() / image.getWidth();
+                                initRatio = originalResumeVBox.getWidth() / image.getWidth();
                         imageView.setFitWidth(originalResumeVBox.getWidth());
-                        imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
-                        originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                        imageView.setFitHeight(originalResumeVBox.getHeight() * initRatio);
+                        allHbox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                                double ratio;
+                                if (image.getWidth() > originalResumeVBox.getWidth())
+                                        ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                else
+                                        ratio = originalResumeVBox.getWidth() / image.getWidth();
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
-                                imageView.setFitHeight(originalResumeVBox.getHeight());
+                                imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
                         });
-                        originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                        allHbox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                                double ratio;
+                                if (image.getWidth() > originalResumeVBox.getWidth())
+                                        ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                else
+                                        ratio = originalResumeVBox.getWidth() / image.getWidth();
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
-                                imageView.setFitHeight(originalResumeVBox.getHeight());
+                                imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
                         });
                         imageViewList.add(imageView);
                 }
