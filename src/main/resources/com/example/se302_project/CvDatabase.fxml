@@ -20,6 +20,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.CheckListView?>
 
 <StackPane alignment="TOP_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
     <children>
@@ -326,7 +327,7 @@
                             <children>
                                 <StackPane prefHeight="510.0" prefWidth="802.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" StackPane.alignment="CENTER">
+                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" visible="false" StackPane.alignment="CENTER">
                                             <children>
                                                 <VBox fx:id="originalResumeVBox" alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                                                     <children>
@@ -461,13 +462,12 @@
                                                                                 <Font size="16.0" />
                                                                             </font>
                                                                         </TextField>
-                                                                        <TextField fx:id="tagSearchField" prefHeight="30.0" prefWidth="230.0" promptText="Type To Search Tag" style="-fx-border-radius: 20; -fx-background-radius: 20; -fx-background-color: white; -fx-border-color: grey; -fx-border-width: 2;">
-                                                                            <font>
-                                                                                <Font size="16.0" />
-                                                                            </font>
-                                                                        </TextField>
-                                                                        <ComboBox fx:id="tags" prefHeight="30.0" prefWidth="180.0" promptText="Tags" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: grey; -fx-border-width: 2;" />
-                                                                        <ComboBox fx:id="templates" prefHeight="30.0" prefWidth="180.0" promptText="Templates" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: grey; -fx-border-width: 2; -fx-background-radius: 10;" />
+                                                      <Button mnemonicParsing="false" onAction="#openTagFilter" prefHeight="30.0" prefWidth="162.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: gray; -fx-border-width: 2;" text="Tap to filter tags" textFill="GREY">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Button>
+                                                                        <ComboBox fx:id="templates" prefHeight="30.0" prefWidth="177.0" promptText="Templates" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: grey; -fx-border-width: 2; -fx-background-radius: 10;" />
                                                                     </children>
                                                                     <HBox.margin>
                                                                         <Insets right="5.0" />
@@ -675,5 +675,67 @@
                 </VBox>
             </children>
         </HBox>
+      <HBox fx:id="checkListViewHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" visible="false">
+         <children>
+            <VBox alignment="CENTER" maxHeight="723.0" maxWidth="370.0" prefHeight="584.0" prefWidth="358.0" HBox.hgrow="NEVER">
+               <children>
+                  <HBox prefHeight="362.0" prefWidth="358.0" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 20; -fx-border-width: 2; -fx-background-radius: 20;">
+                     <children>
+                        <VBox prefHeight="361.0" prefWidth="354.0">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="35.0" prefWidth="354.0">
+                                       <children>
+                                          <HBox alignment="CENTER" prefHeight="35.0" prefWidth="269.0" HBox.hgrow="ALWAYS">
+                                             <HBox.margin>
+                                                <Insets left="50.0" />
+                                             </HBox.margin>
+                                             <children>
+                                                <Label prefHeight="30.0" prefWidth="118.0" text="TAG FILTER">
+                                                   <font>
+                                                      <Font size="20.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <Button mnemonicParsing="false" onAction="#closeTagFilter" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 50;" text="X">
+                                             <HBox.margin>
+                                                <Insets right="5.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="46.0" prefWidth="354.0">
+                                 <children>
+                                    <TextField fx:id="tagFilterTextField" alignment="CENTER" promptText="Enter a tag to filter" style="-fx-background-color: white; -fx-border-color: grey; -fx-border-radius: 10;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="38.0" prefWidth="354.0" spacing="100.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <CheckListView fx:id="checkListView" prefHeight="265.0" prefWidth="276.0" style="-fx-border-color: gray; -fx-border-radius: 10; -fx-background-radius: 10;" HBox.hgrow="ALWAYS">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                    </CheckListView>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <HBox.margin>
+                              <Insets bottom="20.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
     </children>
 </StackPane>

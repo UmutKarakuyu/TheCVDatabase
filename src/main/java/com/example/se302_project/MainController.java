@@ -22,6 +22,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.controlsfx.control.CheckListView;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,8 +50,6 @@ public class MainController {
         private Button leftBarButton;
         @FXML
         private Button filterOptionButton;
-        @FXML
-        private TextField tagSearchField;
         @FXML
         private ComboBox<String> tags;
         @FXML
@@ -113,15 +112,21 @@ public class MainController {
         private ScrollPane generatedResumeScrollPane;
         @FXML
         private VBox generatedResumeVBox;
+        @FXML
+        private HBox checkListViewHBox;
+        @FXML
+        private TextField tagFilterTextField;
+        @FXML
+        private CheckListView checkListView;
 
         private ResumeParser resumeParser;
 
         public void initialize() throws SQLException, IOException {
                 resumeParser = new ResumeParser("src/main/resources/com/example/se302_project/nlp/skills_t100.txt",
-                                                             "src/main/resources/com/example/se302_project/nlp/titles/titles_combined.txt",
-                                                             "src/main/resources/com/example/se302_project/nlp/stopwords.txt");
+                                "src/main/resources/com/example/se302_project/nlp/titles/titles_combined.txt",
+                                "src/main/resources/com/example/se302_project/nlp/stopwords.txt");
 
-                tagSearchField.setOnKeyPressed(event -> {
+                tagFilterTextField.setOnKeyPressed(event -> {
                         if (event.getCode() == KeyCode.ENTER) {
                                 addTag();
                         }
@@ -370,7 +375,7 @@ public class MainController {
 
                 ArrayList<String> tagFilters = new ArrayList<String>();
                 // tagFilters.add("SQLite");
-                for(String tag: tags.getItems()){
+                for (String tag : tags.getItems()) {
                         tagFilters.add(tag);
                 }
                 Index index = DBConnection.getInstance().getIndex();
@@ -393,7 +398,8 @@ public class MainController {
 
         private void addTag() {
                 // Search for tag query if it's found, added to combobox
-                String tag_query = tagSearchField.getText();
+                // burası siilinebilir gibi artık kontrol et ama yine de
+                String tag_query = tagFilterTextField.getText();
                 if (tag_query.equals("")) {
                         return;
                 }
@@ -418,7 +424,7 @@ public class MainController {
 
                 if (match_found) {
                         tags.setItems(combobox_tags);
-                        tagSearchField.clear();
+                        tagFilterTextField.clear();
                 }
         }
 
@@ -432,6 +438,7 @@ public class MainController {
 
         String path = "";
         String resume_text = "";
+
         @FXML
         public void saveResume() throws SQLException, IOException {
                 FileChooser fileChooser = new FileChooser();
@@ -487,26 +494,28 @@ public class MainController {
                         }
                 };
 
-               /* // Get the resume name from the resumeName1 text field
-                String resumeName = resumeTitle.getText();
-
-                // Check if the resume already exists in the database
-                if (DBConnection.getInstance().resumeExists(resumeName)) {
-                        // If the resume already exists, update the resume in the database
-                        DBConnection.getInstance().updateResume(resumeName, path);
-                } else {
-                        // If the resume does not exist, create a new resume with the given name and path and add it to the database
-                        Resume resume = new Resume(resumeName);
-                        DBConnection.getInstance().addResume(resume);
-                }
-
-                // Set the image in the "originalResume" ImageView when the task is complete
-                task.setOnSucceeded(event -> setOriginalResumeImage());
-
-                // Start the task
-                new Thread(task).start();
-
-              */  // Set the image in the "originalResume" ImageView when the task is complete
+                /*
+                 * // Get the resume name from the resumeName1 text field
+                 * String resumeName = resumeTitle.getText();
+                 * 
+                 * // Check if the resume already exists in the database
+                 * if (DBConnection.getInstance().resumeExists(resumeName)) {
+                 * // If the resume already exists, update the resume in the database
+                 * DBConnection.getInstance().updateResume(resumeName, path);
+                 * } else {
+                 * // If the resume does not exist, create a new resume with the given name and
+                 * path and add it to the database
+                 * Resume resume = new Resume(resumeName);
+                 * DBConnection.getInstance().addResume(resume);
+                 * }
+                 * 
+                 * // Set the image in the "originalResume" ImageView when the task is complete
+                 * task.setOnSucceeded(event -> setOriginalResumeImage());
+                 * 
+                 * // Start the task
+                 * new Thread(task).start();
+                 * 
+                 */ // Set the image in the "originalResume" ImageView when the task is complete
                 task.setOnSucceeded(event -> setOriginalResumeImage());
 
                 // Start the task
@@ -724,12 +733,14 @@ public class MainController {
                         }
 
                         resume.setAttributes(attributes);
-                        
+
                         List<String> tokens = resumeParser.extractTokensFromResume(resume_text);
-                        /*List<String> titles = resumeParser.match(tokens, "TITLE");
-                        for(String title: titles){
-                                resume.addTag(title);
-                        }*/
+                        /*
+                         * List<String> titles = resumeParser.match(tokens, "TITLE");
+                         * for(String title: titles){
+                         * resume.addTag(title);
+                         * }
+                         */
 
                         List<String> skills = resumeParser.match(tokens, "SKILL");
                         resume.setTags((ArrayList<String>) skills);
@@ -799,6 +810,30 @@ public class MainController {
                 generateResume.addRow(0, l1, l2);
                 resumeTitle.setText(null);
                 originalResume.setImage(null);
+        }
+
+        @FXML
+        private void openTagFilter() {
+                checkListViewHBox.setVisible(true);
+                GaussianBlur gaussian_blur = new GaussianBlur();
+
+                // set radius for gaussian blur
+                gaussian_blur.setRadius(20.0f);
+
+                // set effect
+                firstEllipses.setEffect(gaussian_blur);
+                secondEllipses.setEffect(gaussian_blur);
+                thirdEllipses.setEffect(gaussian_blur);
+                allHbox.setEffect(gaussian_blur);
+        }
+
+        @FXML
+        private void closeTagFilter() {
+                checkListViewHBox.setVisible(false);
+                firstEllipses.setEffect(null);
+                secondEllipses.setEffect(null);
+                thirdEllipses.setEffect(null);
+                allHbox.setEffect(null);
         }
 
         @FXML
