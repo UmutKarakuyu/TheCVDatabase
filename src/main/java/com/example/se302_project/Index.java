@@ -98,7 +98,6 @@ public class Index {
     public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters, String templateFilter)
             throws IOException, ParseException, ClassNotFoundException {
         query_text = query_text.toLowerCase(Locale.forLanguageTag("en"));
-        templateFilter = templateFilter.toLowerCase(Locale.forLanguageTag("en"));
 
         ArrayList<Query> queries = new ArrayList<>();
         queries.add(new WildcardQuery(new Term("name", "*" + query_text + "*")));
@@ -135,11 +134,16 @@ public class Index {
                     tags_condition = true;
                 }
 
-                if(!templateFilter.equals("")){
-                    if(d.get("template_title").equals(templateFilter)){
+                if(templateFilter != null){
+                    templateFilter = templateFilter.toLowerCase(Locale.forLanguageTag("en"));
+                    if(!templateFilter.equals("")){
+                        if(d.get("template_title").equals(templateFilter)){
+                            template_condition = true;
+                        }
+                    } else{
                         template_condition = true;
                     }
-                } else{
+                }else{
                     template_condition = true;
                 }
 

@@ -22,7 +22,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckListView?>
 
-<StackPane alignment="TOP_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
+<StackPane alignment="TOP_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.se302_project.MainController">
     <children>
         <HBox fx:id="firstEllipses" prefHeight="100.0" prefWidth="200.0">
             <children>
@@ -468,7 +468,7 @@
                                                                                 <Font size="16.0" />
                                                                             </font>
                                                                         </Button>
-                                                                        <ComboBox fx:id="templates" prefHeight="30.0" prefWidth="177.0" promptText="Templates" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: grey; -fx-border-width: 2; -fx-background-radius: 10;" />
+                                                                        <ComboBox fx:id="templates" onAction="#search" prefHeight="30.0" prefWidth="177.0" promptText="Templates" style="-fx-border-radius: 10; -fx-background-color: white; -fx-border-color: grey; -fx-border-width: 2; -fx-background-radius: 10;" />
                                                                     </children>
                                                                     <HBox.margin>
                                                                         <Insets right="5.0" />
