@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -53,29 +54,37 @@ public class Index {
         this.indexWriter = indexWriter;
     }
 
-    private byte[] serialize(Object obj) throws IOException {
+    private byte[] serialize(ArrayList<String> tags) throws IOException {
+        ArrayList<Object> tagsObj = new ArrayList<Object>(tags.stream().map(tag -> (Object) tag).collect(Collectors.toList()));
         ByteArrayOutputStream bos = new ByteArrayOutputStream(200000);
         ObjectOutputStream os = new ObjectOutputStream(bos);
-        os.writeObject(obj);
+        os.writeObject(tagsObj);
         os.close();
         return bos.toByteArray();
     }
 
-    private Object unserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+    private List<String> unserialize(byte[] bytes) throws IOException, ClassNotFoundException {
         ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bytes));
-        Object result = is.readObject();
+        ArrayList<Object> result = (ArrayList<Object>) is.readObject();
         is.close();
-        return result;
+        List<String> docTags = result.stream().map(object -> Objects.toString(object, null)).collect(Collectors.toList());
+        return docTags;
     }
 
     public void addDoc(String name, String date, String text, ArrayList<String> tags) throws IOException {
         Document doc = new Document();
-        doc.add(new TextField("name", name, Field.Store.YES));
-        doc.add(new TextField("date", date, Field.Store.YES));
-        doc.add(new TextField("text", text, Field.Store.YES));
+        doc.add(new TextField("name", name.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
+        doc.add(new TextField("date", date.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
+        doc.add(new TextField("resume_text", text.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
 
-        ArrayList<Object> tagsObj = new ArrayList<Object>(tags.stream().map(tag -> (Object) tag).collect(Collectors.toList()));
-        doc.add(new StoredField("tags", this.serialize(tagsObj)));
+        String tags_text = "";
+        for(String tag: tags){
+            tags_text += tag + " ";
+        }
+        doc.add(new TextField("tags_text", tags_text.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
+
+        
+        doc.add(new StoredField("tags", this.serialize(tags)));
 
         this.indexWriter.addDocument(doc);
         this.indexWriter.commit();
@@ -87,41 +96,46 @@ public class Index {
     }
 
     public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters) throws IOException, ParseException, ClassNotFoundException{
-        //QueryParser.SetAllowLeadingWildcard(true)
-        //Query q = new QueryParser("text", analyzer).parse(query_text);
-        Query q = new WildcardQuery(new Term("text", "*"+query_text+"*"));
+        query_text = query_text.toLowerCase(Locale.forLanguageTag("en"));
+
+        ArrayList<Query> queries = new ArrayList<>();
+        queries.add(new WildcardQuery(new Term("name", "*"+query_text+"*")));
+        queries.add(new WildcardQuery(new Term("date", "*"+query_text+"*")));
+        queries.add(new WildcardQuery(new Term("resume_text", "*"+query_text+"*")));
+        queries.add(new WildcardQuery(new Term("tags_text", "*"+query_text+"*")));
 
         IndexReader reader = DirectoryReader.open(this.index);
         IndexSearcher searcher = new IndexSearcher(reader);
-        TopDocs docs = searcher.search(q, this.hitsPerPage);
-        ScoreDoc[] hits = docs.scoreDocs;
 
-        HashMap<String, String> query_results = new HashMap<>();
+        
         System.out.printf("Query: %s\n", query_text);
-        for(int i=0;i<hits.length;++i) {
-            int docId = hits[i].doc;
-            Document d = searcher.doc(docId);
-            ArrayList<Object> docTagsObj = (ArrayList<Object>) this.unserialize(d.getBinaryValue("tags").bytes);
-            List<String> docTags = docTagsObj.stream().map(object -> Objects.toString(object, null)).collect(Collectors.toList());
+        HashMap<String, String> query_results = new HashMap<>();
+        for(Query q: queries){
+            TopDocs docs = searcher.search(q, this.hitsPerPage);
+            ScoreDoc[] hits = docs.scoreDocs;
 
-            if(tagFilters.size() != 0){
-                for(String docTag: docTags){
-                    for(String tagFilter: tagFilters){
-                        if(docTag.equals(tagFilter)){
-                            System.out.println((i + 1) + ". " + d.get("name") + ". " + d.get("date") + ". " + docTags);
-                            query_results.put(d.get("name"), d.get("date"));
-                            break;
+            for(int i=0;i<hits.length;++i) {
+                int docId = hits[i].doc;
+                Document d = searcher.doc(docId);
+                List<String> docTags = this.unserialize(d.getBinaryValue("tags").bytes);
+
+                if(tagFilters.size() != 0){
+                    for(String docTag: docTags){
+                        for(String tagFilter: tagFilters){
+                            if(docTag.equals(tagFilter)){
+                                query_results.put(d.get("name"), d.get("date"));
+                                break;
+                            }
                         }
                     }
+                } else{
+                    query_results.put(d.get("name"), d.get("date"));
                 }
-            } else{
-                query_results.put(d.get("name"), d.get("date"));
-                System.out.println((i + 1) + ". " + d.get("name") + ". " + d.get("date") + ". " + docTags);
             }
+            
         }
-        System.out.println();
-        reader.close();
-
+        
+        System.out.println(String.valueOf(query_results));
         return query_results;
     }
 

@@ -94,7 +94,7 @@ public class DBConnection {
         }
 
         this.indexDir = "index";
-        this.hitsPerPage = 10;
+        this.hitsPerPage = 20;
         try {
             Index index = new Index(this.indexDir, this.hitsPerPage);
             this.index = index;
