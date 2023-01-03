@@ -247,29 +247,6 @@ public class DBConnection {
         }
     }
 
-    public boolean resumeExists(String name) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM resumes WHERE name = ?");
-            statement.setString(1, name);
-            ResultSet resultSet = statement.executeQuery();
-            return resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public void updateResume(String name, String path) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE resumes SET path = ? WHERE name = ?");
-            statement.setString(1, path);
-            statement.setString(2, name);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void updateTemplateAttributes(String templateName, List<String> attributes) throws SQLException {
         deleteTemplate.setString(1, templateName);
         deleteTemplate.executeUpdate();
