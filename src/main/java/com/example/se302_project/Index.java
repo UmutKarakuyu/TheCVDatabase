@@ -75,29 +75,28 @@ public class Index {
 
     public void addDoc(String name, String date, String text, ArrayList<String> tags, String template_title) throws IOException {
         Document doc = new Document();
-        doc.add(new TextField("name", name.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
-        doc.add(new TextField("date", date.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
-        doc.add(new TextField("resume_text", text.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
-        doc.add(new TextField("template_title", template_title.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
+        doc.add(new TextField("name", name, Field.Store.YES));
+        doc.add(new TextField("date", date, Field.Store.YES));
+        doc.add(new TextField("resume_text", text, Field.Store.YES));
+        doc.add(new TextField("template_title", template_title, Field.Store.YES));
         doc.add(new StoredField("tags", this.serialize(tags)));
         String tags_text = "";
         for (String tag : tags) {
             tags_text += tag + " ";
         }
-        doc.add(new TextField("tags_text", tags_text.toLowerCase(Locale.forLanguageTag("en")), Field.Store.YES));
+        doc.add(new TextField("tags_text", tags_text, Field.Store.YES));
 
         this.indexWriter.addDocument(doc);
         this.indexWriter.commit();
     }
 
     public void deleteDoc(String name) throws IOException {
-        this.indexWriter.deleteDocuments(new Term("name", name));
+        this.indexWriter.deleteDocuments(new Term("name", name.trim()));
         this.indexWriter.commit();
     }
 
     public HashMap<String, String> query(String query_text, ArrayList<String> tagFilters, String templateFilter, String NO_TEMPLATE_FILTER_TEXT)
             throws IOException, ParseException, ClassNotFoundException {
-        query_text = query_text.toLowerCase(Locale.forLanguageTag("en"));
 
         ArrayList<Query> queries = new ArrayList<>();
         queries.add(new WildcardQuery(new Term("name", "*" + query_text + "*")));
@@ -136,7 +135,6 @@ public class Index {
 
                 if(templateFilter != null){
                     if(!templateFilter.equals(NO_TEMPLATE_FILTER_TEXT)){
-                        templateFilter = templateFilter.toLowerCase(Locale.forLanguageTag("en"));
                         if(!templateFilter.equals("")){
                             if(d.get("template_title").equals(templateFilter)){
                                 template_condition = true;
