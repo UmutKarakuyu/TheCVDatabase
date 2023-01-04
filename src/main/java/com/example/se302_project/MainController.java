@@ -527,7 +527,7 @@ public class MainController {
                                         + file.getName().trim().replace(".pdf", "");
                         File destinationFile = new File(destinationDir);
                         if (!destinationFile.exists()) {
-                                destinationFile.mkdir();
+                                destinationFile.mkdirs();
                         }
 
                         File tempfile = new File(destinationDir, file.getName());
