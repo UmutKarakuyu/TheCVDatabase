@@ -2,6 +2,7 @@ package com.example.se302_project;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class Resume {
     private boolean is_empty_initialized = false;
@@ -13,6 +14,7 @@ public class Resume {
     private HashMap<String, String> attributes;
 
     public Resume(String name) {
+        name = name.replace(" ", "").toLowerCase(Locale.forLanguageTag("en"));
         this.name = name;
         this.date = null;
         this.fileName = null;
@@ -23,6 +25,7 @@ public class Resume {
     }
 
     public Resume(String name, String date, String fileName, Template template) {
+        name = name.replace(" ", "").toLowerCase(Locale.forLanguageTag("en"));
         this.name = name;
         this.date = date;
         this.fileName = fileName;
@@ -40,6 +43,7 @@ public class Resume {
     }
 
     public void setName(String name) {
+        name = name.replace(" ", "").toLowerCase(Locale.forLanguageTag("en"));
         this.name = name;
     }
 
