@@ -145,7 +145,6 @@ public class MainController {
         private GridPane currentGridPane;
 
         public void initialize() throws SQLException, IOException {
-                DBConnection.getInstance();
 
                 resumeParser = new ResumeParser("src/main/resources/com/example/se302_project/nlp/skills_t100.txt",
                                 "src/main/resources/com/example/se302_project/nlp/titles/titles_combined.txt",
@@ -224,7 +223,7 @@ public class MainController {
                         e.printStackTrace();
                 }
                 ObservableList<String> available_templates_observable_list = FXCollections.observableArrayList();
-                available_templates_observable_list.add("");
+                available_templates_observable_list.add("All Templates");
                 for (String t : available_templates) {
                         available_templates_observable_list.add(t);
                 }
@@ -426,6 +425,9 @@ public class MainController {
                 }
 
                 String template_filter = templates.getSelectionModel().getSelectedItem();
+                if (templates.getSelectionModel().getSelectedItem().equals("All Templates")) {
+                        template_filter = "";
+                }
 
                 Index index = DBConnection.getInstance().getIndex();
                 HashMap<String, String> findings = null;
