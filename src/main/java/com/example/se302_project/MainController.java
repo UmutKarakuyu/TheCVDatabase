@@ -825,15 +825,14 @@ public class MainController {
                         resume.setAttributes(attributes);
 
                         List<String> tokens = resumeParser.extractTokensFromResume(resume_text);
-                        /*
-                         * List<String> titles = resumeParser.match(tokens, "TITLE");
-                         * for(String title: titles){
-                         * resume.addTag(title);
-                         * }
-                         */
-
+                        List<String> titles = resumeParser.match(tokens, "TITLE");
+                        for(String title: titles){
+                                resume.addTag(title);
+                        }
                         List<String> skills = resumeParser.match(tokens, "SKILL");
-                        resume.setTags((ArrayList<String>) skills);
+                        for(String skill: skills){
+                                resume.addTag(skill);
+                        }
 
                         if (DBConnection.getInstance().getResumeObject(resume.getName()).isEmptyInitialized() == true)
                                 DBConnection.getInstance().addResume(resume);

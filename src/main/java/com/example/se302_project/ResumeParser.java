@@ -181,8 +181,12 @@ public class ResumeParser {
         for (String orig_text : matchList.values()) {
             for (String match : matches) {
                 if (orig_text.equals(match)) {
-                    if (!ordered_matches.contains(this.capitalizeText(orig_text))) {
-                        ordered_matches.add(this.capitalizeText(orig_text));
+                    String capitalized_text = this.capitalizeText(orig_text);
+                    if(type.equals("TITLE")){
+                        capitalized_text = "["+capitalized_text+"]";
+                    }
+                    if (!ordered_matches.contains(capitalized_text)) {
+                        ordered_matches.add(capitalized_text);
                     }
                     break;
                 }
