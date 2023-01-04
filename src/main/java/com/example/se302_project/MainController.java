@@ -880,6 +880,7 @@ public class MainController {
         }
 
         private void clearResumeContents() {
+                resumeHBox.setVisible(false);
                 generateResume.getChildren().clear();
                 Label l1 = new Label("Attributes");
                 l1.setStyle("-fx-font-size: 20;");
