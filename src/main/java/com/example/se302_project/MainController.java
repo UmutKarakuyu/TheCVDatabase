@@ -141,12 +141,13 @@ public class MainController {
         private Button share;
 
         private ResumeParser resumeParser;
-        boolean sortDesc = true;
+        private boolean sortDesc = true;
+        private final String NO_TEMPLATE_FILTER_TEXT = "All Templates";
+
         private Button editButton;
         private GridPane currentGridPane;
 
         public void initialize() throws SQLException, IOException {
-
                 resumeParser = new ResumeParser("com/example/se302_project/nlp/skills_t100.txt",
                                 "com/example/se302_project/nlp/titles/titles_combined.txt",
                                 "com/example/se302_project/nlp/stopwords.txt");
@@ -237,12 +238,12 @@ public class MainController {
                         e.printStackTrace();
                 }
                 ObservableList<String> available_templates_observable_list = FXCollections.observableArrayList();
-                available_templates_observable_list.add("");
+                available_templates_observable_list.add(NO_TEMPLATE_FILTER_TEXT);
                 for (String t : available_templates) {
                         available_templates_observable_list.add(t);
                 }
                 templates.setItems(available_templates_observable_list);
-                templates.getSelectionModel().selectFirst();
+                templates.getSelectionModel().select(0);
         }
 
         @FXML
@@ -443,7 +444,7 @@ public class MainController {
                 Index index = DBConnection.getInstance().getIndex();
                 HashMap<String, String> findings = null;
                 try {
-                        findings = index.query(query, tagFilters, template_filter);
+                        findings = index.query(query, tagFilters, template_filter, NO_TEMPLATE_FILTER_TEXT);
                 } catch (ParseException | ClassNotFoundException e) {
                         e.printStackTrace();
                 } catch (IOException e) {
@@ -521,55 +522,57 @@ public class MainController {
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
                 fileChooser.getExtensionFilters().add(extFilter);
                 File file = (fileChooser.showOpenDialog(null));
-                String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/"
-                                + file.getName().trim().replace(".pdf", "");
-                File destinationFile = new File(destinationDir);
-                if (!destinationFile.exists()) {
-                        destinationFile.mkdir();
-                }
-
-                File tempfile = new File(destinationDir, file.getName());
-                tempfile.createNewFile();
-
-                // Create a task to perform the file conversion in the background
-                Task<Void> task = new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                                try {
-                                        if (file.exists()) {
-                                                PDDocument document = PDDocument.load(file);
-                                                PDFTextStripper pdfStripper = new PDFTextStripper();
-                                                resume_text = pdfStripper.getText(document);
-
-                                                PDFRenderer pdfRenderer = new PDFRenderer(document);
-                                                int numberOfPages = document.getNumberOfPages();
-                                                String fileName = file.getName().replace(".pdf", "");
-                                                String fileExtension = "png";
-                                                int dpi = 300;
-
-                                                for (int i = 0; i < numberOfPages; ++i) {
-                                                        File outPutFile = new File(destinationDir + "/" + fileName + "_"
-                                                                        + (i + 1) + "." + fileExtension);
-                                                        BufferedImage bImage = pdfRenderer.renderImageWithDPI(i, dpi,
-                                                                        ImageType.RGB);
-                                                        ImageIO.write(bImage, fileExtension, outPutFile);
-                                                }
-
-                                                document.close();
-
-                                                path = "images/pdfs/" + file.getName().trim().replace(".pdf", "") + "/"
-                                                                + fileName;
-                                        } else {
-                                                System.err.println(file.getName() + " File not exists");
-                                        }
-                                } catch (Exception e) {
-                                        e.printStackTrace();
-                                }
-                                return null;
+                if(file != null){
+                        String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/"
+                                        + file.getName().trim().replace(".pdf", "");
+                        File destinationFile = new File(destinationDir);
+                        if (!destinationFile.exists()) {
+                                destinationFile.mkdir();
                         }
-                };
-                task.setOnSucceeded(event -> setOriginalResumeImage(destinationDir));
-                new Thread(task).start();
+
+                        File tempfile = new File(destinationDir, file.getName());
+                        tempfile.createNewFile();
+
+                        // Create a task to perform the file conversion in the background
+                        Task<Void> task = new Task<Void>() {
+                                @Override
+                                protected Void call() throws Exception {
+                                        try {
+                                                if (file.exists()) {
+                                                        PDDocument document = PDDocument.load(file);
+                                                        PDFTextStripper pdfStripper = new PDFTextStripper();
+                                                        resume_text = pdfStripper.getText(document);
+
+                                                        PDFRenderer pdfRenderer = new PDFRenderer(document);
+                                                        int numberOfPages = document.getNumberOfPages();
+                                                        String fileName = file.getName().replace(".pdf", "");
+                                                        String fileExtension = "png";
+                                                        int dpi = 300;
+
+                                                        for (int i = 0; i < numberOfPages; ++i) {
+                                                                File outPutFile = new File(destinationDir + "/" + fileName + "_"
+                                                                                + (i + 1) + "." + fileExtension);
+                                                                BufferedImage bImage = pdfRenderer.renderImageWithDPI(i, dpi,
+                                                                                ImageType.RGB);
+                                                                ImageIO.write(bImage, fileExtension, outPutFile);
+                                                        }
+
+                                                        document.close();
+
+                                                        path = "images/pdfs/" + file.getName().trim().replace(".pdf", "") + "/"
+                                                                        + fileName;
+                                                } else {
+                                                        System.err.println(file.getName() + " File not exists");
+                                                }
+                                        } catch (Exception e) {
+                                                e.printStackTrace();
+                                        }
+                                        return null;
+                                }
+                        };
+                        task.setOnSucceeded(event -> setOriginalResumeImage(destinationDir));
+                        new Thread(task).start();
+                }
         }
 
         private void setOriginalResumeImage(String destinationDir) {
