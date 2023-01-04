@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Resume {
+    private boolean is_empty_initialized = false;
     private String name;
     private String date;
     private String fileName;
@@ -18,6 +19,7 @@ public class Resume {
         this.tags = null;
         this.template = null;
         this.attributes = null;
+        this.is_empty_initialized = true;
     }
 
     public Resume(String name, String date, String fileName, Template template) {
@@ -27,6 +29,10 @@ public class Resume {
         this.tags = new ArrayList<>();
         this.template = template;
         this.attributes = new HashMap<String, String>();
+    }
+
+    public boolean isEmptyInitialized(){
+        return this.is_empty_initialized;
     }
 
     public String getName() {
