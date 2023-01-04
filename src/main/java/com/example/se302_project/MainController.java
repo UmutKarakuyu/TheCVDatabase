@@ -182,29 +182,35 @@ public class MainController {
                         generatedResumeScrollPane.setPrefHeight(allHbox.getHeight() - 200);
                 });
 
-                resumeTableView.widthProperty().addListener(new ChangeListener<Number>()
-{
-                @Override
-                public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth)
-                {
-                        TableHeaderRow header = (TableHeaderRow) resumeTableView.lookup("TableHeaderRow");
-                        header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
+                resumeTableView.widthProperty().addListener(new ChangeListener<Number>() {
                         @Override
-                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        header.setReordering(false);
-                 }});}});
+                        public void changed(ObservableValue<? extends Number> source, Number oldWidth,
+                                        Number newWidth) {
+                                TableHeaderRow header = (TableHeaderRow) resumeTableView.lookup("TableHeaderRow");
+                                header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
+                                        @Override
+                                        public void changed(ObservableValue<? extends Boolean> observable,
+                                                        Boolean oldValue, Boolean newValue) {
+                                                header.setReordering(false);
+                                        }
+                                });
+                        }
+                });
 
-                 templateTableView.widthProperty().addListener(new ChangeListener<Number>()
-{
-                @Override
-                public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth)
-                {
-                        TableHeaderRow header = (TableHeaderRow) templateTableView.lookup("TableHeaderRow");
-                        header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
+                templateTableView.widthProperty().addListener(new ChangeListener<Number>() {
                         @Override
-                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        header.setReordering(false);
-                 }});}});
+                        public void changed(ObservableValue<? extends Number> source, Number oldWidth,
+                                        Number newWidth) {
+                                TableHeaderRow header = (TableHeaderRow) templateTableView.lookup("TableHeaderRow");
+                                header.reorderingProperty().addListener(new ChangeListener<Boolean>() {
+                                        @Override
+                                        public void changed(ObservableValue<? extends Boolean> observable,
+                                                        Boolean oldValue, Boolean newValue) {
+                                                header.setReordering(false);
+                                        }
+                                });
+                        }
+                });
 
                 fillTableViews();
 
@@ -273,20 +279,30 @@ public class MainController {
                                 imageView.setPreserveRatio(true);
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
                                 imageView.setFitHeight(originalResumeVBox.getHeight());
-                                double ratio;
+                                double initRatio;
                                 if (image.getWidth() > originalResumeVBox.getWidth())
-                                        ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                        initRatio = image.getWidth() / imageScrollPane.getWidth();
                                 else
-                                        ratio = originalResumeVBox.getWidth() / image.getWidth();
-                                imageView.setFitWidth(originalResumeVBox.getWidth());
-                                imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
-                                originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
-                                        imageView.setFitWidth(originalResumeVBox.getWidth());
-                                        imageView.setFitHeight(originalResumeVBox.getHeight());
+                                        initRatio = imageScrollPane.getWidth() / image.getWidth();
+                                imageView.setFitWidth(imageScrollPane.getWidth());
+                                imageView.setFitHeight(imageScrollPane.getHeight() * initRatio);
+                                imageScrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+                                        double ratio;
+                                        if (image.getWidth() > imageScrollPane.getWidth())
+                                                ratio = image.getWidth() / imageScrollPane.getWidth();
+                                        else
+                                                ratio = imageScrollPane.getWidth() / image.getWidth();
+                                        imageView.setFitWidth(imageScrollPane.getWidth());
+                                        imageView.setFitHeight(imageScrollPane.getHeight() * ratio);
                                 });
-                                originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
-                                        imageView.setFitWidth(originalResumeVBox.getWidth());
-                                        imageView.setFitHeight(originalResumeVBox.getHeight());
+                                imageScrollPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+                                        double ratio;
+                                        if (image.getWidth() > imageScrollPane.getWidth())
+                                                ratio = image.getWidth() / imageScrollPane.getWidth();
+                                        else
+                                                ratio = imageScrollPane.getWidth() / image.getWidth();
+                                        imageView.setFitWidth(imageScrollPane.getWidth());
+                                        imageView.setFitHeight(imageScrollPane.getHeight() * ratio);
                                 });
                                 imageViewList.add(imageView);
                         }
@@ -556,20 +572,30 @@ public class MainController {
                         imageView.setFitWidth(originalResumeVBox.getWidth());
                         imageView.setFitHeight(originalResumeVBox.getHeight());
 
-                        double ratio;
+                        double initRatio;
                         if (image.getWidth() > originalResumeVBox.getWidth())
-                                ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                initRatio = image.getWidth() / imageScrollPane.getWidth();
                         else
-                                ratio = originalResumeVBox.getWidth() / image.getWidth();
-                        imageView.setFitWidth(originalResumeVBox.getWidth());
-                        imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
-                        originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
-                                imageView.setFitWidth(originalResumeVBox.getWidth());
-                                imageView.setFitHeight(originalResumeVBox.getHeight());
+                                initRatio = imageScrollPane.getWidth() / image.getWidth();
+                        imageView.setFitWidth(imageScrollPane.getWidth());
+                        imageView.setFitHeight(imageScrollPane.getHeight() * initRatio);
+                        imageScrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+                                double ratio;
+                                if (image.getWidth() > imageScrollPane.getWidth())
+                                        ratio = image.getWidth() / imageScrollPane.getWidth();
+                                else
+                                        ratio = imageScrollPane.getWidth() / image.getWidth();
+                                imageView.setFitWidth(imageScrollPane.getWidth());
+                                imageView.setFitHeight(imageScrollPane.getHeight() * ratio);
                         });
-                        originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
-                                imageView.setFitWidth(originalResumeVBox.getWidth());
-                                imageView.setFitHeight(originalResumeVBox.getHeight());
+                        imageScrollPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+                                double ratio;
+                                if (image.getWidth() > imageScrollPane.getWidth())
+                                        ratio = image.getWidth() / imageScrollPane.getWidth();
+                                else
+                                        ratio = imageScrollPane.getWidth() / image.getWidth();
+                                imageView.setFitWidth(imageScrollPane.getWidth());
+                                imageView.setFitHeight(imageScrollPane.getHeight() * ratio);
                         });
                         imageViewList.add(imageView);
                 }
@@ -789,7 +815,7 @@ public class MainController {
                         List<String> skills = resumeParser.match(tokens, "SKILL");
                         resume.setTags((ArrayList<String>) skills);
 
-                        if(DBConnection.getInstance().getResumeObject(resume.getName()) == null)
+                        if (DBConnection.getInstance().getResumeObject(resume.getName()) == null)
                                 DBConnection.getInstance().addResume(resume);
                         else {
                                 ArrayList<String> tags = DBConnection.getInstance().getResumeTags(resume.getName());
