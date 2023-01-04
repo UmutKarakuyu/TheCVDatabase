@@ -159,14 +159,14 @@ public class MainController {
                 searchTableView.setRowFactory(tv -> {
                         TableRow<SearchResult> row = new TableRow<>();
                         row.setOnMouseClicked(event -> {
-                                if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY
-                                        && event.getClickCount() == 2) {
+                                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY
+                                                && event.getClickCount() == 2) {
 
                                         SearchResult sr = row.getItem();
                                         redirectSearchViewToResumeView(sr);
                                 }
                         });
-                        return row ;
+                        return row;
                 });
 
                 firstEllipses.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -237,7 +237,7 @@ public class MainController {
                         e.printStackTrace();
                 }
                 ObservableList<String> available_templates_observable_list = FXCollections.observableArrayList();
-                available_templates_observable_list.add("All Templates");
+                available_templates_observable_list.add("");
                 for (String t : available_templates) {
                         available_templates_observable_list.add(t);
                 }
@@ -439,9 +439,6 @@ public class MainController {
                 }
 
                 String template_filter = templates.getSelectionModel().getSelectedItem();
-                if (templates.getSelectionModel().getSelectedItem().equals("All Templates")) {
-                        template_filter = "";
-                }
 
                 Index index = DBConnection.getInstance().getIndex();
                 HashMap<String, String> findings = null;
@@ -1080,7 +1077,7 @@ public class MainController {
                 currentGridPane.getTransforms().remove(scale);
         }
 
-        private void redirectSearchViewToResumeView(SearchResult sr){
+        private void redirectSearchViewToResumeView(SearchResult sr) {
                 try {
                         openResumeScreen();
                         String resumeName = sr.getName();
@@ -1091,7 +1088,7 @@ public class MainController {
                         String path = resume.getfileName();
                         String[] parts = path.split("/");
                         String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/"
-                                + parts[parts.length - 1];
+                                        + parts[parts.length - 1];
                         ;
                         List<ImageView> imageViewList = new ArrayList<>();
                         File directory = new File(destinationDir);
@@ -1135,7 +1132,7 @@ public class MainController {
                         resumeTitle.setText(resume.getName());
                         currentGridPane = showGeneratedResume(resume);
                         fillAllTags();
-                } catch(SQLException e){
+                } catch (SQLException e) {
                         e.printStackTrace();
                 }
         }
