@@ -196,6 +196,10 @@ public class MainController {
                         generatedResumeScrollPane.setPrefHeight(allHbox.getHeight() - 200);
                 });
 
+                generatedResumeScrollPane.widthProperty().addListener((observable, oldValue, newValue) -> {
+                        generateResume.setPrefWidth(generatedResumeScrollPane.getWidth());
+                });
+
                 resumeTableView.widthProperty().addListener(new ChangeListener<Number>() {
                         @Override
                         public void changed(ObservableValue<? extends Number> source, Number oldWidth,
@@ -826,11 +830,11 @@ public class MainController {
 
                         List<String> tokens = resumeParser.extractTokensFromResume(resume_text);
                         List<String> titles = resumeParser.match(tokens, "TITLE");
-                        for(String title: titles){
+                        for (String title : titles) {
                                 resume.addTag(title);
                         }
                         List<String> skills = resumeParser.match(tokens, "SKILL");
-                        for(String skill: skills){
+                        for (String skill : skills) {
                                 resume.addTag(skill);
                         }
 
@@ -874,11 +878,23 @@ public class MainController {
 
                 for (int i = 0; i < resume.getTags().size() - 1; i += 2) {
                         Label label = new Label(resume.getTag(i));
+                        if (label.getText().contains("[") && label.getText().contains("]")) {
+                                label.setText(label.getText().replace("[", " ").replace("]", " "));
+                                label.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #27905e; -fx-background-radius: 20;");
+                        }
                         Label label2 = new Label(resume.getTag(i + 1));
+                        if (label2.getText().contains("[") && label2.getText().contains("]")) {
+                                label2.setText(label2.getText().replace("[", " ").replace("]", " "));
+                                label2.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #27905e; -fx-background-radius: 20;");
+                        }
                         generateResume.addRow(generateResume.getRowCount(), label, label2);
                 }
                 if (resume.getTags().size() % 2 != 0) {
                         Label label = new Label(resume.getTag(resume.getTags().size() - 1));
+                        if (label.getText().contains("[") && label.getText().contains("]")) {
+                                label.setText(label.getText().replace("[", " ").replace("]", " "));
+                                label.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #27905e; -fx-background-radius: 20;");
+                        }
                         generateResume.addRow(generateResume.getRowCount(), label);
                 }
                 editButton = new Button();
