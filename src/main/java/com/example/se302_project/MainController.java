@@ -1104,20 +1104,30 @@ public class MainController {
                                 imageView.setPreserveRatio(true);
                                 imageView.setFitWidth(originalResumeVBox.getWidth());
                                 imageView.setFitHeight(originalResumeVBox.getHeight());
-                                double ratio;
+                                double initRatio;
                                 if (image.getWidth() > originalResumeVBox.getWidth())
-                                        ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                        initRatio = image.getWidth() / imageScrollPane.getWidth();
                                 else
-                                        ratio = originalResumeVBox.getWidth() / image.getWidth();
-                                imageView.setFitWidth(originalResumeVBox.getWidth());
-                                imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
-                                originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
-                                        imageView.setFitWidth(originalResumeVBox.getWidth());
-                                        imageView.setFitHeight(originalResumeVBox.getHeight());
+                                        initRatio = imageScrollPane.getWidth() / image.getWidth();
+                                imageView.setFitWidth(imageScrollPane.getWidth());
+                                imageView.setFitHeight(imageScrollPane.getHeight() * initRatio);
+                                imageScrollPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+                                        double ratio;
+                                        if (image.getWidth() > imageScrollPane.getWidth())
+                                                ratio = image.getWidth() / imageScrollPane.getWidth();
+                                        else
+                                                ratio = imageScrollPane.getWidth() / image.getWidth();
+                                        imageView.setFitWidth(imageScrollPane.getWidth());
+                                        imageView.setFitHeight(imageScrollPane.getHeight() * ratio);
                                 });
-                                originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
-                                        imageView.setFitWidth(originalResumeVBox.getWidth());
-                                        imageView.setFitHeight(originalResumeVBox.getHeight());
+                                imageScrollPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+                                        double ratio;
+                                        if (image.getWidth() > imageScrollPane.getWidth())
+                                                ratio = image.getWidth() / imageScrollPane.getWidth();
+                                        else
+                                                ratio = imageScrollPane.getWidth() / image.getWidth();
+                                        imageView.setFitWidth(imageScrollPane.getWidth());
+                                        imageView.setFitHeight(imageScrollPane.getHeight() * ratio);
                                 });
                                 imageViewList.add(imageView);
                         }
