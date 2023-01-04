@@ -47,6 +47,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.TableHeaderRow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.stage.FileChooser;
 import javafx.scene.effect.*;
 import javafx.stage.Stage;
@@ -153,6 +154,19 @@ public class MainController {
                 tagFilterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
                         tagSearchRetrieve();
                         tagFilterTextField.requestFocus();
+                });
+
+                searchTableView.setRowFactory(tv -> {
+                        TableRow<SearchResult> row = new TableRow<>();
+                        row.setOnMouseClicked(event -> {
+                                if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY
+                                        && event.getClickCount() == 2) {
+
+                                        SearchResult sr = row.getItem();
+                                        redirectSearchViewToResumeView(sr);
+                                }
+                        });
+                        return row ;
                 });
 
                 firstEllipses.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -1064,5 +1078,55 @@ public class MainController {
                 if (editButton != null)
                         editButton.setVisible(true);
                 currentGridPane.getTransforms().remove(scale);
+        }
+
+        private void redirectSearchViewToResumeView(SearchResult sr){
+                try {
+                        openResumeScreen();
+                        String resumeName = sr.getName();
+                        Resume resume = DBConnection.getInstance().getResumeObject(resumeName);
+
+                        scrollVBox.getChildren().removeAll(scrollVBox.getChildren());
+                        scrollVBox.getChildren().clear();
+                        String path = resume.getfileName();
+                        String[] parts = path.split("/");
+                        String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/"
+                                + parts[parts.length - 1];
+                        ;
+                        List<ImageView> imageViewList = new ArrayList<>();
+                        File directory = new File(destinationDir);
+                        FilenameFilter pngFilter = (dir, name) -> name.endsWith(".png");
+
+                        File[] pngFiles = directory.listFiles(pngFilter);
+                        for (File pngFile : pngFiles) {
+                                Image image = new Image(pngFile.toURI().toString());
+                                ImageView imageView = new ImageView(image);
+                                imageView.setPreserveRatio(true);
+                                imageView.setFitWidth(originalResumeVBox.getWidth());
+                                imageView.setFitHeight(originalResumeVBox.getHeight());
+                                double ratio;
+                                if (image.getWidth() > originalResumeVBox.getWidth())
+                                        ratio = image.getWidth() / originalResumeVBox.getWidth();
+                                else
+                                        ratio = originalResumeVBox.getWidth() / image.getWidth();
+                                imageView.setFitWidth(originalResumeVBox.getWidth());
+                                imageView.setFitHeight(originalResumeVBox.getHeight() * ratio);
+                                originalResumeVBox.widthProperty().addListener((obs, oldVal, newVal) -> {
+                                        imageView.setFitWidth(originalResumeVBox.getWidth());
+                                        imageView.setFitHeight(originalResumeVBox.getHeight());
+                                });
+                                originalResumeVBox.heightProperty().addListener((obs, oldVal, newVal) -> {
+                                        imageView.setFitWidth(originalResumeVBox.getWidth());
+                                        imageView.setFitHeight(originalResumeVBox.getHeight());
+                                });
+                                imageViewList.add(imageView);
+                        }
+                        scrollVBox.getChildren().addAll(imageViewList);
+                        resumeTitle.setText(resume.getName());
+                        currentGridPane = showGeneratedResume(resume);
+                        fillAllTags();
+                } catch(SQLException e){
+                        e.printStackTrace();
+                }
         }
 }
