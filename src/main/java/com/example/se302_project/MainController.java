@@ -147,9 +147,9 @@ public class MainController {
 
         public void initialize() throws SQLException, IOException {
 
-                resumeParser = new ResumeParser("src/main/resources/com/example/se302_project/nlp/skills_t100.txt",
-                                "src/main/resources/com/example/se302_project/nlp/titles/titles_combined.txt",
-                                "src/main/resources/com/example/se302_project/nlp/stopwords.txt");
+                resumeParser = new ResumeParser("com/example/se302_project/nlp/skills_t100.txt",
+                                "com/example/se302_project/nlp/titles/titles_combined.txt",
+                                "com/example/se302_project/nlp/stopwords.txt");
 
                 tagFilterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
                         tagSearchRetrieve();
@@ -826,6 +826,7 @@ public class MainController {
                          */
 
                         List<String> skills = resumeParser.match(tokens, "SKILL");
+                        System.out.println(String.valueOf(skills));
                         resume.setTags((ArrayList<String>) skills);
 
                         if (DBConnection.getInstance().getResumeObject(resume.getName()) == null)

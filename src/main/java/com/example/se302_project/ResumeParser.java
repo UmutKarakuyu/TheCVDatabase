@@ -1,6 +1,8 @@
 package com.example.se302_project;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -20,15 +22,37 @@ public class ResumeParser {
     private LinkedHashMap<String, String> titleMatches;
 
     public ResumeParser(String skills_path, String titles_path, String stopwords_path) throws IOException {
-        List<String> stopwords = Files.readAllLines(Paths.get(stopwords_path));
+        List<String> stopwords = read_file(stopwords_path);
         this.stopwords = stopwords;
 
         this.skillMatches = this.createMatchList(skills_path);
         this.titleMatches = this.createMatchList(titles_path);
     }
 
+    private List<String> read_file(String path){
+        BufferedReader reader;
+        List<String> data = new ArrayList<>();
+        try {
+            reader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(path), "UTF-8"));
+			for (String line; (line = reader.readLine()) != null;) {
+                data.add(line);
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e){
+            path = "src/main/resources/" + path;
+            try {
+                data = Files.readAllLines(Paths.get(path));
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return data;
+    }
+
     private LinkedHashMap<String, String> createMatchList(String path) throws IOException {
-        List<String> list = Files.readAllLines(Paths.get(path));
+        List<String> list = read_file(path);
         LinkedHashMap<String, String> matchList = new LinkedHashMap<>();
         for (String original_text : list) {
             String text = this.lowercaseText(original_text);
