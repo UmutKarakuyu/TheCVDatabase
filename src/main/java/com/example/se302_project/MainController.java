@@ -826,10 +826,9 @@ public class MainController {
                          */
 
                         List<String> skills = resumeParser.match(tokens, "SKILL");
-                        System.out.println(String.valueOf(skills));
                         resume.setTags((ArrayList<String>) skills);
 
-                        if (DBConnection.getInstance().getResumeObject(resume.getName()) == null)
+                        if (DBConnection.getInstance().getResumeObject(resume.getName()).getDate() == null)
                                 DBConnection.getInstance().addResume(resume);
                         else {
                                 ArrayList<String> tags = DBConnection.getInstance().getResumeTags(resume.getName());
