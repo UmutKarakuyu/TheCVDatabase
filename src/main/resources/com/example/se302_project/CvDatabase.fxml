@@ -327,7 +327,7 @@
                             <children>
                                 <StackPane prefHeight="510.0" prefWidth="802.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" visible="false" StackPane.alignment="CENTER">
+                                        <HBox fx:id="resumeHBox" minHeight="-Infinity" prefHeight="700.0" spacing="20.0" StackPane.alignment="CENTER">
                                             <children>
                                                 <VBox fx:id="originalResumeVBox" alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                                                     <children>
@@ -335,9 +335,22 @@
                                                             <children>
                                                                 <Label prefHeight="17.0" prefWidth="45.0" style="-fx-font-size: 16;" text="Title:" />
                                                                 <TextField fx:id="resumeTitle" prefHeight="26.0" prefWidth="257.0" style="-fx-background-radius: 10;" />
+                                                <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                                                   <children>
+                                                                      <Button fx:id="share" mnemonicParsing="false" onAction="#share" prefHeight="35.0" prefWidth="41.0" style="-fx-border-color: grey; -fx-background-color: transparent; -fx-background-radius: 100; -fx-border-width: 1; -fx-border-radius: 50;">
+                                                                          <graphic>
+                                                                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                                                                  <image>
+                                                                                      <Image url="@images/share.png" />
+                                                                                  </image>
+                                                                              </ImageView>
+                                                                          </graphic>
+                                                                      </Button>
+                                                   </children>
+                                                </HBox>
                                                             </children>
                                                             <VBox.margin>
-                                                                <Insets bottom="20.0" top="10.0" />
+                                                                <Insets top="10.0" />
                                                             </VBox.margin>
                                                         </HBox>
                                                         <ScrollPane fx:id="imageScrollPane" focusTraversable="false" hbarPolicy="NEVER" maxWidth="1000.0" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" stylesheets="@css/ScrollPane.css" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
@@ -379,15 +392,6 @@
                                                                     <HBox.margin>
                                                                         <Insets />
                                                                     </HBox.margin>
-                                                                </Button>
-                                                                <Button fx:id="share" mnemonicParsing="false" onAction="#share" style="-fx-background-color: white; -fx-background-radius: 20;">
-                                                                    <graphic>
-                                                                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                                                            <image>
-                                                                                <Image url="@images/share.png" />
-                                                                            </image>
-                                                                        </ImageView>
-                                                                    </graphic>
                                                                 </Button>
                                                             </children>
                                                             <padding>

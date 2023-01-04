@@ -522,12 +522,12 @@ public class MainController {
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
                 fileChooser.getExtensionFilters().add(extFilter);
                 File file = (fileChooser.showOpenDialog(null));
-                if(file != null){
+                if (file != null) {
                         String destinationDir = "src/main/resources/com/example/se302_project/images/pdfs/"
                                         + file.getName().trim().replace(".pdf", "");
                         File destinationFile = new File(destinationDir);
                         if (!destinationFile.exists()) {
-                                destinationFile.mkdir();
+                                destinationFile.mkdirs();
                         }
 
                         File tempfile = new File(destinationDir, file.getName());
@@ -550,16 +550,20 @@ public class MainController {
                                                         int dpi = 300;
 
                                                         for (int i = 0; i < numberOfPages; ++i) {
-                                                                File outPutFile = new File(destinationDir + "/" + fileName + "_"
+                                                                File outPutFile = new File(destinationDir + "/"
+                                                                                + fileName + "_"
                                                                                 + (i + 1) + "." + fileExtension);
-                                                                BufferedImage bImage = pdfRenderer.renderImageWithDPI(i, dpi,
+                                                                BufferedImage bImage = pdfRenderer.renderImageWithDPI(i,
+                                                                                dpi,
                                                                                 ImageType.RGB);
                                                                 ImageIO.write(bImage, fileExtension, outPutFile);
                                                         }
 
                                                         document.close();
 
-                                                        path = "images/pdfs/" + file.getName().trim().replace(".pdf", "") + "/"
+                                                        path = "images/pdfs/"
+                                                                        + file.getName().trim().replace(".pdf", "")
+                                                                        + "/"
                                                                         + fileName;
                                                 } else {
                                                         System.err.println(file.getName() + " File not exists");
